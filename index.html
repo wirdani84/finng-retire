@@ -418,9 +418,7 @@ var TABS=[
 var PRO_UNLOCKED=false; // flip to true when user pays
 
 function checkProCode(code){
-  // Simple hash check — replace with real validation later
-  var hash=0;for(var i=0;i<code.length;i++){hash=((hash<<5)-hash)+code.charCodeAt(i);hash|=0;}
-  return hash===-1289843080||hash===987654321; // placeholder hashes
+  return code.trim().toUpperCase()==='FINNIEGINGER2026PRO';
 }
 
 function unlockPro(){
@@ -1235,7 +1233,7 @@ document.addEventListener('DOMContentLoaded',function(){
   if(localStorage.getItem('finng-pro')==='1'){unlockPro();}
 
   // Upgrade buttons — link to payment (replace URL when ready)
-  var upgradeURL=''; // SET YOUR GUMROAD/STRIPE LINK HERE
+  var upgradeURL='https://wirdani.gumroad.com/l/finng-retire-pro';
   document.querySelectorAll('.btnUpgrade, #btnUpgrade1').forEach(function(b){
     b.addEventListener('click',function(){
       if(upgradeURL){window.open(upgradeURL,'_blank');}

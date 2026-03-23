@@ -1,0 +1,71 @@
+{
+  "id": "/finng-retire/",
+  "name": "FinnG Retire \u2014 Projection Calculator",
+  "short_name": "FinnG Retire",
+  "description": "Comprehensive retirement planning for US citizens and international workers. Monte Carlo simulation, tax modeling, inflation adjustment, healthcare costs, and more. Privacy-first: runs 100% in your browser.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "background_color": "#04070d",
+  "theme_color": "#06b6d4",
+  "orientation": "any",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "finance",
+    "utilities",
+    "productivity"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "FinnG Retire Dashboard - Desktop View"
+    },
+    {
+      "src": "screenshot-narrow.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "FinnG Retire Dashboard - Mobile View"
+    }
+  ],
+  "related_applications": [],
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
+}

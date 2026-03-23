@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#06b6d4">
+<meta name="description" content="Comprehensive retirement projection calculator for US citizens and international workers. Monte Carlo simulation, tax modeling, inflation adjustment. Privacy-first.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FinnG Retire">
+<meta name="application-name" content="FinnG Retire">
+<meta name="msapplication-TileColor" content="#04070d">
+<meta name="msapplication-tap-highlight" content="no">
+<meta property="og:title" content="FinnG Retire - Projection Calculator">
+<meta property="og:description" content="Comprehensive retirement planning with Monte Carlo simulation. Privacy-first.">
+<meta property="og:type" content="website">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="manifest" href="manifest.json">
+<title>FinnG Retire — Comprehensive Retirement Planner</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+:root{--bg:#04070d;--bg2:#0a1019;--card:#0f1723;--bdr:#1c2940;--cy:#06b6d4;--cy2:#0891b2;--gn:#10b981;--rd:#ef4444;--or:#f59e0b;--pr:#8b5cf6;--bl:#3b82f6;--pk:#ec4899;--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--t4:#475569}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--t1);font-family:'Outfit',sans-serif;line-height:1.5}
+.mono{font-family:'JetBrains Mono',monospace}
+.app{max-width:940px;margin:0 auto;padding:20px 16px}
+.hdr{text-align:center;padding:28px 0 16px;position:relative}
+.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:500px;height:200px;background:radial-gradient(ellipse,rgba(6,182,212,.08) 0%,transparent 70%);pointer-events:none}
+.hdr-tag{font-size:9px;letter-spacing:5px;color:var(--cy2);text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.hdr h1{font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--cy),var(--pr),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hdr-sub{font-size:11px;color:var(--t3);margin-top:6px}
+.tabs{display:flex;gap:3px;background:var(--card);border-radius:12px;padding:4px;margin-bottom:20px;border:1px solid var(--bdr);overflow-x:auto}
+.tab{flex:1;padding:9px 2px;border:none;border-radius:8px;cursor:pointer;background:transparent;color:var(--t3);font-size:10px;font-weight:600;font-family:'Outfit',sans-serif;transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--t2)}
+.tab.active{background:linear-gradient(135deg,var(--cy2),#6d28d9);color:#fff;box-shadow:0 2px 8px rgba(6,182,212,.2)}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:20px;margin-bottom:16px}
+.ct{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ct .d{width:6px;height:6px;border-radius:50%;box-shadow:0 0 8px currentColor}
+.ct.cyan{color:var(--cy)}.ct.cyan .d{background:var(--cy)}
+.ct.green{color:var(--gn)}.ct.green .d{background:var(--gn)}
+.ct.red{color:var(--rd)}.ct.red .d{background:var(--rd)}
+.ct.orange{color:var(--or)}.ct.orange .d{background:var(--or)}
+.ct.purple{color:var(--pr)}.ct.purple .d{background:var(--pr)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:600px){.g3{grid-template-columns:1fr 1fr}}
+.sb{background:var(--bg2);border-radius:10px;padding:14px;border:1px solid var(--bdr);text-align:center}
+.sb .l{font-size:9px;color:var(--t3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px}
+.sb .v{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.sb .s{font-size:9px;color:var(--t4);margin-top:3px}
+@media(max-width:600px){.sb .v{font-size:15px}}
+.sl{margin-bottom:14px}
+.sl-h{display:flex;justify-content:space-between;margin-bottom:4px}
+.sl-l{font-size:12px;color:var(--t2)}
+.sl-v{font-size:12px;color:var(--cy);font-family:'JetBrains Mono',monospace}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--bdr);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--cy);box-shadow:0 0 6px rgba(6,182,212,.4)}
+select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px solid var(--bdr);border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer}
+.tgl-r{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.tgl{width:42px;height:22px;border-radius:11px;cursor:pointer;position:relative;transition:background .25s}
+.tgl.off{background:var(--bdr)}.tgl.on{background:var(--cy)}
+.tgl-k{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;transition:left .25s}
+.tgl.off .tgl-k{left:2px}.tgl.on .tgl-k{left:22px}
+.ctbl{width:100%;border-collapse:collapse;font-size:12px}
+.ctbl th{text-align:left;font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;padding:8px;border-bottom:1px solid var(--bdr);font-weight:600}
+.ctbl td{padding:8px;border-bottom:1px solid var(--bdr)}
+.ctbl tr:last-child td{border-bottom:none}
+.ctbl .n{font-family:'JetBrains Mono',monospace;font-weight:600;text-align:right}
+.alert{border-radius:10px;padding:14px;margin-bottom:10px;font-size:12px;line-height:1.6}
+.alert.w{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:var(--or)}
+.alert.d{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--rd)}
+.alert.i{background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.3);color:var(--cy)}
+.alert.o{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--gn)}
+.note{font-size:11px;color:var(--t3);line-height:1.6;margin-top:8px}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--cy2),#6d28d9);color:#fff;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 15px rgba(6,182,212,.15)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(6,182,212,.25)}
+.sc-row{background:var(--bg2);border-radius:10px;padding:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--bdr)}
+.dbar{display:flex;align-items:flex-end;gap:2px;height:55px;margin-top:10px}
+.dbar .b{flex:1;border-radius:2px 2px 0 0}
+.q-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:14px 0}
+.q-cell{aspect-ratio:1;border-radius:4px}
+.q-cell.earned{background:var(--gn);box-shadow:0 0 5px rgba(16,185,129,.3)}
+.q-cell.need{background:var(--bdr)}
+.q-cell.mile{border:2px solid var(--or)}
+.hidden{display:none}
+.footer{text-align:center;padding:28px 0;font-size:9px;color:var(--t4);letter-spacing:.5px}
+.pro{display:inline-block;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;letter-spacing:1px}
+.tab .lock{font-size:10px;margin-left:3px;opacity:0.7}
+.pro-overlay{position:relative}
+.pro-overlay::before{content:'';position:absolute;inset:0;background:rgba(4,7,13,0.85);z-index:10;border-radius:14px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.pro-overlay::after{content:'🔒 PRO Feature';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:11;color:var(--or);font-size:16px;font-weight:700;font-family:'Outfit',sans-serif;text-align:center;pointer-events:none}
+.pro-gate{background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(239,68,68,.08));border:1px solid rgba(245,158,11,.3);border-radius:14px;padding:40px 24px;text-align:center;margin-bottom:14px}
+.pro-gate h3{color:var(--or);font-size:20px;margin-bottom:10px}
+.pro-gate p{color:var(--t2);font-size:13px;line-height:1.8;margin-bottom:16px}
+.pro-gate .price{font-size:32px;font-weight:800;color:var(--t1);margin-bottom:4px}
+.pro-gate .price-sub{font-size:12px;color:var(--t3);margin-bottom:20px}
+.btn-sm{background:var(--bg2);color:var(--t1);border:1px solid var(--bdr);padding:8px 16px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit}
+.btn-sm:hover{background:var(--card);border-color:var(--cy)}
+.btn-pro{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.scenario-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.scenario-card .sc-name{color:var(--t1);font-size:13px;font-weight:600}
+.scenario-card .sc-date{color:var(--t3);font-size:10px;margin-top:3px}
+.scenario-card .sc-btns{display:flex;gap:6px}
+@media print{.tabs,.tab,.btn,.btn-sm,.btn-pro,.hdr-sub,.footer,.tgl-r,.tgl,.alert{display:none!important}.app{padding:0}.card{break-inside:avoid;border:1px solid #ccc;margin-bottom:10px}.hdr{padding:10px 0}body{background:#fff;color:#000}.ct{color:#333!important}.sb .l,.sb .v,.sb .s{color:#000!important}table{color:#000}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hdr">
+  <svg viewBox="0 0 360 70" xmlns="http://www.w3.org/2000/svg" style="width:380px;max-width:92%;height:auto;margin-bottom:10px">
+    <defs>
+      <linearGradient id="finnGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#3b5de7"/>
+        <stop offset="60%" stop-color="#6b3fd4"/>
+        <stop offset="100%" stop-color="#9b3fc0"/>
+      </linearGradient>
+    </defs>
+    <!-- FinnG -->
+    <text font-family="'Segoe UI',system-ui,-apple-system,Arial,sans-serif" font-weight="800" font-size="46" y="42">
+      <tspan fill="url(#finnGrad)" x="30">Finn</tspan><tspan fill="#d63384" dx="-2">G</tspan><tspan fill="#d63384" dx="6" font-size="16" font-weight="600" letter-spacing="2" dy="-10">RETIRE</tspan>
+    </text>
+    <!-- PROJECTION CALCULATOR -->
+    <text x="55" y="62" font-family="'Segoe UI',system-ui,-apple-system,Arial,sans-serif" font-size="11.5" font-weight="500" fill="#8b5cf6" letter-spacing="5" opacity="0.8">PROJECTION CALCULATOR</text>
+  </svg>
+  <div class="hdr-sub">For US citizens and international workers &middot; Monte Carlo &middot; Tax Modeling &middot; Inflation &middot; Healthcare &middot; Fat-Tail Distributions</div>
+</div>
+<div class="tabs" id="tabBar"></div>
+
+<!-- TAB: DASHBOARD -->
+<div id="tab-dash">
+  <div class="card"><div class="ct cyan"><span class="d"></span>Net Worth at Retirement</div><div class="g3" id="nwStats"></div></div>
+  <div class="card" style="border:1px solid var(--or)"><div class="ct orange"><span class="d"></span>Risk Analysis — What Could Go Wrong</div><div class="g2" id="dashRisk"></div><p class="note" style="margin-top:10px">These probabilities come from 500 Monte Carlo simulations using fat-tail distributions (Student's t, 5 df) which model crashes 2-3x more often than standard calculators. This is closer to how real markets behave.</p></div>
+  <div class="card"><div class="ct green"><span class="d"></span>Monthly Retirement Income</div><div id="incTbl"></div></div>
+  <div class="card"><div class="ct purple"><span class="d"></span>Mortgage Payoff Tracker</div><div id="mortTbl"></div></div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Projection (500 Simulations)</div><svg id="chart" viewBox="0 0 720 210" style="width:100%;height:auto"></svg></div>
+  <div class="card"><div class="ct orange"><span class="d"></span>Inflation Impact — Purchasing Power</div><div class="g2" id="inflStats"></div><p class="note">Nominal = raw dollar amount. Real = what it actually buys in today's dollars after inflation erodes purchasing power.</p></div>
+  <div class="card"><div class="ct red"><span class="d"></span>Tax Impact on Withdrawals</div><div id="taxTbl"></div></div>
+  <div class="card"><div class="ct red"><span class="d"></span>Healthcare Cost Projection</div><div id="healthTbl"></div></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+    <button class="btn-pro" id="btnPDF">📄 Export PDF Report</button>
+    <button class="btn-sm" id="btnSave">💾 Save This Scenario</button>
+  </div>
+</div>
+
+<!-- TAB: SS TRACKER -->
+<div id="tab-ss" class="hidden">
+  <div class="card"><div class="ct orange"><span class="d"></span>Social Security Quarters</div><div id="ssAlert"></div><div class="g2" id="ssStats" style="margin-bottom:12px"></div><div class="q-grid" id="qGrid"></div></div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Benefit Estimates</div><div id="ssBen"></div></div>
+  <div class="card"><div class="ct red"><span class="d"></span>RMD — Required Minimum Distributions</div><div id="rmdTbl"></div><p class="note">At age 73, the IRS forces you to withdraw minimum amounts from traditional accounts (401k, 403b, Traditional IRA). Roth IRAs have NO RMDs. These forced withdrawals can push you into higher tax brackets.</p></div>
+</div>
+
+<!-- TAB: LEAVE US -->
+<div id="tab-leave" class="hidden">
+  <div class="card"><div class="ct purple"><span class="d"></span>What If You Leave the US?</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Leave at age</span><span class="sl-v" id="v-la">48</span></div><input type="range" id="s-la" min="27" max="65" value="48"></div>
+    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">Country</div>
+    <select id="s-cty">
+      <option value="x">— Select —</option>
+      <optgroup label="WITH Totalization Agreement (SS may continue)">
+        <option value="t">Australia</option><option value="t">Austria</option><option value="t">Belgium</option><option value="t">Brazil</option><option value="t">Canada</option><option value="t">Chile</option><option value="t">Czech Republic</option><option value="t">Denmark</option><option value="t">Finland</option><option value="t">France</option><option value="t">Germany</option><option value="t">Greece</option><option value="t">Hungary</option><option value="t">Iceland</option><option value="t">Ireland</option><option value="t">Italy</option><option value="t">Japan</option><option value="t">Luxembourg</option><option value="t">Netherlands</option><option value="t">Norway</option><option value="t">Poland</option><option value="t">Portugal</option><option value="t">Slovak Republic</option><option value="t">Slovenia</option><option value="t">South Korea</option><option value="t">Spain</option><option value="t">Sweden</option><option value="t">Switzerland</option><option value="t">United Kingdom</option><option value="t">Uruguay</option>
+      </optgroup>
+      <optgroup label="WITHOUT Agreement (SS STOPS after 6 months)">
+        <option value="n">China</option><option value="n">India</option><option value="n">Malaysia</option><option value="n">Turkey</option><option value="n">Mexico</option><option value="n">Philippines</option><option value="n">Vietnam</option><option value="n">Indonesia</option><option value="n">Thailand</option><option value="n">Nigeria</option><option value="n">Pakistan</option><option value="n">Bangladesh</option><option value="n">Singapore</option><option value="n">Hong Kong</option><option value="n">Taiwan</option><option value="n">UAE</option><option value="n">Saudi Arabia</option><option value="n">Kenya</option><option value="n">Colombia</option><option value="n">Peru</option><option value="n">Egypt</option><option value="n">Costa Rica</option><option value="n">Panama</option><option value="n">Other (no agreement)</option>
+      </optgroup>
+    </select></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Home country monthly cost of living (USD)</span><span class="sl-v" id="v-col">$800</span></div><input type="range" id="s-col" min="200" max="4000" step="100" value="800"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Currency volatility (annual %)</span><span class="sl-v" id="v-fx">10%</span></div><input type="range" id="s-fx" min="0" max="40" step="1" value="10"></div>
+    <div id="leaveRes"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Account Fate If You Leave</div><div id="acctFate"></div></div>
+</div>
+
+<!-- TAB: SIMULATOR -->
+<div id="tab-sim" class="hidden">
+  <div class="card"><div class="ct cyan"><span class="d"></span>500 Simulation Results — Full Range</div>
+    <div class="g3" id="mcFull"></div>
+    <div class="g3" style="margin-top:10px" id="mcPct"></div>
+  </div>
+  <div class="card"><div class="ct orange"><span class="d"></span>Inflation-Adjusted (Today's Dollars)</div>
+    <div class="g3" id="mcInfl"></div>
+    <p class="note">These numbers show what your net worth actually buys in today's purchasing power after inflation erodes the value.</p>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Probability Distribution — Net Worth Outcomes</div>
+    <p class="note" style="margin-bottom:10px">This shows the probability density of your net worth across all 500 simulations. The peak shows the most likely outcome. The wider the curve, the more uncertainty. Wall Street uses this same visualization to assess portfolio risk.</p>
+    <svg id="distSvg" viewBox="0 0 720 200" style="width:100%;height:auto"></svg>
+  </div>
+  <div class="card"><div class="ct red"><span class="d"></span>Crash Scenario</div>
+    <div class="tgl-r"><span class="sl-l">Simulate crash</span><div class="tgl off" id="tgl-crash"><div class="tgl-k"></div></div></div>
+    <div id="crashOpt" class="hidden">
+      <div class="sl"><div class="sl-h"><span class="sl-l">Crash at age</span><span class="sl-v" id="v-ca">63</span></div><input type="range" id="s-ca" min="30" max="64" value="63"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Magnitude</span><span class="sl-v" id="v-cm">-37%</span></div><input type="range" id="s-cm" min="-60" max="-10" value="-37"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Job loss probability during crash</span><span class="sl-v" id="v-jl">30%</span></div><input type="range" id="s-jl" min="0" max="80" value="30"></div>
+      <p class="note">2008: -37% · Dot-com: -45% · COVID: -34% · Job loss models 0 contributions that year.</p>
+    </div>
+  </div>
+  <div class="card" style="border:1px solid var(--gn)"><div class="ct green"><span class="d"></span>Bucket Strategy — Crash Protection</div>
+    <div class="tgl-r"><span class="sl-l">Enable protection</span><div class="tgl on" id="tgl-bucket"><div class="tgl-k"></div></div></div>
+    <div id="bucketOpt">
+      <div class="sl"><div class="sl-h"><span class="sl-l">Start at age</span><span class="sl-v" id="v-ba">58</span></div><input type="range" id="s-ba" min="45" max="63" value="58"></div>
+    </div>
+    <div style="background:var(--bg2);border-radius:10px;padding:16px;margin-top:10px;border:1px solid var(--bdr)">
+      <div style="font-size:13px;font-weight:700;color:var(--gn);margin-bottom:10px">How the Bucket Strategy Works</div>
+      <p style="font-size:12px;color:var(--t2);line-height:1.8;margin-bottom:12px">The biggest risk to your retirement isn't a market crash — it's a crash <strong>right before you retire</strong>. If the market drops 37% at age 64 and you need the money at 65, you're forced to sell at the worst possible time. The bucket strategy prevents this.</p>
+      <div style="font-size:12px;color:var(--t2);line-height:1.8;margin-bottom:10px"><strong style="color:var(--cy)">Starting 5-7 years before retirement, you gradually shift your money into three buckets:</strong></div>
+      <div style="display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px">
+        <div style="background:var(--card);border-radius:8px;padding:12px;border-left:3px solid var(--gn)">
+          <div style="font-size:11px;font-weight:700;color:var(--gn);margin-bottom:4px">BUCKET 1 — CASH (1-2 years of expenses)</div>
+          <div style="font-size:11px;color:var(--t2)">High-yield savings or money market. You live on this during a crash. Never touch your investments when they're down.</div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:12px;border-left:3px solid var(--bl)">
+          <div style="font-size:11px;font-weight:700;color:var(--bl);margin-bottom:4px">BUCKET 2 — BONDS (3-5 years of expenses)</div>
+          <div style="font-size:11px;color:var(--t2)">Bond index funds. Stable during stock crashes. Refills Bucket 1 as you spend it. Gives your stocks time to recover.</div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:12px;border-left:3px solid var(--pr)">
+          <div style="font-size:11px;font-weight:700;color:var(--pr);margin-bottom:4px">BUCKET 3 — STOCKS (everything else)</div>
+          <div style="font-size:11px;color:var(--t2)">Stock index funds for long-term growth. Even at 65, you could live 25+ more years — you still need growth. If a crash hits, Buckets 1 and 2 buy you 5-7 years for stocks to recover.</div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--t2);line-height:1.8;margin-bottom:8px"><strong style="color:var(--or)">In this model:</strong> When enabled, the simulator gradually shifts your allocation from 100% stocks to ~40% stocks / 60% bonds between your start age and retirement. This reduces crash impact by absorbing losses in the bond portion while stocks recover.</p>
+      <p style="font-size:12px;color:var(--t2);line-height:1.8"><strong style="color:var(--or)">The tradeoff:</strong> Less growth in the final years (bonds return ~4% vs stocks ~8%). But protection from a 2008-style crash right before retirement can save you $100,000+ compared to being 100% in stocks.</p>
+    </div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Risk Analysis</div><div class="g2" id="mcR"></div></div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Scenario Comparison (with inflation)</div><div id="mcCmp"></div></div>
+  <button class="btn" id="btnSim">RE-RUN 500 SIMULATIONS</button>
+</div>
+
+<!-- TAB: INPUTS -->
+<div id="tab-in" class="hidden">
+  <div class="card"><div class="ct cyan"><span class="d"></span>Personal</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current Age</span><span class="sl-v" id="v-age">35</span></div><input type="range" id="s-age" min="18" max="60" value="35"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Retirement Age</span><span class="sl-v" id="v-ra">65</span></div><input type="range" id="s-ra" min="55" max="75" value="65"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Annual Salary</span><span class="sl-v" id="v-sal">$50,000.00</span></div><input type="range" id="s-sal" min="0" max="200000" step="1" value="50000"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Salary Growth</span><span class="sl-v" id="v-sg">3.00%</span></div><input type="range" id="s-sg" min="0" max="8" step="0.01" value="3"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Years Working in US</span><span class="sl-v" id="v-uy">2</span></div><input type="range" id="s-uy" min="0" max="40" value="2"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Expected Inflation</span><span class="sl-v" id="v-inf">3.00%</span></div><input type="range" id="s-inf" min="0" max="8" step="0.01" value="3"></div>
+    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">State of Residence (where you live)</div>
+    <select id="s-st"><option value="0">No state tax (FL, TX, NV, WA, WY, AK, NH, SD, TN)</option><option value="2.50">Arizona (2.50%)</option><option value="2.75">North Dakota (2.75%)</option><option value="3.05" selected>Indiana (3.05%)</option><option value="3.07">Pennsylvania (3.07%)</option><option value="4.25">Michigan (4.25%)</option><option value="4.40">Colorado (4.40%)</option><option value="4.75">North Carolina (4.75%)</option><option value="4.95">Illinois (4.95%)</option><option value="5.00">Massachusetts (5.00%)</option><option value="5.25">Virginia (5.25%)</option><option value="5.49">Georgia (5.49%)</option><option value="5.70">Ohio (5.70%)</option><option value="6.50">Maryland (6.50%)</option><option value="6.85">Minnesota (6.85%)</option><option value="6.99">New Jersey (6.99%)</option><option value="8.82">New York (8.82%)</option><option value="9.30">Oregon (9.30%)</option><option value="13.30">California (13.30%)</option></select></div>
+    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">State of Employment (where you work — if different)</div>
+    <select id="s-st2"><option value="0" selected>Same as residence</option><option value="0">No state tax (FL, TX, NV, WA, WY, AK, NH, SD, TN)</option><option value="2.50">Arizona (2.50%)</option><option value="2.75">North Dakota (2.75%)</option><option value="3.05">Indiana (3.05%)</option><option value="3.07">Pennsylvania (3.07%)</option><option value="4.25">Michigan (4.25%)</option><option value="4.40">Colorado (4.40%)</option><option value="4.75">North Carolina (4.75%)</option><option value="4.95">Illinois (4.95%)</option><option value="5.00">Massachusetts (5.00%)</option><option value="5.25">Virginia (5.25%)</option><option value="5.49">Georgia (5.49%)</option><option value="5.70">Ohio (5.70%)</option><option value="6.50">Maryland (6.50%)</option><option value="6.85">Minnesota (6.85%)</option><option value="6.99">New Jersey (6.99%)</option><option value="8.82">New York (8.82%)</option><option value="9.30">Oregon (9.30%)</option><option value="13.30">California (13.30%)</option></select>
+    <p class="note">If you live in one state but work in another (e.g., live in Indiana, work in Illinois), you may owe taxes to both states. Some states have reciprocal agreements that prevent double taxation — check with a tax professional.</p></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Employer Plan (401k/403b)</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Your Contribution</span><span class="sl-v" id="v-ec">6.00%</span></div><input type="range" id="s-ec" min="0" max="15" step="0.01" value="6"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Employer Match</span><span class="sl-v" id="v-em">3.00%</span></div><input type="range" id="s-em" min="0" max="15" step="0.01" value="3"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>IRAs</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Roth IRA</span><span class="sl-v" id="v-ri">$100.00</span></div><input type="range" id="s-ri" min="0" max="583" step="1" value="100"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Traditional IRA</span><span class="sl-v" id="v-ti">$0.00</span></div><input type="range" id="s-ti" min="0" max="583" step="1" value="0"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Additional Accounts</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly 457(b)</span><span class="sl-v" id="v-457">$0.00</span></div><input type="range" id="s-457" min="0" max="1000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly HSA</span><span class="sl-v" id="v-hsa">$0.00</span></div><input type="range" id="s-hsa" min="0" max="350" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Taxable Brokerage</span><span class="sl-v" id="v-tx">$0.00</span></div><input type="range" id="s-tx" min="0" max="2000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Expected Monthly Pension</span><span class="sl-v" id="v-pn">$0.00</span></div><input type="range" id="s-pn" min="0" max="5000" step="1" value="0"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Home &amp; Mortgage</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Home Value / Purchase Price</span><span class="sl-v" id="v-hv">$0.00</span></div><input type="range" id="s-hv" min="0" max="500000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Mortgage Balance (amount owed)</span><span class="sl-v" id="v-mb">$0.00</span></div><input type="range" id="s-mb" min="0" max="500000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Mortgage Interest Rate</span><span class="sl-v" id="v-mr">0.00%</span></div><input type="range" id="s-mr" min="0" max="9" step="0.01" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Mortgage Payment (P&amp;I only)</span><span class="sl-v" id="v-mp">$0.00</span></div><input type="range" id="s-mp" min="0" max="4000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Property Tax + Insurance (escrow)</span><span class="sl-v" id="v-esc">$0.00</span></div><input type="range" id="s-esc" min="0" max="1500" step="1" value="0"></div>
+    <div class="alert i" style="margin-bottom:14px"><strong>Important:</strong> Enter only Principal &amp; Interest (P&amp;I) above — NOT your total monthly payment. Your total payment likely includes property tax and homeowner's insurance (escrow). Only P&amp;I pays down the mortgage. Tax and insurance are separate expenses that continue even after the mortgage is paid off.<br><br>
+    <strong>Example:</strong> If your total payment is $1,385/month and escrow (tax + insurance) is $288/month, your P&amp;I is $1,097/month. Check your mortgage statement for the breakdown.<br><br>
+    <strong>No mortgage?</strong> Leave all values at $0.00. Renters, veterans with paid-off VA loans, or homeowners who own outright can skip this section.</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Home Appreciation Rate</span><span class="sl-v" id="v-ha">0.00%</span></div><input type="range" id="s-ha" min="0" max="6" step="0.01" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Extra Mortgage Payment</span><span class="sl-v" id="v-xm">$0.00/mo</span></div><input type="range" id="s-xm" min="0" max="500" step="1" value="0"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Custom Return Assumptions <span class="pro">PRO</span></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Stock Return (annual)</span><span class="sl-v" id="v-rstock">8.00%</span></div><input type="range" id="s-rstock" min="0" max="15" step="0.01" value="8"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Bond Return (annual)</span><span class="sl-v" id="v-rbond">4.00%</span></div><input type="range" id="s-rbond" min="0" max="8" step="0.01" value="4"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Cash Return (annual)</span><span class="sl-v" id="v-rcash">2.00%</span></div><input type="range" id="s-rcash" min="0" max="5" step="0.01" value="2"></div>
+    <p class="note">Default stock return is 8% (historical S&amp;P 500 average). The simulator uses these as base rates and adds volatility through fat-tail distributions.</p>
+  </div>
+  <button class="btn" id="btnCalc">CALCULATE →</button>
+</div>
+
+<!-- TAB: SCENARIOS (PRO) -->
+<div id="tab-scn" class="hidden">
+  <div class="pro-gate-wrap">
+    <div class="pro-gate">
+      <h3>🔒 Scenarios — PRO Feature</h3>
+      <p>Save unlimited retirement scenarios, compare strategies side-by-side, and load any scenario instantly to pick up where you left off.</p>
+      <div class="price">$5</div>
+      <div class="price-sub">one-time payment · lifetime access</div>
+      <button class="btn-pro" id="btnUpgrade1" style="padding:14px 40px;font-size:15px">Upgrade to PRO</button>
+      <div style="margin-top:16px;display:flex;align-items:center;gap:8px;justify-content:center">
+        <input type="text" id="proCode1" placeholder="Have an unlock code?" style="background:var(--bg);border:1px solid var(--bdr);color:var(--t1);padding:8px 12px;border-radius:6px;font-size:12px;width:180px;font-family:inherit">
+        <button class="btn-sm" id="btnCode1">Activate</button>
+      </div>
+    </div>
+  </div>
+  <div class="pro-content" style="display:none">
+    <div class="card"><div class="ct orange"><span class="d"></span>Saved Scenarios <span class="pro">PRO</span></div>
+    <p class="note" style="margin-bottom:14px">Save different retirement scenarios to compare strategies. Data is stored locally in your browser — never sent anywhere.</p>
+    <div id="scenarioList"></div>
+    <div style="margin-top:14px;display:flex;gap:10px;align-items:center">
+      <input type="text" id="scenarioName" placeholder="Scenario name (e.g., Aggressive, Conservative)" style="flex:1;background:var(--bg2);border:1px solid var(--bdr);color:var(--t1);padding:10px 14px;border-radius:8px;font-family:inherit;font-size:13px">
+      <button class="btn-pro" id="btnSaveScenario">Save Current</button>
+    </div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Compare Scenarios</div>
+    <div id="scenarioCompare"></div>
+    <p class="note" style="margin-top:10px">Save at least 2 scenarios to see a side-by-side comparison.</p>
+  </div>
+  </div>
+</div>
+
+<!-- TAB: SPOUSE (PRO) -->
+<div id="tab-spouse" class="hidden">
+  <div class="pro-gate-wrap">
+    <div class="pro-gate">
+      <h3>🔒 Spouse Planning — PRO Feature</h3>
+      <p>Model your partner's retirement alongside yours. See combined household income, net worth, and Social Security for both of you.</p>
+      <div class="price">$5</div>
+      <div class="price-sub">one-time payment · lifetime access</div>
+      <button class="btn-pro btnUpgrade" style="padding:14px 40px;font-size:15px">Upgrade to PRO</button>
+      <div style="margin-top:16px;display:flex;align-items:center;gap:8px;justify-content:center">
+        <input type="text" class="proCodeInput" placeholder="Have an unlock code?" style="background:var(--bg);border:1px solid var(--bdr);color:var(--t1);padding:8px 12px;border-radius:6px;font-size:12px;width:180px;font-family:inherit">
+        <button class="btn-sm btnCodeActivate">Activate</button>
+      </div>
+    </div>
+  </div>
+  <div class="pro-content" style="display:none">
+  <div class="card"><div class="ct purple"><span class="d"></span>Spouse / Partner Planning <span class="pro">PRO</span></div>
+    <p class="note" style="margin-bottom:14px">Model your partner's retirement alongside yours to see combined household income at retirement.</p>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Age</span><span class="sl-v" id="v-sp-age">35</span></div><input type="range" id="s-sp-age" min="18" max="60" value="35"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Retirement Age</span><span class="sl-v" id="v-sp-ra">65</span></div><input type="range" id="s-sp-ra" min="55" max="75" value="65"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Annual Salary</span><span class="sl-v" id="v-sp-sal">$0.00</span></div><input type="range" id="s-sp-sal" min="0" max="200000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Salary Growth</span><span class="sl-v" id="v-sp-sg">3.00%</span></div><input type="range" id="s-sp-sg" min="0" max="8" step="0.01" value="3"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse 401k/403b Contribution</span><span class="sl-v" id="v-sp-ec">0.00%</span></div><input type="range" id="s-sp-ec" min="0" max="15" step="0.01" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Employer Match</span><span class="sl-v" id="v-sp-em">0.00%</span></div><input type="range" id="s-sp-em" min="0" max="15" step="0.01" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Monthly Roth IRA</span><span class="sl-v" id="v-sp-ri">$0.00</span></div><input type="range" id="s-sp-ri" min="0" max="583" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Years Working in US</span><span class="sl-v" id="v-sp-uy">0</span></div><input type="range" id="s-sp-uy" min="0" max="40" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Monthly Pension</span><span class="sl-v" id="v-sp-pn">$0.00</span></div><input type="range" id="s-sp-pn" min="0" max="5000" step="1" value="0"></div>
+  </div>
+  <button class="btn" id="btnSpouse">CALCULATE HOUSEHOLD →</button>
+  <div class="card" style="margin-top:14px"><div class="ct green"><span class="d"></span>Household Results</div><div id="spouseResults"></div></div>
+  </div>
+</div>
+
+<!-- TAB: ROTH CONVERT (PRO) -->
+<div id="tab-roth" class="hidden">
+  <div class="pro-gate-wrap">
+    <div class="pro-gate">
+      <h3>🔒 Roth Conversion — PRO Feature</h3>
+      <p>Should you convert traditional 401k/IRA money to Roth? This optimizer models different strategies and tells you exactly how much you'll save in taxes — or if you should skip it.</p>
+      <div class="price">$5</div>
+      <div class="price-sub">one-time payment · lifetime access</div>
+      <button class="btn-pro btnUpgrade" style="padding:14px 40px;font-size:15px">Upgrade to PRO</button>
+      <div style="margin-top:16px;display:flex;align-items:center;gap:8px;justify-content:center">
+        <input type="text" class="proCodeInput" placeholder="Have an unlock code?" style="background:var(--bg);border:1px solid var(--bdr);color:var(--t1);padding:8px 12px;border-radius:6px;font-size:12px;width:180px;font-family:inherit">
+        <button class="btn-sm btnCodeActivate">Activate</button>
+      </div>
+    </div>
+  </div>
+  <div class="pro-content" style="display:none">
+  <div class="card"><div class="ct green"><span class="d"></span>Roth Conversion Optimizer <span class="pro">PRO</span></div>
+    <p class="note" style="margin-bottom:14px">Should you convert traditional 401k/IRA money to Roth? This tool models different conversion strategies to find your optimal tax savings. Converting pays tax now but withdrawals are tax-free forever.</p>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current Traditional Balance</span><span class="sl-v" id="v-rc-bal">$0.00</span></div><input type="range" id="s-rc-bal" min="0" max="500000" step="1000" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Annual Conversion Amount</span><span class="sl-v" id="v-rc-amt">$0.00</span></div><input type="range" id="s-rc-amt" min="0" max="100000" step="1000" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Convert Over (years)</span><span class="sl-v" id="v-rc-yrs">5</span></div><input type="range" id="s-rc-yrs" min="1" max="20" value="5"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current Marginal Tax Rate</span><span class="sl-v" id="v-rc-tax">22.00%</span></div><input type="range" id="s-rc-tax" min="10" max="37" step="0.01" value="22"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Expected Retirement Tax Rate</span><span class="sl-v" id="v-rc-rtax">12.00%</span></div><input type="range" id="s-rc-rtax" min="10" max="37" step="0.01" value="12"></div>
+  </div>
+  <button class="btn" id="btnRoth">ANALYZE CONVERSION →</button>
+  <div class="card" style="margin-top:14px"><div class="ct cyan"><span class="d"></span>Conversion Analysis</div><div id="rothResults"></div></div>
+  </div>
+</div>
+
+<!-- TAB: ABOUT -->
+<div id="tab-abt" class="hidden">
+  <div class="card"><div class="ct cyan"><span class="d"></span>Why This Tool Exists</div>
+    <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px">Most retirement calculators assume a straightforward financial life — one country, one career, one tax system. But millions of Americans, including international workers, immigrants, green card holders, veterans, gig workers, and anyone with a non-traditional career path, don't fit that mold.</p>
+    <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px">FinnG Retire was built to serve everyone — with specific features for international workers who face unique challenges like Social Security quarter requirements, totalization agreements, cross-border tax implications, and the "what if I leave" scenario that no other calculator models.</p>
+    <p style="font-size:13px;color:var(--t2);line-height:1.8"><strong style="color:var(--cy)">Privacy-first:</strong> Everything runs in your browser. No data is sent anywhere. No account linking. No login required. Your financial data stays on your device.</p>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Model Features</div>
+    <div class="g2">
+      <div class="sb" style="text-align:left"><div class="l">Monte Carlo + Fat Tails</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Student's t-distribution (5 df) produces crash-like events 2-3x more often than normal distribution — matching real markets</div></div>
+      <div class="sb" style="text-align:left"><div class="l">Federal + State Tax</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Models 2026 federal brackets on traditional account withdrawals plus state income tax. Shows after-tax retirement income</div></div>
+      <div class="sb" style="text-align:left"><div class="l">Inflation Adjusted</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Shows both nominal dollars and real purchasing power. $760k in 23 years buys like ~$385k today at 3% inflation</div></div>
+      <div class="sb" style="text-align:left"><div class="l">Healthcare Costs</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Projects Medicare premiums + supplemental insurance + out-of-pocket. Based on Fidelity's $315k+ lifetime estimate</div></div>
+      <div class="sb" style="text-align:left"><div class="l">RMD Modeling</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Required Minimum Distributions at 73 from traditional accounts. Shows tax impact of forced withdrawals</div></div>
+      <div class="sb" style="text-align:left"><div class="l">Job Loss + Crash Correlation</div><div style="font-size:11px;color:var(--t2);margin-top:6px">When crashes happen, job loss probability spikes. Model simulates zero contributions during job loss years</div></div>
+      <div class="sb" style="text-align:left"><div class="l">Currency Risk</div><div style="font-size:11px;color:var(--t2);margin-top:6px">For retire-abroad scenarios, models exchange rate volatility on your USD savings</div></div>
+      <div class="sb" style="text-align:left"><div class="l">SS Quarters + Totalization</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Tracks eligibility cliff, models zero-earning years in benefit formula, verifies totalization agreements for 30+ countries</div></div>
+    </div>
+  </div>
+  <div class="card"><div class="ct orange"><span class="d"></span>Known Limitations</div>
+    <p style="font-size:12px;color:var(--t2);line-height:1.8">Student's t-distribution is better than normal but still underestimates extreme tail events. Tax brackets are 2026 approximations and will change. Healthcare costs vary enormously by individual. No Roth conversion strategy modeling. No estate tax for non-citizens ($60k exemption vs $13.6M for citizens). No divorce, disability, or long-term care modeling. Single earner only. Not financial advice — consult a professional.</p>
+  </div>
+</div>
+
+<div class="footer">FinnG Retire — Comprehensive Retirement Planning for Everyone, Including International Workers<br>Privacy-first: all calculations run locally in your browser · Not financial advice · Consult a professional</div>
+</div>
+
+<script>
+// ===== CORE =====
+function $(id){return document.getElementById(id)}
+function fmt(v){return '$'+v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+function pct(v){return(v*100).toFixed(2)+'%'}
+function gv(id){var e=$('s-'+id);return e?Number(e.value):0}
+
+var ST={crash:false,bucket:true};
+
+// ===== TABS =====
+var TABS=[
+  {id:'dash',label:'Dashboard'},{id:'ss',label:'SS Tracker'},{id:'leave',label:'Leave US?'},
+  {id:'sim',label:'Simulator'},{id:'in',label:'Inputs'},
+  {id:'scn',label:'Scenarios',pro:true},{id:'spouse',label:'Spouse',pro:true},{id:'roth',label:'Roth Convert',pro:true},
+  {id:'abt',label:'About'}
+];
+
+var PRO_UNLOCKED=false; // flip to true when user pays
+
+function checkProCode(code){
+  // Simple hash check — replace with real validation later
+  var hash=0;for(var i=0;i<code.length;i++){hash=((hash<<5)-hash)+code.charCodeAt(i);hash|=0;}
+  return hash===-1289843080||hash===987654321; // placeholder hashes
+}
+
+function unlockPro(){
+  PRO_UNLOCKED=true;
+  localStorage.setItem('finng-pro','1');
+  document.querySelectorAll('.pro-gate-wrap').forEach(function(el){el.remove();});
+  document.querySelectorAll('.pro-content').forEach(function(el){el.style.display='';});
+  document.querySelectorAll('.tab .lock').forEach(function(el){el.textContent='';});
+  renderScenarios();
+}
+
+function initTabs(){
+  var h='';
+  for(var i=0;i<TABS.length;i++){
+    var lock=TABS[i].pro?'<span class="lock">🔒</span>':'';
+    h+='<button class="tab'+(TABS[i].id==='dash'?' active':'')+'" data-t="'+TABS[i].id+'">'+TABS[i].label+lock+'</button>';
+  }
+  $('tabBar').innerHTML=h;
+}
+
+function switchTab(id){
+  for(var i=0;i<TABS.length;i++){
+    $('tab-'+TABS[i].id).classList.toggle('hidden',TABS[i].id!==id);
+  }
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++){tabs[i].classList.toggle('active',tabs[i].getAttribute('data-t')===id);}
+}
+
+// ===== PARAMS =====
+function getP(){
+  return{
+    age:gv('age'),ra:gv('ra'),sal:gv('sal'),sg:gv('sg')/100,uy:gv('uy'),
+    ec:gv('ec')/100,em:gv('em')/100,ri:gv('ri'),ti:gv('ti'),
+    b457:gv('457'),hsa:gv('hsa'),tx:gv('tx'),pn:gv('pn'),
+    hv:gv('hv'),ha:gv('ha')/100,xm:gv('xm'),
+    mb:gv('mb')||gv('hv'), mortRate:gv('mr')/100||0.057, mortPay:gv('mp')||1097, esc:gv('esc')||0,
+    inf:gv('inf')/100,stTax:Number($('s-st').value)/100,
+    st2Tax:Number($('s-st2').value)/100,
+    rStock:(gv('rstock')||8)/100, rBond:(gv('rbond')||4)/100, rCash:(gv('rcash')||2)/100
+  };
+}
+
+// ===== TAX ENGINE =====
+function fedTax(income){
+  // 2026 brackets single filer (approximate)
+  var brackets=[[11600,.10],[47150,.12],[100525,.22],[191950,.24],[243725,.32],[609350,.35],[Infinity,.37]];
+  var tax=0,prev=0;
+  for(var i=0;i<brackets.length;i++){
+    var top=brackets[i][0],rate=brackets[i][1];
+    var taxable=Math.min(income,top)-prev;
+    if(taxable<=0)break;
+    tax+=taxable*rate;
+    prev=top;
+  }
+  return tax;
+}
+
+function totalTax(income,stRate,st2Rate){
+  st2Rate=st2Rate||0;
+  var combinedState=Math.max(stRate,st2Rate); // simplified: pay the higher rate (most reciprocal agreements)
+  if(st2Rate>0&&stRate>0&&st2Rate!==stRate)combinedState=stRate+st2Rate*0.5; // partial credit approximation
+  return fedTax(income)+income*combinedState;
+}
+
+// ===== SOCIAL SECURITY =====
+function calcSS(yrsW,sal,sg){
+  var earn=[],s=sal;
+  for(var y=0;y<yrsW;y++){earn.push(Math.min(s,168600));s*=(1+sg);}
+  earn.sort(function(a,b){return b-a;});
+  while(earn.length<35)earn.push(0);
+  var top=earn.slice(0,35);
+  var aime=0;for(var i=0;i<35;i++)aime+=top[i];
+  aime/=(35*12);
+  var pia;
+  if(aime<=1174)pia=aime*.90;
+  else if(aime<=7078)pia=1174*.90+(aime-1174)*.32;
+  else pia=1174*.90+(7078-1174)*.32+(aime-7078)*.15;
+  return{aime:aime,pia:pia,zeros:35-Math.min(yrsW,35)};
+}
+
+// ===== RMD =====
+function rmdFactor(age){
+  // Uniform Lifetime Table approximation
+  var factors={73:26.5,74:25.5,75:24.6,76:23.7,77:22.9,78:22.0,79:21.1,80:20.2,81:19.4,82:18.5,83:17.7,84:16.8,85:16.0};
+  return factors[age]||Math.max(10,27-(age-72));
+}
+
+// ===== FAT-TAIL RANDOM (Student's t, df=5) =====
+function randT(df){
+  // Generate Student's t via ratio of normal and chi-squared
+  var u1=Math.random(),u2=Math.random();
+  var z=Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2);
+  // Chi-squared with df degrees of freedom (sum of df standard normals squared)
+  var chi=0;
+  for(var i=0;i<df;i++){
+    var a=Math.random(),b=Math.random();
+    var n=Math.sqrt(-2*Math.log(a))*Math.cos(2*Math.PI*b);
+    chi+=n*n;
+  }
+  return z/Math.sqrt(chi/df);
+}
+
+// ===== MONTE CARLO ENGINE =====
+function runMC(p,nSim,ov){
+  nSim=nSim||500;ov=ov||{};
+  var crashOn=ov.crash!==undefined?ov.crash:ST.crash;
+  var bucketOn=ov.bucket!==undefined?ov.bucket:ST.bucket;
+  var cAge=ov.cAge||gv('ca')||63;
+  var cMag=ov.cMag||(gv('cm')/100)||(-0.37);
+  var jlProb=(gv('jl')||30)/100;
+  var bStart=gv('ba')||58;
+  var yrs=p.ra-p.age;
+  var results=[],paths=[];
+
+  for(var sim=0;sim<nSim;sim++){
+    var bE=0,bR=0,bT=0,b4=0,bH=0,bX=0;
+    var sal=p.sal,mBal=p.mb;
+    var path=[];
+    for(var y=0;y<yrs;y++){
+      var age=p.age+y;
+      // Fat-tail return (Student's t, df=5)
+      var t5=randT(5);
+      var ret=p.rStock+0.12*t5; // custom stock return + scaled volatility
+      var jobLoss=false;
+
+      // Crash injection
+      if(crashOn&&age===cAge){
+        ret=cMag;
+        if(Math.random()<jlProb)jobLoss=true;
+      }
+
+      // Bucket strategy
+      var sA=1.0;
+      if(bucketOn&&age>=bStart){sA=Math.max(0.4,(p.ra-age)/(p.ra-bStart));}
+      var eR=sA*ret+(1-sA)*p.rBond;
+
+      // Contributions (0 if job loss)
+      var contrib=jobLoss?0:1;
+      bE=(bE+sal*(p.ec+p.em)*contrib)*(1+eR);
+      bR=(bR+p.ri*12*contrib)*(1+eR);
+      bT=(bT+p.ti*12*contrib)*(1+eR);
+      b4=(b4+p.b457*12*contrib)*(1+eR);
+      bH=(bH+p.hsa*12*contrib)*(1+eR);
+      bX=(bX+p.tx*12*contrib)*(1+eR*0.85); // tax drag
+
+      if(!jobLoss)sal*=(1+p.sg);
+
+      // Mortgage
+      if(mBal>0){var mr=p.mortRate/12;for(var m=0;m<12;m++){if(mBal<=0)break;mBal=Math.max(0,mBal-(p.mortPay+p.xm-mBal*mr));}}
+
+      var totalI=bE+bR+bT+b4+bH+bX;
+      path.push({age:age+1,inv:totalI});
+    }
+    var hVal=p.hv*Math.pow(1+p.ha,yrs);
+    var hEq=hVal-Math.max(0,mBal);
+    var totalInv=bE+bR+bT+b4+bH+bX;
+    var nw=totalInv+hEq;
+    results.push({bE:bE,bR:bR,bT:bT,b4:b4,bH:bH,bX:bX,hEq:hEq,mBal:Math.max(0,mBal),nw:nw,totalInv:totalInv});
+    paths.push(path);
+  }
+  results.sort(function(a,b){return a.nw-b.nw;});
+  var pc=function(x){return results[Math.floor(x/100*(nSim-1))];};
+  return{p10:pc(10),p25:pc(25),p50:pc(50),p75:pc(75),p90:pc(90),worst:results[0],best:results[nSim-1],all:results,paths:paths};
+}
+
+// ===== RENDERERS =====
+function renderDash(p,mc){
+  var m=mc.p50;
+  var yrs=p.ra-p.age;
+  var totalYrs=p.uy+yrs;
+  var ss=calcSS(totalYrs,p.sal,p.sg);
+  var inv=m.totalInv;
+  var moInv=inv*0.04/12;
+  var totalMo=moInv+ss.pia+p.pn;
+  var inflFactor=Math.pow(1+p.inf,yrs);
+  var realNW=m.nw/inflFactor;
+  var realMo=totalMo/inflFactor;
+
+  // Nominal + real
+  $('nwStats').innerHTML=
+    '<div class="sb"><div class="l">Worst 10%</div><div class="v" style="color:var(--rd)">'+fmt(mc.p10.nw)+'</div><div class="s">Real: '+fmt(mc.p10.nw/inflFactor)+'</div></div>'+
+    '<div class="sb"><div class="l">Median</div><div class="v" style="color:var(--cy)">'+fmt(m.nw)+'</div><div class="s">Real: '+fmt(realNW)+'</div></div>'+
+    '<div class="sb"><div class="l">Best 10%</div><div class="v" style="color:var(--gn)">'+fmt(mc.p90.nw)+'</div><div class="s">Real: '+fmt(mc.p90.nw/inflFactor)+'</div></div>';
+
+  // Income table
+  var rows='';
+  if(m.bE>0)rows+='<tr><td>401(k)/403(b)</td><td class="n" style="color:var(--cy)">'+fmt(m.bE*0.04/12)+'</td><td class="n">'+fmt(m.bE*0.04)+'</td></tr>';
+  if(m.bR>0)rows+='<tr><td>Roth IRA (tax-free)</td><td class="n" style="color:var(--pr)">'+fmt(m.bR*0.04/12)+'</td><td class="n">'+fmt(m.bR*0.04)+'</td></tr>';
+  if(m.bT>0)rows+='<tr><td>Traditional IRA</td><td class="n" style="color:var(--bl)">'+fmt(m.bT*0.04/12)+'</td><td class="n">'+fmt(m.bT*0.04)+'</td></tr>';
+  if(m.b4>0)rows+='<tr><td>457(b)</td><td class="n" style="color:var(--cy)">'+fmt(m.b4*0.04/12)+'</td><td class="n">'+fmt(m.b4*0.04)+'</td></tr>';
+  if(m.bH>0)rows+='<tr><td>HSA</td><td class="n" style="color:var(--gn)">'+fmt(m.bH*0.04/12)+'</td><td class="n">'+fmt(m.bH*0.04)+'</td></tr>';
+  if(m.bX>0)rows+='<tr><td>Taxable Brokerage</td><td class="n">'+fmt(m.bX*0.04/12)+'</td><td class="n">'+fmt(m.bX*0.04)+'</td></tr>';
+  rows+='<tr><td>Social Security (at 67)</td><td class="n" style="color:var(--gn)">'+fmt(ss.pia)+'</td><td class="n">'+fmt(ss.pia*12)+'</td></tr>';
+  if(p.pn>0)rows+='<tr><td>Pension</td><td class="n" style="color:var(--or)">'+fmt(p.pn)+'</td><td class="n">'+fmt(p.pn*12)+'</td></tr>';
+  rows+='<tr style="border-top:2px solid var(--bdr)"><td><strong>Total (nominal)</strong></td><td class="n" style="color:var(--cy)"><strong>'+fmt(totalMo)+'</strong></td><td class="n"><strong>'+fmt(totalMo*12)+'</strong></td></tr>';
+  rows+='<tr><td><em>In today\'s dollars</em></td><td class="n" style="color:var(--t3)"><em>'+fmt(realMo)+'</em></td><td class="n" style="color:var(--t3)"><em>'+fmt(realMo*12)+'</em></td></tr>';
+  $('incTbl').innerHTML='<table class="ctbl"><tr><th>Source</th><th style="text-align:right">Monthly</th><th style="text-align:right">Annual</th></tr>'+rows+'</table>';
+
+  // Inflation
+  $('inflStats').innerHTML=
+    '<div class="sb"><div class="l">Net Worth (Nominal)</div><div class="v" style="color:var(--cy)">'+fmt(m.nw)+'</div><div class="s">Raw dollars at retirement</div></div>'+
+    '<div class="sb"><div class="l">Net Worth (Today\'s $)</div><div class="v" style="color:var(--or)">'+fmt(realNW)+'</div><div class="s">After '+pct(p.inf)+' inflation for '+yrs+' years</div></div>';
+
+  // Tax impact
+  var pretaxIncome=(m.bE+m.bT+m.b4)*0.04; // taxable withdrawals
+  var fedT=fedTax(pretaxIncome);
+  var stT=pretaxIncome*p.stTax;
+  var st2T=p.st2Tax>0?pretaxIncome*p.st2Tax*0.5:0; // partial credit for work state
+  var totalStateT=stT+st2T;
+  var afterTax=pretaxIncome-fedT-totalStateT+(m.bR+m.bH)*0.04+ss.pia*12*0.85+p.pn*12;
+  var stateRows='<tr><td>State tax — residence ('+pct(p.stTax)+')</td><td class="n" style="color:var(--rd)">-'+fmt(stT)+'</td></tr>';
+  if(p.st2Tax>0)stateRows+='<tr><td>State tax — employment ('+pct(p.st2Tax)+', partial credit)</td><td class="n" style="color:var(--rd)">-'+fmt(st2T)+'</td></tr>';
+  $('taxTbl').innerHTML=
+    '<table class="ctbl"><tr><th>Category</th><th style="text-align:right">Annual</th></tr>'+
+    '<tr><td>Taxable withdrawals (401k + Trad IRA + 457b)</td><td class="n">'+fmt(pretaxIncome)+'</td></tr>'+
+    '<tr><td>Federal tax</td><td class="n" style="color:var(--rd)">-'+fmt(fedT)+'</td></tr>'+
+    stateRows+
+    '<tr><td>Tax-free income (Roth + HSA)</td><td class="n" style="color:var(--gn)">'+fmt((m.bR+m.bH)*0.04)+'</td></tr>'+
+    '<tr style="border-top:2px solid var(--bdr)"><td><strong>After-tax annual income</strong></td><td class="n" style="color:var(--cy)"><strong>'+fmt(afterTax)+'</strong></td></tr>'+
+    '<tr><td><em>After-tax monthly</em></td><td class="n" style="color:var(--cy)"><em>'+fmt(afterTax/12)+'</em></td></tr></table>'+
+    (p.st2Tax>0?'<div class="alert w" style="margin-top:10px"><strong>Dual-state taxation detected.</strong> Living in one state and working in another may result in taxes to both. Some states have reciprocal agreements (e.g., Indiana and Illinois have one for certain situations). Consult a tax professional for your specific case.</div>':'')+
+    '<div class="alert i" style="margin-top:10px"><strong>This is why Roth matters.</strong> Roth withdrawals are not taxed, reducing your total tax bill. Every dollar in Roth is worth more than a dollar in traditional accounts.</div>';
+
+  // Healthcare
+  var annualHC=8200*inflFactor; // per person, grows with inflation
+  var lifetimeHC=annualHC*20; // ~20 years in retirement
+  $('healthTbl').innerHTML=
+    '<table class="ctbl"><tr><th>Expense</th><th style="text-align:right">Annual (at retirement)</th><th style="text-align:right">20-Year Total</th></tr>'+
+    '<tr><td>Medicare Part B + Part D premiums</td><td class="n">'+fmt(annualHC*0.45)+'</td><td class="n">'+fmt(annualHC*0.45*20)+'</td></tr>'+
+    '<tr><td>Supplemental insurance (Medigap)</td><td class="n">'+fmt(annualHC*0.25)+'</td><td class="n">'+fmt(annualHC*0.25*20)+'</td></tr>'+
+    '<tr><td>Out-of-pocket (dental, vision, copays)</td><td class="n">'+fmt(annualHC*0.30)+'</td><td class="n">'+fmt(annualHC*0.30*20)+'</td></tr>'+
+    '<tr style="border-top:2px solid var(--bdr)"><td><strong>Total healthcare</strong></td><td class="n" style="color:var(--rd)"><strong>'+fmt(annualHC)+'</strong></td><td class="n" style="color:var(--rd)"><strong>'+fmt(lifetimeHC)+'</strong></td></tr></table>'+
+    '<div class="alert w" style="margin-top:10px"><strong>Healthcare is the hidden retirement cost.</strong> This reduces your spendable income by ~'+fmt(annualHC/12)+'/month. Non-citizens must have lived in the US for 5+ years to qualify for Medicare.</div>';
+
+  // Risk analysis on dashboard
+  var n=mc.all.length;
+  $('dashRisk').innerHTML=[
+    {l:'Risk of net worth < $300,000',v:pct(mc.all.filter(function(r){return r.nw<300000}).length/n),c:'var(--rd)'},
+    {l:'Risk of net worth < $500,000',v:pct(mc.all.filter(function(r){return r.nw<500000}).length/n),c:'var(--or)'},
+    {l:'Chance of net worth > $750,000',v:pct(mc.all.filter(function(r){return r.nw>=750000}).length/n),c:'var(--gn)'},
+    {l:'Chance of net worth > $1,000,000',v:pct(mc.all.filter(function(r){return r.nw>=1000000}).length/n),c:'var(--cy)'}
+  ].map(function(r){return '<div class="sb" style="display:flex;justify-content:space-between;align-items:center;text-align:left;padding:16px"><span style="font-size:12px;color:var(--t1)">'+r.l+'</span><span class="mono" style="font-size:18px;font-weight:700;color:'+r.c+'">'+r.v+'</span></div>';}).join('');
+
+  // Mortgage payoff tracker
+  var mortBal=p.mb;
+  var mRate=p.mortRate/12;
+  var mortRows='';
+  var totalInterest=0,totalPrincipal=0;
+  var paidOff=false,paidOffAge=0;
+  for(var yr=0;yr<yrs;yr++){
+    var yrInterest=0,yrPrincipal=0;
+    for(var mo=0;mo<12;mo++){
+      if(mortBal<=0){if(!paidOff){paidOff=true;paidOffAge=p.age+yr;}break;}
+      var interest=mortBal*mRate;
+      var principal=p.mortPay+p.xm-interest;
+      if(principal>mortBal)principal=mortBal;
+      mortBal=Math.max(0,mortBal-principal);
+      yrInterest+=interest;
+      yrPrincipal+=principal;
+    }
+    totalInterest+=yrInterest;
+    totalPrincipal+=yrPrincipal;
+    if((yr+1)%5===0||yr===yrs-1||mortBal<=0){
+      mortRows+='<tr><td>Age '+(p.age+yr+1)+'</td><td class="n">'+fmt(mortBal)+'</td><td class="n">'+fmt(totalPrincipal)+'</td><td class="n" style="color:var(--rd)">'+fmt(totalInterest)+'</td></tr>';
+      if(mortBal<=0)break;
+    }
+  }
+  var totalHousing=p.mortPay+p.xm+p.esc;
+  var mortHdr='<div class="g2" style="margin-bottom:10px">'+
+    '<div class="sb"><div class="l">Mortgage Balance</div><div class="v" style="color:var(--cy);font-size:16px">'+fmt(p.mb)+'</div></div>'+
+    '<div class="sb"><div class="l">Interest Rate</div><div class="v" style="color:var(--or);font-size:16px">'+(p.mortRate*100).toFixed(2)+'%</div></div></div>'+
+    '<div class="g3" style="margin-bottom:14px">'+
+    '<div class="sb"><div class="l">P&I Payment</div><div class="v" style="color:var(--t1);font-size:14px">'+fmt(p.mortPay)+'</div><div class="s">+ Extra: '+fmt(p.xm)+'</div></div>'+
+    '<div class="sb"><div class="l">Tax + Insurance</div><div class="v" style="color:var(--t2);font-size:14px">'+fmt(p.esc)+'</div><div class="s">Escrow (ongoing cost)</div></div>'+
+    '<div class="sb"><div class="l">Total Housing Cost</div><div class="v" style="color:var(--pr);font-size:14px">'+fmt(totalHousing)+'</div><div class="s">per month</div></div></div>'+
+    (p.esc>0?'<div class="alert i" style="margin-bottom:10px"><strong>Note:</strong> Property tax and insurance ('+fmt(p.esc)+'/mo) continue even after the mortgage is paid off. Only P&I ('+fmt(p.mortPay)+') + extra ('+fmt(p.xm)+') pay down the loan balance.</div>':'');
+  $('mortTbl').innerHTML=mortHdr+
+    '<table class="ctbl"><tr><th>Year</th><th style="text-align:right">Balance Left</th><th style="text-align:right">Principal Paid</th><th style="text-align:right">Interest Paid</th></tr>'+mortRows+'</table>'+
+    (paidOff?'<div class="alert o" style="margin-top:10px"><strong>Mortgage paid off at age '+paidOffAge+'!</strong> That\'s '+(p.ra-paidOffAge)+' years mortgage-free before retirement. Total interest paid: '+fmt(totalInterest)+'.'+(p.esc>0?' You\'ll still pay '+fmt(p.esc)+'/mo in property tax and insurance.':'')+'</div>':
+    '<div class="alert w" style="margin-top:10px"><strong>Mortgage still active at retirement.</strong> Balance: '+fmt(mortBal)+'. Total interest paid: '+fmt(totalInterest)+'</div>');
+
+  // Chart
+  renderChart(mc,p);
+}
+
+function renderChart(mc,p){
+  var paths=mc.paths,yrs=paths[0].length;
+  var W=720,H=210,pad={t:20,r:20,b:30,l:90};
+  var cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  var bands=[];
+  for(var i=0;i<yrs;i++){
+    var vals=paths.map(function(p2){return p2[i].inv;}).sort(function(a,b){return a-b;});
+    bands.push({p25:vals[Math.floor(.25*vals.length)],p50:vals[Math.floor(.5*vals.length)],p75:vals[Math.floor(.75*vals.length)]});
+  }
+  var mx=0;for(var i=0;i<bands.length;i++){if(bands[i].p75>mx)mx=bands[i].p75;}mx*=1.15;
+  function x(i){return pad.l+(i/(yrs-1))*cW;}
+  function y(v){return pad.t+cH-(v/mx)*cH;}
+  var h='';
+  for(var i=0;i<=4;i++){var v=mx*i/4;h+='<line x1="'+pad.l+'" y1="'+y(v)+'" x2="'+(W-pad.r)+'" y2="'+y(v)+'" stroke="#1c2940" stroke-width="0.5"/><text x="'+(pad.l-5)+'" y="'+(y(v)+4)+'" text-anchor="end" fill="#475569" font-size="8" font-family="JetBrains Mono">'+fmt(v)+'</text>';}
+  var pts=[0,Math.floor(yrs/4),Math.floor(yrs/2),Math.floor(3*yrs/4),yrs-1];
+  for(var j=0;j<pts.length;j++){var i=pts[j];h+='<text x="'+x(i)+'" y="'+(H-5)+'" text-anchor="middle" fill="#475569" font-size="9" font-family="JetBrains Mono">'+(p.age+i+1)+'</text>';}
+  var b1='';for(var i=0;i<bands.length;i++){b1+=(i?'L':'M')+x(i)+','+y(bands[i].p25);}for(var i=bands.length-1;i>=0;i--){b1+='L'+x(i)+','+y(bands[i].p75);}
+  h+='<path d="'+b1+'Z" fill="#0891b2" opacity="0.12"/>';
+  var med='';for(var i=0;i<bands.length;i++){med+=(i?'L':'M')+x(i)+','+y(bands[i].p50);}
+  h+='<path d="'+med+'" fill="none" stroke="#06b6d4" stroke-width="2"/>';
+  $('chart').innerHTML=h;
+}
+
+function renderSS(p){
+  var q=p.uy*4,need=Math.max(0,40-q),yrsE=Math.max(0,Math.ceil(need/4));
+  $('ssStats').innerHTML=
+    '<div class="sb"><div class="l">Earned</div><div class="v" style="color:var(--gn)">'+q+'</div></div>'+
+    '<div class="sb"><div class="l">Needed</div><div class="v" style="color:'+(q>=40?'var(--gn)':'var(--or)')+'">'+need+'</div></div>';
+  $('ssAlert').innerHTML=q>=40?
+    '<div class="alert o"><strong>Eligible!</strong> You have '+q+' quarters.</div>':
+    '<div class="alert w"><strong>'+need+' quarters needed.</strong> Work '+yrsE+' more year'+(yrsE>1?'s':'')+' to qualify. Leaving before = $0 in SS benefits.</div>';
+  var gh='';for(var i=0;i<40;i++){gh+='<div class="q-cell '+(i<q?'earned':'need')+(i===39?' mile':'')+'"></div>';}
+  $('qGrid').innerHTML=gh;
+
+  // Benefit table
+  var scenarios=[{l:'10 years only',y:10},{l:'Work to 62 ('+(62-p.age+p.uy)+'y)',y:62-p.age+p.uy},{l:'Work to 65 ('+(65-p.age+p.uy)+'y)',y:65-p.age+p.uy},{l:'US-born (35y)',y:35}];
+  var bh='<table class="ctbl"><tr><th>Scenario</th><th style="text-align:right">Zero Years</th><th style="text-align:right">Monthly at 67</th></tr>';
+  for(var i=0;i<scenarios.length;i++){
+    var s=scenarios[i],ss2=calcSS(s.y,p.sal,p.sg);
+    bh+='<tr><td>'+s.l+'</td><td class="n">'+ss2.zeros+'</td><td class="n" style="color:'+(ss2.zeros>15?'var(--rd)':ss2.zeros>5?'var(--or)':'var(--gn)')+'">'+fmt(ss2.pia)+'</td></tr>';
+  }
+  $('ssBen').innerHTML=bh+'</table>';
+
+  // RMD table
+  var totalYrs=p.uy+(p.ra-p.age);
+  var mc=runMC(p,100);
+  var tradBal=mc.p50.bE+mc.p50.bT+mc.p50.b4; // all pre-tax accounts
+  var rh='<table class="ctbl"><tr><th>Age</th><th style="text-align:right">Traditional Balance</th><th style="text-align:right">RMD Amount</th><th style="text-align:right">Tax on RMD</th></tr>';
+  var bal=tradBal;
+  for(var age=73;age<=83;age++){
+    var factor=rmdFactor(age);
+    var rmd=bal/factor;
+    var tax=fedTax(rmd)+rmd*p.stTax;
+    rh+='<tr><td>'+age+'</td><td class="n">'+fmt(bal)+'</td><td class="n" style="color:var(--or)">'+fmt(rmd)+'</td><td class="n" style="color:var(--rd)">'+fmt(tax)+'</td></tr>';
+    bal=(bal-rmd)*1.05; // assume 5% growth
+  }
+  $('rmdTbl').innerHTML=rh+'</table>';
+}
+
+function renderLeave(p){
+  var la=gv('la'),col=gv('col'),fx=gv('fx')/100;
+  $('v-la').textContent='Age '+la;$('v-col').textContent='$'+col;$('v-fx').textContent=fx*100+'%';
+  var ce=$('s-cty'),cv=ce.value,cn=ce.options[ce.selectedIndex].text;
+  var yw=p.uy+(la-p.age),q=yw*4,elig=q>=40,hasTot=cv==='t';
+  var ss=elig?calcSS(yw,p.sal,p.sg):null;
+  var canCol=elig&&hasTot;
+
+  var yi=la-p.age;
+  var bE=0,bR=0,s=p.sal;
+  for(var y=0;y<yi;y++){bE=(bE+s*(p.ec+p.em))*1.07;bR=(bR+p.ri*12)*1.07;s*=(1+p.sg);}
+  var yg=Math.max(0,65-la);
+  var bEat65=bE*Math.pow(1.07,yg),bRat65=bR*Math.pow(1.07,yg);
+  var tax30=bEat65*0.30,afterE=bEat65-tax30;
+
+  // Currency risk
+  var colWithFx=col*(1+fx*0.5); // worst case: currency depreciates
+  var colBestFx=col*(1-fx*0.3); // best case: currency appreciates
+
+  var ssHtml='';
+  if(!elig)ssHtml='<div class="alert d"><strong>NOT ELIGIBLE.</strong> '+q+'/40 quarters. Work '+Math.ceil((40-q)/4)+' more year(s).</div>';
+  else if(cv==='x')ssHtml='<div class="alert w">Select country to check totalization agreement.</div>';
+  else if(hasTot)ssHtml='<div class="alert o"><strong>'+cn+' HAS a totalization agreement.</strong> SS may continue: ~'+fmt(ss.pia)+'/mo at 67.</div>';
+  else ssHtml='<div class="alert d"><strong>'+cn+' has NO agreement.</strong> SS benefits STOP after 6 months. ~'+fmt(ss.pia)+'/mo at risk. Consider US citizenship before leaving.</div>';
+
+  $('leaveRes').innerHTML=
+    '<div class="g2" style="margin-top:10px"><div class="sb"><div class="l">US Work Years</div><div class="v" style="color:var(--cy)">'+yw+'</div></div><div class="sb"><div class="l">SS Quarters</div><div class="v" style="color:'+(elig?'var(--gn)':'var(--rd)')+'">'+q+'/40</div></div></div>'+ssHtml+
+    '<div class="g2" style="margin-top:10px"><div class="sb"><div class="l">Retire in US (~$2,500/mo)</div><div class="v" style="color:var(--or)">'+fmt(2500)+'/mo</div></div><div class="sb"><div class="l">Home Country (±'+Math.round(fx*100)+'% FX risk)</div><div class="v" style="color:var(--gn)">'+fmt(col)+'/mo</div><div class="s">Range: '+fmt(colBestFx)+' - '+fmt(colWithFx)+'</div></div></div>';
+
+  $('acctFate').innerHTML=
+    '<table class="ctbl"><tr><th>Account</th><th style="text-align:right">At Leave</th><th style="text-align:right">At 65</th><th style="text-align:right">After Tax</th></tr>'+
+    '<tr><td>401(k)/403(b) <span style="color:var(--rd);font-size:10px">30% withholding</span></td><td class="n">'+fmt(bE)+'</td><td class="n">'+fmt(bEat65)+'</td><td class="n" style="color:var(--rd)">'+fmt(afterE)+'</td></tr>'+
+    '<tr><td>Roth IRA <span style="color:var(--gn);font-size:10px">tax-free worldwide</span></td><td class="n">'+fmt(bR)+'</td><td class="n">'+fmt(bRat65)+'</td><td class="n" style="color:var(--gn)">'+fmt(bRat65)+'</td></tr>'+
+    '<tr><td>Social Security</td><td class="n">—</td><td class="n">—</td><td class="n" style="color:'+(canCol?'var(--gn)':elig?'var(--or)':'var(--rd)')+'">'+
+    (canCol?fmt(ss.pia)+'/mo':elig?'AT RISK':'$0')+'</td></tr></table>';
+}
+
+function renderSim(mc){
+  var p=getP();
+  var yrs=p.ra-p.age;
+  var inflFactor=Math.pow(1+p.inf,yrs);
+  var n=mc.all.length;
+
+  // Calculate average
+  var totalNW=0;
+  for(var i=0;i<n;i++){totalNW+=mc.all[i].nw;}
+  var avgNW=totalNW/n;
+
+  // Full range: Lowest, Average, Highest
+  $('mcFull').innerHTML=
+    '<div class="sb"><div class="l">Lowest (Worst Case)</div><div class="v" style="color:var(--rd)">'+fmt(mc.worst.nw)+'</div><div class="s">Simulation #1 of '+n+'</div></div>'+
+    '<div class="sb"><div class="l">Average (All '+n+')</div><div class="v" style="color:var(--cy)">'+fmt(avgNW)+'</div><div class="s">Mean of all simulations</div></div>'+
+    '<div class="sb"><div class="l">Highest (Best Case)</div><div class="v" style="color:var(--gn)">'+fmt(mc.best.nw)+'</div><div class="s">Simulation #'+n+' of '+n+'</div></div>';
+
+  // Percentiles
+  $('mcPct').innerHTML=
+    '<div class="sb"><div class="l">10th Percentile</div><div class="v" style="color:var(--or)">'+fmt(mc.p10.nw)+'</div><div class="s">90% chance of beating this</div></div>'+
+    '<div class="sb"><div class="l">Median (50th)</div><div class="v" style="color:var(--cy)">'+fmt(mc.p50.nw)+'</div><div class="s">Equal chance above or below</div></div>'+
+    '<div class="sb"><div class="l">90th Percentile</div><div class="v" style="color:var(--gn)">'+fmt(mc.p90.nw)+'</div><div class="s">10% chance of reaching this</div></div>';
+
+  // Inflation-adjusted versions
+  $('mcInfl').innerHTML=
+    '<div class="sb"><div class="l">Lowest (Today\'s $)</div><div class="v" style="color:var(--rd)">'+fmt(mc.worst.nw/inflFactor)+'</div><div class="s">Nominal: '+fmt(mc.worst.nw)+'</div></div>'+
+    '<div class="sb"><div class="l">Average (Today\'s $)</div><div class="v" style="color:var(--or)">'+fmt(avgNW/inflFactor)+'</div><div class="s">Nominal: '+fmt(avgNW)+'</div></div>'+
+    '<div class="sb"><div class="l">Highest (Today\'s $)</div><div class="v" style="color:var(--gn)">'+fmt(mc.best.nw/inflFactor)+'</div><div class="s">Nominal: '+fmt(mc.best.nw)+'</div></div>';
+
+  // Distribution — Wall Street style probability density line graph
+  var nBins=40;
+  var bk=new Array(nBins).fill(0);
+  var mn=mc.worst.nw,mx2=mc.best.nw,rng=mx2-mn||1;
+  for(var i=0;i<n;i++){var idx=Math.min(nBins-1,Math.floor((mc.all[i].nw-mn)/rng*nBins));bk[idx]++;}
+  var mbk=0;for(var i=0;i<nBins;i++){if(bk[i]>mbk)mbk=bk[i];}
+  // Smooth the curve with 3-point moving average
+  var sm=[];for(var i=0;i<nBins;i++){var v=bk[i];if(i>0)v+=bk[i-1];if(i<nBins-1)v+=bk[i+1];sm.push(v/(i>0&&i<nBins-1?3:2));}
+  var smMax=0;for(var i=0;i<nBins;i++){if(sm[i]>smMax)smMax=sm[i];}
+  var W=720,H=200,pad={t:20,r:30,b:40,l:90};
+  var cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  function dx(i){return pad.l+(i/(nBins-1))*cW;}
+  function dy(v){return pad.t+cH-(v/smMax)*cH;}
+  var svgH='';
+  // Y-axis
+  for(var i=0;i<=3;i++){var v=smMax*i/3;svgH+='<line x1="'+pad.l+'" y1="'+dy(v)+'" x2="'+(W-pad.r)+'" y2="'+dy(v)+'" stroke="#1c2940" stroke-width="0.5"/>';}
+  svgH+='<text x="'+(pad.l-5)+'" y="'+(pad.t-5)+'" text-anchor="end" fill="#64748b" font-size="8" font-family="JetBrains Mono">Probability</text>';
+  // X-axis labels
+  for(var i=0;i<=4;i++){var val=mn+(rng*i/4);svgH+='<text x="'+dx(i*(nBins-1)/4)+'" y="'+(H-5)+'" text-anchor="middle" fill="#64748b" font-size="8" font-family="JetBrains Mono">'+fmt(val)+'</text>';}
+  // Filled area under curve
+  var areaPath='M'+dx(0)+','+dy(0);
+  for(var i=0;i<nBins;i++){areaPath+='L'+dx(i)+','+dy(sm[i]);}
+  areaPath+='L'+dx(nBins-1)+','+dy(0)+'Z';
+  svgH+='<path d="'+areaPath+'" fill="url(#distGrad)" opacity="0.3"/>';
+  // Line curve
+  var linePath='';
+  for(var i=0;i<nBins;i++){linePath+=(i?'L':'M')+dx(i)+','+dy(sm[i]);}
+  svgH+='<path d="'+linePath+'" fill="none" stroke="#06b6d4" stroke-width="2.5"/>';
+  // Median marker
+  var medIdx=Math.floor((mc.p50.nw-mn)/rng*nBins);medIdx=Math.min(nBins-1,Math.max(0,medIdx));
+  svgH+='<line x1="'+dx(medIdx)+'" y1="'+pad.t+'" x2="'+dx(medIdx)+'" y2="'+(H-pad.b)+'" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>';
+  svgH+='<text x="'+dx(medIdx)+'" y="'+(pad.t-4)+'" text-anchor="middle" fill="#f59e0b" font-size="9" font-family="JetBrains Mono">Median: '+fmt(mc.p50.nw)+'</text>';
+  // P10 marker
+  var p10Idx=Math.floor((mc.p10.nw-mn)/rng*nBins);p10Idx=Math.min(nBins-1,Math.max(0,p10Idx));
+  svgH+='<line x1="'+dx(p10Idx)+'" y1="'+pad.t+'" x2="'+dx(p10Idx)+'" y2="'+(H-pad.b)+'" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,3"/>';
+  svgH+='<text x="'+Math.max(pad.l+30,dx(p10Idx))+'" y="'+(pad.t+12)+'" text-anchor="middle" fill="#ef4444" font-size="8" font-family="JetBrains Mono">P10</text>';
+  // P90 marker
+  var p90Idx=Math.floor((mc.p90.nw-mn)/rng*nBins);p90Idx=Math.min(nBins-1,Math.max(0,p90Idx));
+  svgH+='<line x1="'+dx(p90Idx)+'" y1="'+pad.t+'" x2="'+dx(p90Idx)+'" y2="'+(H-pad.b)+'" stroke="#10b981" stroke-width="1" stroke-dasharray="3,3"/>';
+  svgH+='<text x="'+Math.min(W-pad.r-30,dx(p90Idx))+'" y="'+(pad.t+12)+'" text-anchor="middle" fill="#10b981" font-size="8" font-family="JetBrains Mono">P90</text>';
+  // Gradient def
+  svgH='<defs><linearGradient id="distGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#06b6d4" stop-opacity="0.6"/><stop offset="100%" stop-color="#06b6d4" stop-opacity="0.05"/></linearGradient></defs>'+svgH;
+  $('distSvg').innerHTML=svgH;
+
+  // Risk analysis
+  $('mcR').innerHTML=[
+    {l:'Risk < $300k',v:pct(mc.all.filter(function(r){return r.nw<300000}).length/n),c:'var(--rd)'},
+    {l:'Risk < $500k',v:pct(mc.all.filter(function(r){return r.nw<500000}).length/n),c:'var(--or)'},
+    {l:'Chance > $750k',v:pct(mc.all.filter(function(r){return r.nw>=750000}).length/n),c:'var(--gn)'},
+    {l:'Chance > $1M',v:pct(mc.all.filter(function(r){return r.nw>=1000000}).length/n),c:'var(--cy)'}
+  ].map(function(r){return '<div class="sb" style="display:flex;justify-content:space-between;align-items:center;text-align:left"><span style="font-size:11px;color:var(--t2)">'+r.l+'</span><span class="mono" style="font-size:15px;font-weight:700;color:'+r.c+'">'+r.v+'</span></div>';}).join('');
+
+  // Scenario comparison with inflation
+  var scen=[{l:'No crash + bucket',cr:false,bu:true,c:'var(--cy)'},{l:'2008 crash, no protection',cr:true,bu:false,c:'var(--rd)'},{l:'2008 crash + bucket',cr:true,bu:true,c:'var(--gn)'}];
+  var ch='';
+  for(var i=0;i<scen.length;i++){
+    var s=scen[i];
+    var r=runMC(p,200,{crash:s.cr,bucket:s.bu,cAge:63,cMag:-0.37});
+    var realVal=r.p50.nw/inflFactor;
+    ch+='<div class="sc-row"><div><div style="font-size:12px;color:var(--t1)">'+s.l+'</div><div style="font-size:10px;color:var(--t3)">Median · Today\'s $: '+fmt(realVal)+'</div></div><div class="mono" style="font-size:20px;font-weight:700;color:'+s.c+'">'+fmt(r.p50.nw)+'</div></div>';
+  }
+  $('mcCmp').innerHTML=ch;
+}
+
+// ===== MAIN =====
+function runAll(){
+  var p=getP();
+  var mc=runMC(p);
+  renderDash(p,mc);
+  renderSS(p);
+  renderLeave(p);
+  renderSim(mc);
+}
+
+// ===== SCENARIOS (Save/Load) =====
+function getScenarios(){try{return JSON.parse(localStorage.getItem('finng-scenarios')||'[]');}catch(e){return[];}}
+function saveScenarios(arr){localStorage.setItem('finng-scenarios',JSON.stringify(arr));}
+
+function saveCurrentScenario(){
+  var name=$('scenarioName').value.trim();
+  if(!name){alert('Please enter a scenario name.');return;}
+  var p=getP();
+  var mc=runMC(p,100);
+  var scn={name:name,date:new Date().toLocaleDateString(),params:p,nw:mc.p50.nw,id:Date.now()};
+  var all=getScenarios();
+  all.push(scn);
+  saveScenarios(all);
+  $('scenarioName').value='';
+  renderScenarios();
+}
+
+function loadScenario(id){
+  var all=getScenarios();
+  var scn=all.find(function(s){return s.id===id;});
+  if(!scn)return;
+  var p=scn.params;
+  var fields={age:'age',ra:'ra',sal:'sal',uy:'uy',ec:'ec',em:'em',ri:'ri',ti:'ti','457':'b457',hsa:'hsa',tx:'tx',pn:'pn',hv:'hv',mb:'mb',xm:'xm'};
+  for(var k in fields){
+    var el=$('s-'+k);
+    if(el&&p[fields[k]]!==undefined){
+      var v=p[fields[k]];
+      if(k==='ec'||k==='em'||k==='sg'||k==='ha'||k==='inf')v=v*100;
+      el.value=v;
+      el.dispatchEvent(new Event('input'));
+    }
+  }
+  runAll();switchTab('dash');
+}
+
+function deleteScenario(id){
+  var all=getScenarios().filter(function(s){return s.id!==id;});
+  saveScenarios(all);
+  renderScenarios();
+}
+
+function renderScenarios(){
+  var all=getScenarios();
+  if(all.length===0){$('scenarioList').innerHTML='<p class="note">No saved scenarios yet. Enter your inputs, calculate, then save here.</p>';$('scenarioCompare').innerHTML='';return;}
+  var h='';
+  for(var i=0;i<all.length;i++){
+    var s=all[i];
+    h+='<div class="scenario-card"><div><div class="sc-name">'+s.name+'</div><div class="sc-date">'+s.date+' · Median net worth: '+fmt(s.nw)+'</div></div><div class="sc-btns"><button class="btn-sm" data-load="'+s.id+'">Load</button><button class="btn-sm" data-del="'+s.id+'" style="color:var(--rd)">Delete</button></div></div>';
+  }
+  $('scenarioList').innerHTML=h;
+  // Bind buttons
+  document.querySelectorAll('[data-load]').forEach(function(b){b.addEventListener('click',function(){loadScenario(Number(b.getAttribute('data-load')));});});
+  document.querySelectorAll('[data-del]').forEach(function(b){b.addEventListener('click',function(){deleteScenario(Number(b.getAttribute('data-del')));});});
+  // Comparison table
+  if(all.length>=2){
+    var ct='<table class="ctbl"><tr><th>Scenario</th><th style="text-align:right">Median Net Worth</th><th style="text-align:right">Salary</th><th style="text-align:right">Contribution</th></tr>';
+    for(var i=0;i<all.length;i++){
+      var s=all[i],p2=s.params;
+      ct+='<tr><td>'+s.name+'</td><td class="n" style="color:var(--cy)">'+fmt(s.nw)+'</td><td class="n">'+fmt(p2.sal)+'</td><td class="n">'+pct(p2.ec)+'</td></tr>';
+    }
+    ct+='</table>';
+    $('scenarioCompare').innerHTML=ct;
+  }
+}
+
+// ===== PDF EXPORT =====
+function exportPDF(){
+  var p=getP();
+  var mc=runMC(p);
+  var m=mc.p50;
+  var yrs=p.ra-p.age;
+  var inflFactor=Math.pow(1+p.inf,yrs);
+  var ss=calcSS(p.uy+yrs,p.sal,p.sg);
+  var moInv=m.totalInv*0.04/12;
+  var totalMo=moInv+ss.pia+p.pn;
+  var n=mc.all.length;
+  var riskBelow300=pct(mc.all.filter(function(r){return r.nw<300000}).length/n);
+  var riskBelow500=pct(mc.all.filter(function(r){return r.nw<500000}).length/n);
+  var chanceAbove750=pct(mc.all.filter(function(r){return r.nw>=750000}).length/n);
+  var chanceAbove1M=pct(mc.all.filter(function(r){return r.nw>=1000000}).length/n);
+
+  var w=window.open('','_blank');
+  w.document.write('<!DOCTYPE html><html><head><title>FinnG Retire — Your Retirement Plan</title>');
+  w.document.write('<style>body{font-family:Segoe UI,Arial,sans-serif;max-width:800px;margin:0 auto;padding:40px;color:#1a1a2e;line-height:1.6}');
+  w.document.write('h1{color:#3b5de7;border-bottom:3px solid #3b5de7;padding-bottom:10px}h2{color:#6b3fd4;margin-top:30px}');
+  w.document.write('table{width:100%;border-collapse:collapse;margin:16px 0}th,td{padding:10px 14px;text-align:left;border-bottom:1px solid #e2e8f0}th{background:#f1f5f9;font-weight:600}');
+  w.document.write('.val{text-align:right;font-family:monospace;font-size:15px}.highlight{background:#eff6ff}.warn{color:#dc2626}.good{color:#059669}');
+  w.document.write('.footer{margin-top:40px;padding-top:20px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8}');
+  w.document.write('@media print{body{padding:20px}}</style></head><body>');
+
+  w.document.write('<h1>FinnG Retire — Your Retirement Plan</h1>');
+  w.document.write('<p>Generated: '+new Date().toLocaleDateString()+' · Age: '+p.age+' · Retirement Age: '+p.ra+' · '+yrs+' years to retirement</p>');
+
+  w.document.write('<h2>Net Worth at Retirement</h2>');
+  w.document.write('<table><tr><th>Scenario</th><th class="val">Net Worth</th><th class="val">Today\'s Dollars</th></tr>');
+  w.document.write('<tr><td>Worst Case (P10)</td><td class="val warn">'+fmt(mc.p10.nw)+'</td><td class="val">'+fmt(mc.p10.nw/inflFactor)+'</td></tr>');
+  w.document.write('<tr class="highlight"><td><strong>Median (P50)</strong></td><td class="val"><strong>'+fmt(m.nw)+'</strong></td><td class="val"><strong>'+fmt(m.nw/inflFactor)+'</strong></td></tr>');
+  w.document.write('<tr><td>Best Case (P90)</td><td class="val good">'+fmt(mc.p90.nw)+'</td><td class="val">'+fmt(mc.p90.nw/inflFactor)+'</td></tr></table>');
+
+  w.document.write('<h2>Monthly Retirement Income</h2>');
+  w.document.write('<table><tr><th>Source</th><th class="val">Monthly</th></tr>');
+  w.document.write('<tr><td>Investment withdrawals (4% rule)</td><td class="val">'+fmt(moInv)+'</td></tr>');
+  w.document.write('<tr><td>Social Security (at 67)</td><td class="val">'+fmt(ss.pia)+'</td></tr>');
+  if(p.pn>0)w.document.write('<tr><td>Pension</td><td class="val">'+fmt(p.pn)+'</td></tr>');
+  w.document.write('<tr class="highlight"><td><strong>Total Monthly</strong></td><td class="val"><strong>'+fmt(totalMo)+'</strong></td></tr></table>');
+
+  w.document.write('<h2>Risk Analysis (500 Simulations)</h2>');
+  w.document.write('<table><tr><th>Metric</th><th class="val">Probability</th></tr>');
+  w.document.write('<tr><td>Risk of net worth below $300,000</td><td class="val warn">'+riskBelow300+'</td></tr>');
+  w.document.write('<tr><td>Risk of net worth below $500,000</td><td class="val warn">'+riskBelow500+'</td></tr>');
+  w.document.write('<tr><td>Chance of exceeding $750,000</td><td class="val good">'+chanceAbove750+'</td></tr>');
+  w.document.write('<tr><td>Chance of exceeding $1,000,000</td><td class="val good">'+chanceAbove1M+'</td></tr></table>');
+
+  w.document.write('<h2>Your Inputs</h2>');
+  w.document.write('<table><tr><th>Parameter</th><th class="val">Value</th></tr>');
+  w.document.write('<tr><td>Annual Salary</td><td class="val">'+fmt(p.sal)+'</td></tr>');
+  w.document.write('<tr><td>401k/403b Contribution</td><td class="val">'+pct(p.ec)+'</td></tr>');
+  w.document.write('<tr><td>Employer Match</td><td class="val">'+pct(p.em)+'</td></tr>');
+  w.document.write('<tr><td>Monthly Roth IRA</td><td class="val">'+fmt(p.ri)+'</td></tr>');
+  if(p.hv>0)w.document.write('<tr><td>Home Value</td><td class="val">'+fmt(p.hv)+'</td></tr>');
+  if(p.mb>0)w.document.write('<tr><td>Mortgage Balance</td><td class="val">'+fmt(p.mb)+'</td></tr>');
+  w.document.write('<tr><td>Expected Stock Return</td><td class="val">'+pct(p.rStock)+'</td></tr>');
+  w.document.write('<tr><td>Expected Inflation</td><td class="val">'+pct(p.inf)+'</td></tr></table>');
+
+  w.document.write('<div class="footer">Generated by FinnG Retire — Projection Calculator<br>');
+  w.document.write('This report is for educational and planning purposes only. It is not financial advice.<br>');
+  w.document.write('Projections use Monte Carlo simulation with 500 scenarios and fat-tail distributions.<br>');
+  w.document.write('Privacy: no data was transmitted to generate this report. All calculations ran locally in your browser.<br>');
+  w.document.write('Copyright &copy; 2026 FinnG. All Rights Reserved.</div>');
+
+  w.document.write('</body></html>');
+  w.document.close();
+  setTimeout(function(){w.print();},500);
+}
+
+// ===== SPOUSE PLANNING =====
+function runSpouse(){
+  var p=getP();
+  var sp={
+    age:Number($('s-sp-age').value),ra:Number($('s-sp-ra').value),
+    sal:Number($('s-sp-sal').value),sg:Number($('s-sp-sg').value)/100,
+    ec:Number($('s-sp-ec').value)/100,em:Number($('s-sp-em').value)/100,
+    ri:Number($('s-sp-ri').value),uy:Number($('s-sp-uy').value),pn:Number($('s-sp-pn').value)
+  };
+  if(sp.sal===0){$('spouseResults').innerHTML='<p class="note">Enter spouse salary above to see household results.</p>';return;}
+
+  // Run MC for primary
+  var mc1=runMC(p,200);
+  // Run simplified MC for spouse
+  var spYrs=sp.ra-sp.age;
+  var spBals=[];
+  for(var sim=0;sim<200;sim++){
+    var bE=0,bR=0,sal=sp.sal;
+    for(var y=0;y<spYrs;y++){
+      var t5=randT(5);
+      var ret=p.rStock+0.12*t5;
+      bE=(bE+sal*(sp.ec+sp.em))*(1+ret);
+      bR=(bR+sp.ri*12)*(1+ret);
+      sal*=(1+sp.sg);
+    }
+    spBals.push(bE+bR);
+  }
+  spBals.sort(function(a,b){return a-b;});
+  var spMedian=spBals[Math.floor(spBals.length*0.5)];
+  var spSS=calcSS(sp.uy+spYrs,sp.sal,sp.sg);
+
+  var p1inv=mc1.p50.totalInv;
+  var p1mo=p1inv*0.04/12;
+  var ss1=calcSS(p.uy+(p.ra-p.age),p.sal,p.sg);
+  var spMo=spMedian*0.04/12;
+  var houseTotal=p1mo+ss1.pia+p.pn+spMo+spSS.pia+sp.pn;
+  var houseNW=mc1.p50.nw+spMedian+p.hv*Math.pow(1+p.ha,p.ra-p.age);
+  var inflFactor=Math.pow(1+p.inf,p.ra-p.age);
+
+  $('spouseResults').innerHTML=
+    '<table class="ctbl"><tr><th></th><th style="text-align:right">You</th><th style="text-align:right">Spouse</th><th style="text-align:right">Household</th></tr>'+
+    '<tr><td>Investment Balance</td><td class="n">'+fmt(p1inv)+'</td><td class="n">'+fmt(spMedian)+'</td><td class="n" style="color:var(--cy)"><strong>'+fmt(p1inv+spMedian)+'</strong></td></tr>'+
+    '<tr><td>Monthly Income (4%)</td><td class="n">'+fmt(p1mo)+'</td><td class="n">'+fmt(spMo)+'</td><td class="n">'+fmt(p1mo+spMo)+'</td></tr>'+
+    '<tr><td>Social Security</td><td class="n">'+fmt(ss1.pia)+'</td><td class="n">'+fmt(spSS.pia)+'</td><td class="n">'+fmt(ss1.pia+spSS.pia)+'</td></tr>'+
+    (p.pn+sp.pn>0?'<tr><td>Pension</td><td class="n">'+fmt(p.pn)+'</td><td class="n">'+fmt(sp.pn)+'</td><td class="n">'+fmt(p.pn+sp.pn)+'</td></tr>':'')+
+    '<tr style="border-top:2px solid var(--bdr)"><td><strong>Total Monthly Income</strong></td><td class="n">'+fmt(p1mo+ss1.pia+p.pn)+'</td><td class="n">'+fmt(spMo+spSS.pia+sp.pn)+'</td><td class="n" style="color:var(--gn);font-size:18px"><strong>'+fmt(houseTotal)+'</strong></td></tr>'+
+    '<tr><td><strong>Total Net Worth</strong></td><td></td><td></td><td class="n" style="color:var(--cy);font-size:18px"><strong>'+fmt(houseNW)+'</strong></td></tr>'+
+    '<tr><td><em>In today\'s dollars</em></td><td></td><td></td><td class="n" style="color:var(--or)"><em>'+fmt(houseNW/inflFactor)+'</em></td></tr></table>';
+}
+
+// ===== ROTH CONVERSION OPTIMIZER =====
+function runRothConvert(){
+  var bal=Number($('s-rc-bal').value);
+  var amt=Number($('s-rc-amt').value);
+  var yrs=Number($('s-rc-yrs').value);
+  var curTax=Number($('s-rc-tax').value)/100;
+  var retTax=Number($('s-rc-rtax').value)/100;
+  var ret=getP().rStock;
+
+  if(bal===0){$('rothResults').innerHTML='<p class="note">Enter your current traditional balance above.</p>';return;}
+
+  var toRetire=getP().ra-getP().age;
+  // Scenario 1: No conversion — keep everything traditional
+  var tradBal=bal*Math.pow(1+ret,toRetire);
+  var tradAfterTax=tradBal*(1-retTax);
+
+  // Scenario 2: Convert specified amount per year
+  var remaining=bal;
+  var rothBal=0;
+  var totalTaxPaid=0;
+  for(var y=0;y<yrs&&remaining>0;y++){
+    var convert=Math.min(amt,remaining);
+    var tax=convert*curTax;
+    totalTaxPaid+=tax;
+    remaining-=convert;
+    rothBal=(rothBal+convert)*(1+ret);
+    remaining*=(1+ret);
+  }
+  // Grow remaining years
+  var yearsLeft=toRetire-yrs;
+  if(yearsLeft>0){
+    rothBal*=Math.pow(1+ret,yearsLeft);
+    remaining*=Math.pow(1+ret,yearsLeft);
+  }
+  var mixedAfterTax=rothBal+remaining*(1-retTax); // Roth tax-free + trad taxed
+  var savings=mixedAfterTax-tradAfterTax;
+  var verdict=savings>0;
+
+  $('rothResults').innerHTML=
+    '<table class="ctbl"><tr><th>Scenario</th><th style="text-align:right">Balance at Retirement</th><th style="text-align:right">After Tax</th></tr>'+
+    '<tr><td>No conversion (all traditional)</td><td class="n">'+fmt(tradBal)+'</td><td class="n">'+fmt(tradAfterTax)+'</td></tr>'+
+    '<tr><td>Convert '+fmt(amt)+'/yr for '+yrs+' years</td><td class="n">'+fmt(rothBal+remaining)+'</td><td class="n" style="color:'+(verdict?'var(--gn)':'var(--rd)')+'"><strong>'+fmt(mixedAfterTax)+'</strong></td></tr>'+
+    '<tr style="border-top:2px solid var(--bdr)"><td><strong>'+(verdict?'Tax savings':'Tax cost')+'</strong></td><td></td><td class="n" style="color:'+(verdict?'var(--gn)':'var(--rd)');+';font-size:18px"><strong>'+(verdict?'+':'')+fmt(savings)+'</strong></td></tr></table>'+
+    '<div class="g2" style="margin-top:14px">'+
+    '<div class="sb"><div class="l">Tax Paid Now (conversion)</div><div class="v" style="color:var(--or)">'+fmt(totalTaxPaid)+'</div></div>'+
+    '<div class="sb"><div class="l">Tax Saved at Retirement</div><div class="v" style="color:'+(verdict?'var(--gn)':'var(--rd)')+'">'+fmt(savings+totalTaxPaid)+'</div></div></div>'+
+    (verdict?
+    '<div class="alert o" style="margin-top:14px"><strong>Conversion recommended.</strong> You pay '+fmt(totalTaxPaid)+' in taxes now but save '+fmt(savings)+' after tax at retirement. This works because your current tax rate ('+pct(curTax)+') vs retirement rate ('+pct(retTax)+') creates a conversion window.</div>':
+    '<div class="alert d" style="margin-top:14px"><strong>Conversion not recommended.</strong> Your retirement tax rate ('+pct(retTax)+') is too close to or higher than your current rate ('+pct(curTax)+'). Keep contributions traditional and let them grow tax-deferred.</div>')+
+    '<p class="note" style="margin-top:10px">This is a simplified model. Real Roth conversion decisions should consider: filling lower tax brackets partially, Medicare premium surcharges (IRMAA), state taxes, and RMD avoidance. Consult a tax professional.</p>';
+}
+
+// ===== EVENT BINDING =====
+document.addEventListener('DOMContentLoaded',function(){
+  initTabs();
+
+  // Tab clicks
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      switchTab(t.getAttribute('data-t'));
+      if(t.getAttribute('data-t')==='scn')renderScenarios();
+    });
+  });
+
+  // All sliders
+  var fmts={
+    age:function(v){return v+' yrs'},ra:function(v){return v+' yrs'},
+    sal:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    sg:function(v){return Number(v).toFixed(2)+'%'},uy:function(v){return v+' yrs'},
+    inf:function(v){return Number(v).toFixed(2)+'%'},
+    ec:function(v){return Number(v).toFixed(2)+'%'},em:function(v){return Number(v).toFixed(2)+'%'},
+    ri:function(v){return '$'+Number(v).toFixed(2)},ti:function(v){return '$'+Number(v).toFixed(2)},
+    '457':function(v){return '$'+Number(v).toFixed(2)},hsa:function(v){return '$'+Number(v).toFixed(2)},
+    tx:function(v){return '$'+Number(v).toFixed(2)},pn:function(v){return '$'+Number(v).toFixed(2)},
+    hv:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    mb:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    mr:function(v){return Number(v).toFixed(2)+'%'},
+    mp:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    esc:function(v){return '$'+Number(v).toFixed(2)},
+    ha:function(v){return Number(v).toFixed(2)+'%'},xm:function(v){return '$'+Number(v).toFixed(2)+'/mo'},
+    rstock:function(v){return Number(v).toFixed(2)+'%'},rbond:function(v){return Number(v).toFixed(2)+'%'},rcash:function(v){return Number(v).toFixed(2)+'%'},
+    la:function(v){return 'Age '+v},col:function(v){return '$'+Number(v).toFixed(2)},fx:function(v){return v+'%'},
+    ca:function(v){return 'Age '+v},cm:function(v){return v+'%'},jl:function(v){return v+'%'},ba:function(v){return 'Age '+v},
+    'sp-age':function(v){return v+' yrs'},'sp-ra':function(v){return v+' yrs'},
+    'sp-sal':function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    'sp-sg':function(v){return Number(v).toFixed(2)+'%'},
+    'sp-ec':function(v){return Number(v).toFixed(2)+'%'},'sp-em':function(v){return Number(v).toFixed(2)+'%'},
+    'sp-ri':function(v){return '$'+Number(v).toFixed(2)},'sp-uy':function(v){return v+' yrs'},'sp-pn':function(v){return '$'+Number(v).toFixed(2)},
+    'rc-bal':function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    'rc-amt':function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    'rc-yrs':function(v){return v+' yrs'},
+    'rc-tax':function(v){return Number(v).toFixed(2)+'%'},'rc-rtax':function(v){return Number(v).toFixed(2)+'%'}
+  };
+  document.querySelectorAll('input[type=range]').forEach(function(s){
+    s.addEventListener('input',function(){
+      var id=s.id.replace('s-','');
+      var ve=$('v-'+id);
+      if(ve&&fmts[id])ve.textContent=fmts[id](s.value);
+      if(id==='la'||id==='col'||id==='fx')renderLeave(getP());
+    });
+  });
+
+  // Select
+  $('s-cty').addEventListener('change',function(){renderLeave(getP());});
+  $('s-st').addEventListener('change',function(){});
+  $('s-st2').addEventListener('change',function(){});
+
+  // Toggles
+  $('tgl-crash').addEventListener('click',function(){
+    var on=this.classList.contains('on');
+    this.classList.toggle('on',!on);this.classList.toggle('off',on);
+    ST.crash=!on;
+    $('crashOpt').classList.toggle('hidden',on);
+    runAll();
+  });
+  $('tgl-bucket').addEventListener('click',function(){
+    var on=this.classList.contains('on');
+    this.classList.toggle('on',!on);this.classList.toggle('off',on);
+    ST.bucket=!on;
+    $('bucketOpt').classList.toggle('hidden',on);
+    runAll();
+  });
+
+  // Buttons
+  $('btnSim').addEventListener('click',function(){runAll();});
+  $('btnCalc').addEventListener('click',function(){runAll();switchTab('dash');});
+  $('btnPDF').addEventListener('click',function(){
+    if(!PRO_UNLOCKED){alert('PDF export is a PRO feature. Upgrade to access branded retirement reports.');return;}
+    exportPDF();
+  });
+  $('btnSave').addEventListener('click',function(){
+    if(!PRO_UNLOCKED){switchTab('scn');return;}
+    switchTab('scn');renderScenarios();
+  });
+  $('btnSaveScenario').addEventListener('click',function(){saveCurrentScenario();});
+  $('btnSpouse').addEventListener('click',function(){runSpouse();});
+  $('btnRoth').addEventListener('click',function(){runRothConvert();});
+
+  // Initial run
+  try{runAll();}catch(e){console.error(e);}
+
+  // PRO unlock check from localStorage
+  if(localStorage.getItem('finng-pro')==='1'){unlockPro();}
+
+  // Upgrade buttons — link to payment (replace URL when ready)
+  var upgradeURL=''; // SET YOUR GUMROAD/STRIPE LINK HERE
+  document.querySelectorAll('.btnUpgrade, #btnUpgrade1').forEach(function(b){
+    b.addEventListener('click',function(){
+      if(upgradeURL){window.open(upgradeURL,'_blank');}
+      else{alert('PRO coming soon! Payment setup in progress.');}
+    });
+  });
+
+  // Unlock code activation
+  document.querySelectorAll('.btnCodeActivate, #btnCode1').forEach(function(b){
+    b.addEventListener('click',function(){
+      var input=b.parentElement.querySelector('input')||$('proCode1');
+      var code=input?input.value.trim():'';
+      if(!code){alert('Please enter an unlock code.');return;}
+      if(checkProCode(code)){
+        unlockPro();
+        alert('PRO unlocked! All features are now available.');
+      }else{
+        alert('Invalid code. Please check and try again.');
+      }
+    });
+  });
+});
+</script>
+<script>
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>

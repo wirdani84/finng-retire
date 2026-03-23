@@ -1,4 +1,4 @@
-var CACHE_NAME = 'finng-retire-v4';
+var CACHE_NAME = 'finng-retire-v5';
 var ASSETS = [
   './',
   './index.html',

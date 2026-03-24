@@ -104,10 +104,10 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
 .scenario-card .sc-name{color:var(--t1);font-size:13px;font-weight:600}
 .scenario-card .sc-date{color:var(--t3);font-size:10px;margin-top:3px}
 .scenario-card .sc-btns{display:flex;gap:6px}
-.subtabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg);border-radius:8px;padding:3px;border:1px solid var(--bdr)}
-.subtab{flex:1;padding:8px 4px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--t3);font-size:11px;font-weight:600;font-family:'Outfit',sans-serif;transition:all .2s}
-.subtab.active{background:var(--card);color:var(--cy);border:1px solid var(--bdr)}
-.subtab:hover{color:var(--t2)}
+.subtabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg);border-radius:8px;padding:3px;border:1px solid var(--cy2)}
+.subtab{flex:1;padding:10px 4px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--t2);font-size:12px;font-weight:700;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:0.5px}
+.subtab.active{background:linear-gradient(135deg,var(--cy2),#6d28d9);color:#fff;box-shadow:0 2px 8px rgba(6,182,212,.3)}
+.subtab:hover{color:var(--t1);background:rgba(6,182,212,.1)}
 .subpanel{display:none}
 .subpanel.active{display:block}
 @media print{.tabs,.tab,.btn,.btn-sm,.btn-pro,.hdr-sub,.footer,.tgl-r,.tgl,.alert{display:none!important}.app{padding:0}.card{break-inside:avoid;border:1px solid #ccc;margin-bottom:10px}.hdr{padding:10px 0}body{background:#fff;color:#000}.ct{color:#333!important}.sb .l,.sb .v,.sb .s{color:#000!important}table{color:#000}}
@@ -345,7 +345,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
           <div style="font-size:10px;color:var(--t2)">Should you convert? Find your tax savings</div>
         </div>
       </div>
-      <div class="price">$5</div>
+      <div class="price">$10</div>
       <div class="price-sub">one-time payment · lifetime access · all 3 features</div>
       <button class="btn-pro btnUpgrade" id="btnUpgrade1" style="padding:14px 40px;font-size:15px">Upgrade to PRO</button>
       <div style="margin-top:16px;display:flex;align-items:center;gap:8px;justify-content:center">

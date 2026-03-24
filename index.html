@@ -104,6 +104,12 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
 .scenario-card .sc-name{color:var(--t1);font-size:13px;font-weight:600}
 .scenario-card .sc-date{color:var(--t3);font-size:10px;margin-top:3px}
 .scenario-card .sc-btns{display:flex;gap:6px}
+.subtabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg);border-radius:8px;padding:3px;border:1px solid var(--bdr)}
+.subtab{flex:1;padding:8px 4px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--t3);font-size:11px;font-weight:600;font-family:'Outfit',sans-serif;transition:all .2s}
+.subtab.active{background:var(--card);color:var(--cy);border:1px solid var(--bdr)}
+.subtab:hover{color:var(--t2)}
+.subpanel{display:none}
+.subpanel.active{display:block}
 @media print{.tabs,.tab,.btn,.btn-sm,.btn-pro,.hdr-sub,.footer,.tgl-r,.tgl,.alert{display:none!important}.app{padding:0}.card{break-inside:avoid;border:1px solid #ccc;margin-bottom:10px}.hdr{padding:10px 0}body{background:#fff;color:#000}.ct{color:#333!important}.sb .l,.sb .v,.sb .s{color:#000!important}table{color:#000}}
 </style>
 </head>
@@ -130,7 +136,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
 <div class="tabs" id="tabBar"></div>
 
 <!-- TAB: DASHBOARD -->
-<div id="tab-dash">
+<div id="tab-dash" class="hidden">
   <div class="card"><div class="ct cyan"><span class="d"></span>Net Worth at Retirement</div><div class="g3" id="nwStats"></div></div>
   <div class="card" style="border:1px solid var(--or)"><div class="ct orange"><span class="d"></span>Risk Analysis — What Could Go Wrong</div><div class="g2" id="dashRisk"></div><p class="note" style="margin-top:10px">These probabilities come from 500 Monte Carlo simulations using fat-tail distributions (Student's t, 5 df) which model crashes 2-3x more often than standard calculators. This is closer to how real markets behave.</p></div>
   <div class="card"><div class="ct green"><span class="d"></span>Monthly Retirement Income</div><div id="incTbl"></div></div>
@@ -145,15 +151,15 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
   </div>
 </div>
 
-<!-- TAB: SS TRACKER -->
-<div id="tab-ss" class="hidden">
+<!-- TAB: INTERNATIONAL -->
+<div id="tab-intl" class="hidden">
+  <div class="subtabs"><button class="subtab active" data-sub="sub-ss">SS Tracker</button><button class="subtab" data-sub="sub-leave">Leave US?</button></div>
+  <div class="subpanel active" id="sub-ss">
   <div class="card"><div class="ct orange"><span class="d"></span>Social Security Quarters</div><div id="ssAlert"></div><div class="g2" id="ssStats" style="margin-bottom:12px"></div><div class="q-grid" id="qGrid"></div></div>
   <div class="card"><div class="ct cyan"><span class="d"></span>Benefit Estimates</div><div id="ssBen"></div></div>
   <div class="card"><div class="ct red"><span class="d"></span>RMD — Required Minimum Distributions</div><div id="rmdTbl"></div><p class="note">At age 73, the IRS forces you to withdraw minimum amounts from traditional accounts (401k, 403b, Traditional IRA). Roth IRAs have NO RMDs. These forced withdrawals can push you into higher tax brackets.</p></div>
-</div>
-
-<!-- TAB: LEAVE US -->
-<div id="tab-leave" class="hidden">
+  </div>
+  <div class="subpanel" id="sub-leave">
   <div class="card"><div class="ct purple"><span class="d"></span>What If You Leave the US?</div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Leave at age</span><span class="sl-v" id="v-la">48</span></div><input type="range" id="s-la" min="27" max="65" value="48"></div>
     <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">Country</div>
@@ -171,10 +177,13 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     <div id="leaveRes"></div>
   </div>
   <div class="card"><div class="ct cyan"><span class="d"></span>Account Fate If You Leave</div><div id="acctFate"></div></div>
+  </div>
 </div>
 
-<!-- TAB: SIMULATOR -->
-<div id="tab-sim" class="hidden">
+<!-- TAB: RISK -->
+<div id="tab-risk" class="hidden">
+  <div class="subtabs"><button class="subtab active" data-sub="sub-sim">Simulator</button><button class="subtab" data-sub="sub-stress">Stress Test</button></div>
+  <div class="subpanel active" id="sub-sim">
   <div class="card"><div class="ct cyan"><span class="d"></span>500 Simulation Results — Full Range</div>
     <div class="g3" id="mcFull"></div>
     <div class="g3" style="margin-top:10px" id="mcPct"></div>
@@ -226,10 +235,36 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
   <div class="card"><div class="ct cyan"><span class="d"></span>Risk Analysis</div><div class="g2" id="mcR"></div></div>
   <div class="card"><div class="ct cyan"><span class="d"></span>Scenario Comparison (with inflation)</div><div id="mcCmp"></div></div>
   <button class="btn" id="btnSim">RE-RUN 500 SIMULATIONS</button>
+  </div>
+  <div class="subpanel" id="sub-stress">
+  <div class="card" style="border:1px solid var(--rd)"><div class="ct red"><span class="d"></span>Downside Risk — When Things Go Wrong</div>
+    <p class="note" style="margin-bottom:14px">This shows what happens in the WORST scenarios — not the average. These numbers use Conditional Value at Risk (CVaR), the same metric banks use to stress test portfolios.</p>
+    <div class="g2" id="stressCVaR"></div>
+  </div>
+  <div class="card"><div class="ct orange"><span class="d"></span>Maximum Drawdown — Worst Single Drop</div>
+    <div class="g3" id="stressDD"></div>
+    <p class="note" style="margin-top:10px">A drawdown is a peak-to-trough decline. This shows the worst drop your portfolio experiences before recovering. Larger drawdowns are harder to recover from — a 50% loss requires a 100% gain to break even.</p>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Recovery Time — How Long to Bounce Back</div>
+    <div class="g3" id="stressRecovery"></div>
+  </div>
+  <div class="card" style="border:1px solid var(--or)"><div class="ct orange"><span class="d"></span>Spending Sustainability — Will Your Money Last?</div>
+    <div class="g2" id="stressLongevity"></div>
+    <p class="note" style="margin-top:10px">Based on your monthly expenses, conservative 5% retirement return, and inflation-growing withdrawals. "Money lasts until age X" means your savings are depleted by that age in the worst scenarios.</p>
+  </div>
+  <div class="card"><div class="ct purple"><span class="d"></span>Sequence of Returns — Timing Risk</div>
+    <div id="stressSequence"></div>
+    <p class="note" style="margin-top:10px">The same -37% crash costs dramatically more at age 63 than at age 45 because you have less time to recover and more money at risk.</p>
+  </div>
+  <div class="card"><div class="ct red"><span class="d"></span>Monthly Income Shortfall — Worst Case</div>
+    <div id="stressShortfall"></div>
+  </div>
+  <button class="btn" id="btnStress">RE-RUN STRESS TEST</button>
+  </div>
 </div>
 
 <!-- TAB: INPUTS -->
-<div id="tab-in" class="hidden">
+<div id="tab-in">
   <div class="card"><div class="ct cyan"><span class="d"></span>Personal</div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Current Age</span><span class="sl-v" id="v-age">35</span></div><input type="range" id="s-age" min="18" max="60" value="35"></div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Retirement Age</span><span class="sl-v" id="v-ra">65</span></div><input type="range" id="s-ra" min="55" max="75" value="65"></div>
@@ -242,18 +277,30 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">State of Employment (where you work — if different)</div>
     <select id="s-st2"><option value="0" selected>Same as residence</option><option value="0">No state tax (FL, TX, NV, WA, WY, AK, NH, SD, TN)</option><option value="2.50">Arizona (2.50%)</option><option value="2.75">North Dakota (2.75%)</option><option value="3.05">Indiana (3.05%)</option><option value="3.07">Pennsylvania (3.07%)</option><option value="4.25">Michigan (4.25%)</option><option value="4.40">Colorado (4.40%)</option><option value="4.75">North Carolina (4.75%)</option><option value="4.95">Illinois (4.95%)</option><option value="5.00">Massachusetts (5.00%)</option><option value="5.25">Virginia (5.25%)</option><option value="5.49">Georgia (5.49%)</option><option value="5.70">Ohio (5.70%)</option><option value="6.50">Maryland (6.50%)</option><option value="6.85">Minnesota (6.85%)</option><option value="6.99">New Jersey (6.99%)</option><option value="8.82">New York (8.82%)</option><option value="9.30">Oregon (9.30%)</option><option value="13.30">California (13.30%)</option></select>
     <p class="note">If you live in one state but work in another (e.g., live in Indiana, work in Illinois), you may owe taxes to both states. Some states have reciprocal agreements that prevent double taxation — check with a tax professional.</p></div>
+    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">Filing Status</div>
+    <select id="s-filing"><option value="single" selected>Single</option><option value="married">Married Filing Jointly</option></select></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Living Expenses (retirement)</span><span class="sl-v" id="v-moExp">$3,000.00</span></div><input type="range" id="s-moExp" min="1000" max="10000" step="1" value="3000"></div>
   </div>
   <div class="card"><div class="ct cyan"><span class="d"></span>Employer Plan (401k/403b)</div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Your Contribution</span><span class="sl-v" id="v-ec">6.00%</span></div><input type="range" id="s-ec" min="0" max="15" step="0.01" value="6"></div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Employer Match</span><span class="sl-v" id="v-em">3.00%</span></div><input type="range" id="s-em" min="0" max="15" step="0.01" value="3"></div>
   </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Existing Account Balances</div>
+    <p class="note" style="margin-bottom:10px">Enter your current balances. If starting from zero, leave at $0.00.</p>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current 401k/403b Balance</span><span class="sl-v" id="v-bal401k">$0.00</span></div><input type="range" id="s-bal401k" min="0" max="500000" step="100" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current Roth IRA Balance</span><span class="sl-v" id="v-balRoth">$0.00</span></div><input type="range" id="s-balRoth" min="0" max="500000" step="100" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current Traditional IRA Balance</span><span class="sl-v" id="v-balTrad">$0.00</span></div><input type="range" id="s-balTrad" min="0" max="500000" step="100" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current 457(b) Balance</span><span class="sl-v" id="v-bal457b">$0.00</span></div><input type="range" id="s-bal457b" min="0" max="300000" step="100" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current HSA Balance</span><span class="sl-v" id="v-balHSA">$0.00</span></div><input type="range" id="s-balHSA" min="0" max="100000" step="100" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current Taxable Brokerage Balance</span><span class="sl-v" id="v-balTx">$0.00</span></div><input type="range" id="s-balTx" min="0" max="500000" step="100" value="0"></div>
+  </div>
   <div class="card"><div class="ct cyan"><span class="d"></span>IRAs</div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Roth IRA</span><span class="sl-v" id="v-ri">$100.00</span></div><input type="range" id="s-ri" min="0" max="583" step="1" value="100"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Traditional IRA</span><span class="sl-v" id="v-ti">$0.00</span></div><input type="range" id="s-ti" min="0" max="583" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Roth IRA</span><span class="sl-v" id="v-ri">$100.00</span></div><input type="range" id="s-ri" min="0" max="625" step="1" value="100"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Traditional IRA</span><span class="sl-v" id="v-ti">$0.00</span></div><input type="range" id="s-ti" min="0" max="625" step="1" value="0"></div>
   </div>
   <div class="card"><div class="ct cyan"><span class="d"></span>Additional Accounts</div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Monthly 457(b)</span><span class="sl-v" id="v-457">$0.00</span></div><input type="range" id="s-457" min="0" max="1000" step="1" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly HSA</span><span class="sl-v" id="v-hsa">$0.00</span></div><input type="range" id="s-hsa" min="0" max="350" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly HSA</span><span class="sl-v" id="v-hsa">$0.00</span></div><input type="range" id="s-hsa" min="0" max="367" step="1" value="0"></div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Taxable Brokerage</span><span class="sl-v" id="v-tx">$0.00</span></div><input type="range" id="s-tx" min="0" max="2000" step="1" value="0"></div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Expected Monthly Pension</span><span class="sl-v" id="v-pn">$0.00</span></div><input type="range" id="s-pn" min="0" max="5000" step="1" value="0"></div>
   </div>
@@ -278,15 +325,29 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
   <button class="btn" id="btnCalc">CALCULATE →</button>
 </div>
 
-<!-- TAB: SCENARIOS (PRO) -->
-<div id="tab-scn" class="hidden">
+<!-- TAB: PRO -->
+<div id="tab-pro" class="hidden">
   <div class="pro-gate-wrap">
     <div class="pro-gate">
-      <h3>🔒 Scenarios — PRO Feature</h3>
-      <p>Save unlimited retirement scenarios, compare strategies side-by-side, and load any scenario instantly to pick up where you left off.</p>
+      <h3>🔒 Unlock PRO Features</h3>
+      <p>Save scenarios, plan with your spouse, optimize Roth conversions, and export branded PDF reports — all for a one-time payment.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;text-align:left">
+        <div style="background:var(--bg);border-radius:8px;padding:12px;border:1px solid var(--bdr)">
+          <div style="font-size:11px;font-weight:700;color:var(--or);margin-bottom:4px">Scenarios</div>
+          <div style="font-size:10px;color:var(--t2)">Save, load, and compare unlimited retirement plans</div>
+        </div>
+        <div style="background:var(--bg);border-radius:8px;padding:12px;border:1px solid var(--bdr)">
+          <div style="font-size:11px;font-weight:700;color:var(--pr);margin-bottom:4px">Spouse Planning</div>
+          <div style="font-size:10px;color:var(--t2)">Combined household income and net worth</div>
+        </div>
+        <div style="background:var(--bg);border-radius:8px;padding:12px;border:1px solid var(--bdr)">
+          <div style="font-size:11px;font-weight:700;color:var(--gn);margin-bottom:4px">Roth Optimizer</div>
+          <div style="font-size:10px;color:var(--t2)">Should you convert? Find your tax savings</div>
+        </div>
+      </div>
       <div class="price">$5</div>
-      <div class="price-sub">one-time payment · lifetime access</div>
-      <button class="btn-pro" id="btnUpgrade1" style="padding:14px 40px;font-size:15px">Upgrade to PRO</button>
+      <div class="price-sub">one-time payment · lifetime access · all 3 features</div>
+      <button class="btn-pro btnUpgrade" id="btnUpgrade1" style="padding:14px 40px;font-size:15px">Upgrade to PRO</button>
       <div style="margin-top:16px;display:flex;align-items:center;gap:8px;justify-content:center">
         <input type="text" id="proCode1" placeholder="Have an unlock code?" style="background:var(--bg);border:1px solid var(--bdr);color:var(--t1);padding:8px 12px;border-radius:6px;font-size:12px;width:180px;font-family:inherit">
         <button class="btn-sm" id="btnCode1">Activate</button>
@@ -294,80 +355,52 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     </div>
   </div>
   <div class="pro-content" style="display:none">
-    <div class="card"><div class="ct orange"><span class="d"></span>Saved Scenarios <span class="pro">PRO</span></div>
-    <p class="note" style="margin-bottom:14px">Save different retirement scenarios to compare strategies. Data is stored locally in your browser — never sent anywhere.</p>
-    <div id="scenarioList"></div>
-    <div style="margin-top:14px;display:flex;gap:10px;align-items:center">
-      <input type="text" id="scenarioName" placeholder="Scenario name (e.g., Aggressive, Conservative)" style="flex:1;background:var(--bg2);border:1px solid var(--bdr);color:var(--t1);padding:10px 14px;border-radius:8px;font-family:inherit;font-size:13px">
-      <button class="btn-pro" id="btnSaveScenario">Save Current</button>
-    </div>
-  </div>
-  <div class="card"><div class="ct cyan"><span class="d"></span>Compare Scenarios</div>
-    <div id="scenarioCompare"></div>
-    <p class="note" style="margin-top:10px">Save at least 2 scenarios to see a side-by-side comparison.</p>
-  </div>
-  </div>
-</div>
+    <div class="subtabs"><button class="subtab active" data-sub="sub-scn">Scenarios</button><button class="subtab" data-sub="sub-spouse">Spouse</button><button class="subtab" data-sub="sub-roth">Roth Convert</button></div>
 
-<!-- TAB: SPOUSE (PRO) -->
-<div id="tab-spouse" class="hidden">
-  <div class="pro-gate-wrap">
-    <div class="pro-gate">
-      <h3>🔒 Spouse Planning — PRO Feature</h3>
-      <p>Model your partner's retirement alongside yours. See combined household income, net worth, and Social Security for both of you.</p>
-      <div class="price">$5</div>
-      <div class="price-sub">one-time payment · lifetime access</div>
-      <button class="btn-pro btnUpgrade" style="padding:14px 40px;font-size:15px">Upgrade to PRO</button>
-      <div style="margin-top:16px;display:flex;align-items:center;gap:8px;justify-content:center">
-        <input type="text" class="proCodeInput" placeholder="Have an unlock code?" style="background:var(--bg);border:1px solid var(--bdr);color:var(--t1);padding:8px 12px;border-radius:6px;font-size:12px;width:180px;font-family:inherit">
-        <button class="btn-sm btnCodeActivate">Activate</button>
+    <div class="subpanel active" id="sub-scn">
+    <div class="card"><div class="ct orange"><span class="d"></span>Saved Scenarios</div>
+      <p class="note" style="margin-bottom:14px">Save different retirement scenarios to compare strategies. Data is stored locally in your browser — never sent anywhere.</p>
+      <div id="scenarioList"></div>
+      <div style="margin-top:14px;display:flex;gap:10px;align-items:center">
+        <input type="text" id="scenarioName" placeholder="Scenario name (e.g., Aggressive, Conservative)" style="flex:1;background:var(--bg2);border:1px solid var(--bdr);color:var(--t1);padding:10px 14px;border-radius:8px;font-family:inherit;font-size:13px">
+        <button class="btn-pro" id="btnSaveScenario">Save Current</button>
       </div>
     </div>
-  </div>
-  <div class="pro-content" style="display:none">
-  <div class="card"><div class="ct purple"><span class="d"></span>Spouse / Partner Planning <span class="pro">PRO</span></div>
-    <p class="note" style="margin-bottom:14px">Model your partner's retirement alongside yours to see combined household income at retirement.</p>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Age</span><span class="sl-v" id="v-sp-age">35</span></div><input type="range" id="s-sp-age" min="18" max="60" value="35"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Retirement Age</span><span class="sl-v" id="v-sp-ra">65</span></div><input type="range" id="s-sp-ra" min="55" max="75" value="65"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Annual Salary</span><span class="sl-v" id="v-sp-sal">$0.00</span></div><input type="range" id="s-sp-sal" min="0" max="200000" step="1" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Salary Growth</span><span class="sl-v" id="v-sp-sg">3.00%</span></div><input type="range" id="s-sp-sg" min="0" max="8" step="0.01" value="3"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse 401k/403b Contribution</span><span class="sl-v" id="v-sp-ec">0.00%</span></div><input type="range" id="s-sp-ec" min="0" max="15" step="0.01" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Employer Match</span><span class="sl-v" id="v-sp-em">0.00%</span></div><input type="range" id="s-sp-em" min="0" max="15" step="0.01" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Monthly Roth IRA</span><span class="sl-v" id="v-sp-ri">$0.00</span></div><input type="range" id="s-sp-ri" min="0" max="583" step="1" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Years Working in US</span><span class="sl-v" id="v-sp-uy">0</span></div><input type="range" id="s-sp-uy" min="0" max="40" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Monthly Pension</span><span class="sl-v" id="v-sp-pn">$0.00</span></div><input type="range" id="s-sp-pn" min="0" max="5000" step="1" value="0"></div>
-  </div>
-  <button class="btn" id="btnSpouse">CALCULATE HOUSEHOLD →</button>
-  <div class="card" style="margin-top:14px"><div class="ct green"><span class="d"></span>Household Results</div><div id="spouseResults"></div></div>
-  </div>
-</div>
-
-<!-- TAB: ROTH CONVERT (PRO) -->
-<div id="tab-roth" class="hidden">
-  <div class="pro-gate-wrap">
-    <div class="pro-gate">
-      <h3>🔒 Roth Conversion — PRO Feature</h3>
-      <p>Should you convert traditional 401k/IRA money to Roth? This optimizer models different strategies and tells you exactly how much you'll save in taxes — or if you should skip it.</p>
-      <div class="price">$5</div>
-      <div class="price-sub">one-time payment · lifetime access</div>
-      <button class="btn-pro btnUpgrade" style="padding:14px 40px;font-size:15px">Upgrade to PRO</button>
-      <div style="margin-top:16px;display:flex;align-items:center;gap:8px;justify-content:center">
-        <input type="text" class="proCodeInput" placeholder="Have an unlock code?" style="background:var(--bg);border:1px solid var(--bdr);color:var(--t1);padding:8px 12px;border-radius:6px;font-size:12px;width:180px;font-family:inherit">
-        <button class="btn-sm btnCodeActivate">Activate</button>
-      </div>
+    <div class="card"><div class="ct cyan"><span class="d"></span>Compare Scenarios</div>
+      <div id="scenarioCompare"></div>
+      <p class="note" style="margin-top:10px">Save at least 2 scenarios to see a side-by-side comparison.</p>
     </div>
-  </div>
-  <div class="pro-content" style="display:none">
-  <div class="card"><div class="ct green"><span class="d"></span>Roth Conversion Optimizer <span class="pro">PRO</span></div>
-    <p class="note" style="margin-bottom:14px">Should you convert traditional 401k/IRA money to Roth? This tool models different conversion strategies to find your optimal tax savings. Converting pays tax now but withdrawals are tax-free forever.</p>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Current Traditional Balance</span><span class="sl-v" id="v-rc-bal">$0.00</span></div><input type="range" id="s-rc-bal" min="0" max="500000" step="1000" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Annual Conversion Amount</span><span class="sl-v" id="v-rc-amt">$0.00</span></div><input type="range" id="s-rc-amt" min="0" max="100000" step="1000" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Convert Over (years)</span><span class="sl-v" id="v-rc-yrs">5</span></div><input type="range" id="s-rc-yrs" min="1" max="20" value="5"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Current Marginal Tax Rate</span><span class="sl-v" id="v-rc-tax">22.00%</span></div><input type="range" id="s-rc-tax" min="10" max="37" step="0.01" value="22"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Expected Retirement Tax Rate</span><span class="sl-v" id="v-rc-rtax">12.00%</span></div><input type="range" id="s-rc-rtax" min="10" max="37" step="0.01" value="12"></div>
-  </div>
-  <button class="btn" id="btnRoth">ANALYZE CONVERSION →</button>
-  <div class="card" style="margin-top:14px"><div class="ct cyan"><span class="d"></span>Conversion Analysis</div><div id="rothResults"></div></div>
+    </div>
+
+    <div class="subpanel" id="sub-spouse">
+    <div class="card"><div class="ct purple"><span class="d"></span>Spouse / Partner Planning</div>
+      <p class="note" style="margin-bottom:14px">Model your partner's retirement alongside yours to see combined household income at retirement.</p>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Age</span><span class="sl-v" id="v-sp-age">35</span></div><input type="range" id="s-sp-age" min="18" max="60" value="35"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Retirement Age</span><span class="sl-v" id="v-sp-ra">65</span></div><input type="range" id="s-sp-ra" min="55" max="75" value="65"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Annual Salary</span><span class="sl-v" id="v-sp-sal">$0.00</span></div><input type="range" id="s-sp-sal" min="0" max="200000" step="1" value="0"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Salary Growth</span><span class="sl-v" id="v-sp-sg">3.00%</span></div><input type="range" id="s-sp-sg" min="0" max="8" step="0.01" value="3"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Spouse 401k/403b Contribution</span><span class="sl-v" id="v-sp-ec">0.00%</span></div><input type="range" id="s-sp-ec" min="0" max="15" step="0.01" value="0"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Employer Match</span><span class="sl-v" id="v-sp-em">0.00%</span></div><input type="range" id="s-sp-em" min="0" max="15" step="0.01" value="0"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Monthly Roth IRA</span><span class="sl-v" id="v-sp-ri">$0.00</span></div><input type="range" id="s-sp-ri" min="0" max="625" step="1" value="0"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Years Working in US</span><span class="sl-v" id="v-sp-uy">0</span></div><input type="range" id="s-sp-uy" min="0" max="40" value="0"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Spouse Monthly Pension</span><span class="sl-v" id="v-sp-pn">$0.00</span></div><input type="range" id="s-sp-pn" min="0" max="5000" step="1" value="0"></div>
+    </div>
+    <button class="btn" id="btnSpouse">CALCULATE HOUSEHOLD →</button>
+    <div class="card" style="margin-top:14px"><div class="ct green"><span class="d"></span>Household Results</div><div id="spouseResults"></div></div>
+    </div>
+
+    <div class="subpanel" id="sub-roth">
+    <div class="card"><div class="ct green"><span class="d"></span>Roth Conversion Optimizer</div>
+      <p class="note" style="margin-bottom:14px">Should you convert traditional 401k/IRA money to Roth? This tool models different conversion strategies to find your optimal tax savings. Converting pays tax now but withdrawals are tax-free forever.</p>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Current Traditional Balance</span><span class="sl-v" id="v-rc-bal">$0.00</span></div><input type="range" id="s-rc-bal" min="0" max="500000" step="1000" value="0"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Annual Conversion Amount</span><span class="sl-v" id="v-rc-amt">$0.00</span></div><input type="range" id="s-rc-amt" min="0" max="100000" step="1000" value="0"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Convert Over (years)</span><span class="sl-v" id="v-rc-yrs">5</span></div><input type="range" id="s-rc-yrs" min="1" max="20" value="5"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Current Marginal Tax Rate</span><span class="sl-v" id="v-rc-tax">22.00%</span></div><input type="range" id="s-rc-tax" min="10" max="37" step="0.01" value="22"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Expected Retirement Tax Rate</span><span class="sl-v" id="v-rc-rtax">12.00%</span></div><input type="range" id="s-rc-rtax" min="10" max="37" step="0.01" value="12"></div>
+    </div>
+    <button class="btn" id="btnRoth">ANALYZE CONVERSION →</button>
+    <div class="card" style="margin-top:14px"><div class="ct cyan"><span class="d"></span>Conversion Analysis</div><div id="rothResults"></div></div>
+    </div>
   </div>
 </div>
 
@@ -391,7 +424,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     </div>
   </div>
   <div class="card"><div class="ct orange"><span class="d"></span>Known Limitations</div>
-    <p style="font-size:12px;color:var(--t2);line-height:1.8">Student's t-distribution is better than normal but still underestimates extreme tail events. Tax brackets are 2026 approximations and will change. Healthcare costs vary enormously by individual. No Roth conversion strategy modeling. No estate tax for non-citizens ($60k exemption vs $13.6M for citizens). No divorce, disability, or long-term care modeling. Single earner only. Not financial advice — consult a professional.</p>
+    <p style="font-size:12px;color:var(--t2);line-height:1.8">Student's t-distribution is better than normal but still underestimates extreme tail events. Tax brackets are 2026 values and will change. Healthcare costs vary enormously by individual. No estate tax for non-citizens ($60k exemption vs $13.6M for citizens). No divorce, disability, or long-term care modeling. Single earner only (use Spouse tab for dual income). Not financial advice — consult a professional.</p>
   </div>
 </div>
 
@@ -409,13 +442,12 @@ var ST={crash:false,bucket:true};
 
 // ===== TABS =====
 var TABS=[
-  {id:'dash',label:'Dashboard'},{id:'ss',label:'SS Tracker'},{id:'leave',label:'Leave US?'},
-  {id:'sim',label:'Simulator'},{id:'in',label:'Inputs'},
-  {id:'scn',label:'Scenarios',pro:true},{id:'spouse',label:'Spouse',pro:true},{id:'roth',label:'Roth Convert',pro:true},
-  {id:'abt',label:'About'}
+  {id:'in',label:'Inputs'},{id:'dash',label:'Dashboard'},
+  {id:'risk',label:'Risk'},{id:'intl',label:'International'},
+  {id:'pro',label:'PRO 🔒'},{id:'abt',label:'About'}
 ];
 
-var PRO_UNLOCKED=false; // flip to true when user pays
+var PRO_UNLOCKED=false;
 
 function checkProCode(code){
   return code.trim().toUpperCase()==='FINNIEGINGER2026PRO';
@@ -426,15 +458,14 @@ function unlockPro(){
   localStorage.setItem('finng-pro','1');
   document.querySelectorAll('.pro-gate-wrap').forEach(function(el){el.remove();});
   document.querySelectorAll('.pro-content').forEach(function(el){el.style.display='';});
-  document.querySelectorAll('.tab .lock').forEach(function(el){el.textContent='';});
-  renderScenarios();
+  var lockEl=document.querySelector('.tab[data-t="pro"]');
+  if(lockEl)lockEl.textContent='PRO';
 }
 
 function initTabs(){
   var h='';
   for(var i=0;i<TABS.length;i++){
-    var lock=TABS[i].pro?'<span class="lock">🔒</span>':'';
-    h+='<button class="tab'+(TABS[i].id==='dash'?' active':'')+'" data-t="'+TABS[i].id+'">'+TABS[i].label+lock+'</button>';
+    h+='<button class="tab'+(TABS[i].id==='in'?' active':'')+'" data-t="'+TABS[i].id+'">'+TABS[i].label+'</button>';
   }
   $('tabBar').innerHTML=h;
 }
@@ -454,48 +485,58 @@ function getP(){
     ec:gv('ec')/100,em:gv('em')/100,ri:gv('ri'),ti:gv('ti'),
     b457:gv('457'),hsa:gv('hsa'),tx:gv('tx'),pn:gv('pn'),
     hv:gv('hv'),ha:gv('ha')/100,xm:gv('xm'),
-    mb:gv('mb')||gv('hv'), mortRate:gv('mr')/100||0.057, mortPay:gv('mp')||1097, esc:gv('esc')||0,
+    mb:gv('mb'), mortRate:gv('mr')/100, mortPay:gv('mp'), esc:gv('esc')||0,
     inf:gv('inf')/100,stTax:Number($('s-st').value)/100,
     st2Tax:Number($('s-st2').value)/100,
-    rStock:(gv('rstock')||8)/100, rBond:(gv('rbond')||4)/100, rCash:(gv('rcash')||2)/100
+    rStock:(gv('rstock')||8)/100, rBond:(gv('rbond')||4)/100, rCash:(gv('rcash')||2)/100,
+    filing:$('s-filing')?$('s-filing').value:'single',
+    bal401k:gv('bal401k')||0, balRoth:gv('balRoth')||0, balTrad:gv('balTrad')||0,
+    bal457:gv('bal457b')||0, balHSA:gv('balHSA')||0, balTx:gv('balTx')||0,
+    moExp:gv('moExp')||3000
   };
 }
 
 // ===== TAX ENGINE =====
-function fedTax(income){
-  // 2026 brackets single filer (approximate)
-  var brackets=[[11600,.10],[47150,.12],[100525,.22],[191950,.24],[243725,.32],[609350,.35],[Infinity,.37]];
+function fedTax(income,filing){
+  filing=filing||'single';
+  // 2026 brackets (IRS Rev Proc 2025-32, OBBBA adjusted)
+  var stdDed=filing==='married'?32200:16100;
+  var taxable=Math.max(0,income-stdDed);
+  var brackets=filing==='married'?
+    [[24800,.10],[100750,.12],[201600,.22],[383750,.24],[487450,.32],[768700,.35],[Infinity,.37]]:
+    [[12400,.10],[50400,.12],[105725,.22],[201800,.24],[256250,.32],[640600,.35],[Infinity,.37]];
   var tax=0,prev=0;
   for(var i=0;i<brackets.length;i++){
     var top=brackets[i][0],rate=brackets[i][1];
-    var taxable=Math.min(income,top)-prev;
-    if(taxable<=0)break;
-    tax+=taxable*rate;
+    var amt=Math.min(taxable,top)-prev;
+    if(amt<=0)break;
+    tax+=amt*rate;
     prev=top;
   }
   return tax;
 }
 
-function totalTax(income,stRate,st2Rate){
-  st2Rate=st2Rate||0;
-  var combinedState=Math.max(stRate,st2Rate); // simplified: pay the higher rate (most reciprocal agreements)
-  if(st2Rate>0&&stRate>0&&st2Rate!==stRate)combinedState=stRate+st2Rate*0.5; // partial credit approximation
-  return fedTax(income)+income*combinedState;
+function totalTax(income,stRate,st2Rate,filing){
+  st2Rate=st2Rate||0;filing=filing||'single';
+  var combinedState=Math.max(stRate,st2Rate);
+  if(st2Rate>0&&stRate>0&&st2Rate!==stRate)combinedState=stRate+st2Rate*0.5;
+  return fedTax(income,filing)+income*combinedState;
 }
 
 // ===== SOCIAL SECURITY =====
 function calcSS(yrsW,sal,sg){
   var earn=[],s=sal;
-  for(var y=0;y<yrsW;y++){earn.push(Math.min(s,168600));s*=(1+sg);}
+  for(var y=0;y<yrsW;y++){earn.push(Math.min(s,184500));s*=(1+sg);}
   earn.sort(function(a,b){return b-a;});
   while(earn.length<35)earn.push(0);
   var top=earn.slice(0,35);
   var aime=0;for(var i=0;i<35;i++)aime+=top[i];
   aime/=(35*12);
   var pia;
-  if(aime<=1174)pia=aime*.90;
-  else if(aime<=7078)pia=1174*.90+(aime-1174)*.32;
-  else pia=1174*.90+(7078-1174)*.32+(aime-7078)*.15;
+  // 2026 bend points: $1,286 and $7,749 (SSA)
+  if(aime<=1286)pia=aime*.90;
+  else if(aime<=7749)pia=1286*.90+(aime-1286)*.32;
+  else pia=1286*.90+(7749-1286)*.32+(aime-7749)*.15;
   return{aime:aime,pia:pia,zeros:35-Math.min(yrsW,35)};
 }
 
@@ -534,14 +575,15 @@ function runMC(p,nSim,ov){
   var results=[],paths=[];
 
   for(var sim=0;sim<nSim;sim++){
-    var bE=0,bR=0,bT=0,b4=0,bH=0,bX=0;
+    var bE=p.bal401k||0,bR=p.balRoth||0,bT=p.balTrad||0,b4=p.bal457||0,bH=p.balHSA||0,bX=p.balTx||0;
     var sal=p.sal,mBal=p.mb;
     var path=[];
     for(var y=0;y<yrs;y++){
       var age=p.age+y;
-      // Fat-tail return (Student's t, df=5)
+      // Fat-tail return (Student's t, df=5) with scaled volatility
       var t5=randT(5);
-      var ret=p.rStock+0.12*t5; // custom stock return + scaled volatility
+      var vol=p.rStock*1.5; // volatility scales with expected return
+      var ret=p.rStock+vol*t5;
       var jobLoss=false;
 
       // Crash injection
@@ -555,13 +597,15 @@ function runMC(p,nSim,ov){
       if(bucketOn&&age>=bStart){sA=Math.max(0.4,(p.ra-age)/(p.ra-bStart));}
       var eR=sA*ret+(1-sA)*p.rBond;
 
-      // Contributions (0 if job loss)
+      // Contributions with 2026 limits (0 if job loss)
       var contrib=jobLoss?0:1;
-      bE=(bE+sal*(p.ec+p.em)*contrib)*(1+eR);
-      bR=(bR+p.ri*12*contrib)*(1+eR);
-      bT=(bT+p.ti*12*contrib)*(1+eR);
-      b4=(b4+p.b457*12*contrib)*(1+eR);
-      bH=(bH+p.hsa*12*contrib)*(1+eR);
+      var empContrib=Math.min(sal*p.ec,24500); // 2026 401k limit
+      var matchContrib=sal*p.em; // employer match not subject to employee limit
+      bE=(bE+(empContrib+matchContrib)*contrib)*(1+eR);
+      bR=(bR+Math.min(p.ri*12,7500)*contrib)*(1+eR); // 2026 IRA limit
+      bT=(bT+Math.min(p.ti*12,7500)*contrib)*(1+eR);
+      b4=(b4+Math.min(p.b457*12,24500)*contrib)*(1+eR);
+      bH=(bH+Math.min(p.hsa*12,4400)*contrib)*(1+eR); // 2026 HSA individual limit
       bX=(bX+p.tx*12*contrib)*(1+eR*0.85); // tax drag
 
       if(!jobLoss)sal*=(1+p.sg);
@@ -624,7 +668,7 @@ function renderDash(p,mc){
 
   // Tax impact
   var pretaxIncome=(m.bE+m.bT+m.b4)*0.04; // taxable withdrawals
-  var fedT=fedTax(pretaxIncome);
+  var fedT=fedTax(pretaxIncome,p.filing);
   var stT=pretaxIncome*p.stTax;
   var st2T=p.st2Tax>0?pretaxIncome*p.st2Tax*0.5:0; // partial credit for work state
   var totalStateT=stT+st2T;
@@ -752,11 +796,12 @@ function renderSS(p){
   var mc=runMC(p,100);
   var tradBal=mc.p50.bE+mc.p50.bT+mc.p50.b4; // all pre-tax accounts
   var rh='<table class="ctbl"><tr><th>Age</th><th style="text-align:right">Traditional Balance</th><th style="text-align:right">RMD Amount</th><th style="text-align:right">Tax on RMD</th></tr>';
+  var rmdStart=(2026-p.age)>=1960?75:73; // SECURE 2.0: age 75 for born 1960+
   var bal=tradBal;
-  for(var age=73;age<=83;age++){
+  for(var age=rmdStart;age<=Math.min(rmdStart+10,85);age++){
     var factor=rmdFactor(age);
     var rmd=bal/factor;
-    var tax=fedTax(rmd)+rmd*p.stTax;
+    var tax=fedTax(rmd,p.filing)+rmd*p.stTax;
     rh+='<tr><td>'+age+'</td><td class="n">'+fmt(bal)+'</td><td class="n" style="color:var(--or)">'+fmt(rmd)+'</td><td class="n" style="color:var(--rd)">'+fmt(tax)+'</td></tr>';
     bal=(bal-rmd)*1.05; // assume 5% growth
   }
@@ -893,6 +938,125 @@ function renderSim(mc){
   $('mcCmp').innerHTML=ch;
 }
 
+// ===== STRESS TEST =====
+function renderStress(mc){
+  var p=getP();
+  var yrs=p.ra-p.age;
+  var inflFactor=Math.pow(1+p.inf,yrs);
+  var n=mc.all.length;
+  var ss=calcSS(p.uy+yrs,p.sal,p.sg);
+
+  // 1. CVaR — average of worst 10%
+  var worst10=Math.floor(n*0.1);
+  var cvarSum=0;for(var i=0;i<worst10;i++)cvarSum+=mc.all[i].nw;
+  var cvar=cvarSum/worst10;
+  var cvarInv=0;for(var i=0;i<worst10;i++)cvarInv+=mc.all[i].totalInv;
+  cvarInv/=worst10;
+
+  $('stressCVaR').innerHTML=
+    '<div class="sb"><div class="l">Average Net Worth (Worst 10%)</div><div class="v" style="color:var(--rd)">'+fmt(cvar)+'</div><div class="s">Today\'s $: '+fmt(cvar/inflFactor)+'</div></div>'+
+    '<div class="sb"><div class="l">Average Investments (Worst 10%)</div><div class="v" style="color:var(--or)">'+fmt(cvarInv)+'</div><div class="s">Monthly income at 4%: '+fmt(cvarInv*0.04/12)+'</div></div>';
+
+  // 2. Maximum Drawdown across all paths
+  var allDD=[];
+  var allRecovery=[];
+  for(var s=0;s<mc.paths.length;s++){
+    var path=mc.paths[s];
+    var peak=0,maxDD=0,ddYear=-1,peakVal=0;
+    for(var y=0;y<path.length;y++){
+      if(path[y].inv>peak){peak=path[y].inv;peakVal=peak;}
+      if(peak>0){
+        var dd=(peak-path[y].inv)/peak;
+        if(dd>maxDD){maxDD=dd;ddYear=y;}
+      }
+    }
+    allDD.push(maxDD);
+    // Recovery: years from maxDD year until portfolio exceeds peakVal
+    var recYrs=0;
+    if(ddYear>=0&&ddYear<path.length-1){
+      for(var y=ddYear+1;y<path.length;y++){
+        if(path[y].inv>=peakVal){recYrs=y-ddYear;break;}
+      }
+      if(recYrs===0)recYrs=path.length-ddYear; // never fully recovered
+    }
+    allRecovery.push(recYrs);
+  }
+  allDD.sort(function(a,b){return a-b;});
+  allRecovery.sort(function(a,b){return a-b;});
+  var medDD=allDD[Math.floor(allDD.length*0.5)];
+  var worstDD=allDD[allDD.length-1];
+  var avgDD=0;for(var i=0;i<allDD.length;i++)avgDD+=allDD[i];avgDD/=allDD.length;
+
+  $('stressDD').innerHTML=
+    '<div class="sb"><div class="l">Median Max Drawdown</div><div class="v" style="color:var(--or)">-'+pct(medDD)+'</div><div class="s">Typical worst drop</div></div>'+
+    '<div class="sb"><div class="l">Average Max Drawdown</div><div class="v" style="color:var(--or)">-'+pct(avgDD)+'</div><div class="s">Mean across all sims</div></div>'+
+    '<div class="sb"><div class="l">Worst Max Drawdown</div><div class="v" style="color:var(--rd)">-'+pct(worstDD)+'</div><div class="s">Absolute worst case</div></div>';
+
+  // 3. Recovery time
+  var medRec=allRecovery[Math.floor(allRecovery.length*0.5)];
+  var worstRec=allRecovery[allRecovery.length-1];
+  var avgRec=0;for(var i=0;i<allRecovery.length;i++)avgRec+=allRecovery[i];avgRec/=allRecovery.length;
+
+  $('stressRecovery').innerHTML=
+    '<div class="sb"><div class="l">Median Recovery</div><div class="v" style="color:var(--gn)">'+Math.round(medRec)+' yrs</div><div class="s">Typical bounce-back time</div></div>'+
+    '<div class="sb"><div class="l">Average Recovery</div><div class="v" style="color:var(--or)">'+Math.round(avgRec)+' yrs</div><div class="s">Mean across all sims</div></div>'+
+    '<div class="sb"><div class="l">Slowest Recovery</div><div class="v" style="color:var(--rd)">'+Math.round(worstRec)+' yrs</div><div class="s">Worst case</div></div>';
+
+  // 4. Spending sustainability — how long does money last?
+  var annExp=p.moExp*12;
+  var retReturn=0.05; // conservative 60/40 in retirement
+  // Worst 10% portfolio
+  var p10Bal=mc.p10.totalInv;
+  var medBal=mc.p50.totalInv;
+  function yearsLast(startBal){
+    var bal=startBal;
+    for(var y=0;y<50;y++){
+      var spend=annExp*Math.pow(1+p.inf,y); // inflation-adjusted spending
+      bal=bal*(1+retReturn)-spend;
+      if(bal<=0)return y;
+    }
+    return 50; // lasts 50+ years
+  }
+  var p10Years=yearsLast(p10Bal);
+  var medYears=yearsLast(medBal);
+  var p10Age=p.ra+p10Years;
+  var medAge=p.ra+medYears;
+
+  $('stressLongevity').innerHTML=
+    '<div class="sb"><div class="l">Worst 10% Scenario</div><div class="v" style="color:'+(p10Age<85?'var(--rd)':p10Age<95?'var(--or)':'var(--gn)')+'">Age '+(p10Years>=50?'95+':p10Age)+'</div><div class="s">'+fmt(p10Bal)+' at '+fmt(p.moExp)+'/mo</div></div>'+
+    '<div class="sb"><div class="l">Median Scenario</div><div class="v" style="color:'+(medAge<85?'var(--rd)':medAge<95?'var(--or)':'var(--gn)')+'">Age '+(medYears>=50?'95+':medAge)+'</div><div class="s">'+fmt(medBal)+' at '+fmt(p.moExp)+'/mo</div></div>'+
+    (p10Age<90?'<div class="alert d" style="grid-column:1/-1"><strong>Warning: You may outlive your savings.</strong> In the worst 10% of scenarios, your money runs out at age '+p10Age+'. Consider increasing contributions, reducing expenses, or working longer.</div>':
+    '<div class="alert o" style="grid-column:1/-1"><strong>Your savings appear sustainable.</strong> Even in bad scenarios, your money lasts past age '+(p10Years>=50?'95+':p10Age)+' at '+fmt(p.moExp)+'/month spending.</div>');
+
+  // 5. Sequence of returns risk
+  var earlyMC=runMC(p,200,{crash:true,bucket:ST.bucket,cAge:Math.min(p.age+5,p.ra-2),cMag:-0.37});
+  var lateMC=runMC(p,200,{crash:true,bucket:ST.bucket,cAge:p.ra-2,cMag:-0.37});
+  var noCrashMC=runMC(p,200,{crash:false,bucket:ST.bucket});
+  var seqCost=earlyMC.p50.nw-lateMC.p50.nw;
+
+  $('stressSequence').innerHTML=
+    '<div class="g3" style="margin-bottom:10px">'+
+    '<div class="sb"><div class="l">No Crash</div><div class="v" style="color:var(--gn)">'+fmt(noCrashMC.p50.nw)+'</div><div class="s">Baseline</div></div>'+
+    '<div class="sb"><div class="l">Crash at Age '+(Math.min(p.age+5,p.ra-2))+'</div><div class="v" style="color:var(--or)">'+fmt(earlyMC.p50.nw)+'</div><div class="s">Early career</div></div>'+
+    '<div class="sb"><div class="l">Crash at Age '+(p.ra-2)+'</div><div class="v" style="color:var(--rd)">'+fmt(lateMC.p50.nw)+'</div><div class="s">Pre-retirement</div></div></div>'+
+    '<div class="alert '+(Math.abs(seqCost)>50000?'d':'w')+'"><strong>Timing cost: '+fmt(Math.abs(seqCost))+'</strong> — A -37% crash at age '+(p.ra-2)+' costs you '+fmt(Math.abs(noCrashMC.p50.nw-lateMC.p50.nw))+' compared to no crash. The same crash at age '+(Math.min(p.age+5,p.ra-2))+' costs only '+fmt(Math.abs(noCrashMC.p50.nw-earlyMC.p50.nw))+'. This is why the bucket strategy matters most in your final years.'+(ST.bucket?' <strong style="color:var(--gn)">Bucket strategy is ON — protecting you.</strong>':'')+'</div>';
+
+  // 6. Monthly income shortfall
+  var p10Income=mc.p10.totalInv*0.04/12+ss.pia+p.pn;
+  var medIncome=mc.p50.totalInv*0.04/12+ss.pia+p.pn;
+  var p10Gap=p.moExp-p10Income;
+  var medGap=p.moExp-medIncome;
+
+  $('stressShortfall').innerHTML=
+    '<table class="ctbl"><tr><th>Scenario</th><th style="text-align:right">Monthly Income</th><th style="text-align:right">Monthly Expenses</th><th style="text-align:right">Gap</th></tr>'+
+    '<tr><td>Worst 10%</td><td class="n">'+fmt(p10Income)+'</td><td class="n">'+fmt(p.moExp)+'</td><td class="n" style="color:'+(p10Gap>0?'var(--rd)':'var(--gn)')+'">'+
+    (p10Gap>0?'-'+fmt(p10Gap)+' shortfall':'+'+fmt(-p10Gap)+' surplus')+'</td></tr>'+
+    '<tr><td>Median</td><td class="n">'+fmt(medIncome)+'</td><td class="n">'+fmt(p.moExp)+'</td><td class="n" style="color:'+(medGap>0?'var(--rd)':'var(--gn)')+'">'+
+    (medGap>0?'-'+fmt(medGap)+' shortfall':'+'+fmt(-medGap)+' surplus')+'</td></tr></table>'+
+    (p10Gap>0?'<div class="alert d" style="margin-top:10px"><strong>Income shortfall in bad scenarios.</strong> You\'d need to either cut expenses by '+fmt(p10Gap)+'/month, work '+Math.ceil(p10Gap/(p.sal/12*p.ec*0.04))+' more years, or increase contributions by '+fmt(p10Gap/0.04*12/((p.ra-p.age)*12))+'/month to close this gap.</div>':
+    '<div class="alert o" style="margin-top:10px"><strong>You\'re on track.</strong> Even in bad scenarios, your projected income covers your expenses with a '+fmt(-p10Gap)+'/month buffer.</div>');
+}
+
 // ===== MAIN =====
 function runAll(){
   var p=getP();
@@ -901,6 +1065,7 @@ function runAll(){
   renderSS(p);
   renderLeave(p);
   renderSim(mc);
+  renderStress(mc);
 }
 
 // ===== SCENARIOS (Save/Load) =====
@@ -1130,7 +1295,7 @@ function runRothConvert(){
     '<table class="ctbl"><tr><th>Scenario</th><th style="text-align:right">Balance at Retirement</th><th style="text-align:right">After Tax</th></tr>'+
     '<tr><td>No conversion (all traditional)</td><td class="n">'+fmt(tradBal)+'</td><td class="n">'+fmt(tradAfterTax)+'</td></tr>'+
     '<tr><td>Convert '+fmt(amt)+'/yr for '+yrs+' years</td><td class="n">'+fmt(rothBal+remaining)+'</td><td class="n" style="color:'+(verdict?'var(--gn)':'var(--rd)')+'"><strong>'+fmt(mixedAfterTax)+'</strong></td></tr>'+
-    '<tr style="border-top:2px solid var(--bdr)"><td><strong>'+(verdict?'Tax savings':'Tax cost')+'</strong></td><td></td><td class="n" style="color:'+(verdict?'var(--gn)':'var(--rd)');+';font-size:18px"><strong>'+(verdict?'+':'')+fmt(savings)+'</strong></td></tr></table>'+
+    '<tr style="border-top:2px solid var(--bdr)"><td><strong>'+(verdict?'Tax savings':'Tax cost')+'</strong></td><td></td><td class="n" style="color:'+(verdict?'var(--gn)':'var(--rd)')+';font-size:18px"><strong>'+(verdict?'+':'')+fmt(savings)+'</strong></td></tr></table>'+
     '<div class="g2" style="margin-top:14px">'+
     '<div class="sb"><div class="l">Tax Paid Now (conversion)</div><div class="v" style="color:var(--or)">'+fmt(totalTaxPaid)+'</div></div>'+
     '<div class="sb"><div class="l">Tax Saved at Retirement</div><div class="v" style="color:'+(verdict?'var(--gn)':'var(--rd)')+'">'+fmt(savings+totalTaxPaid)+'</div></div></div>'+
@@ -1148,7 +1313,21 @@ document.addEventListener('DOMContentLoaded',function(){
   document.querySelectorAll('.tab').forEach(function(t){
     t.addEventListener('click',function(){
       switchTab(t.getAttribute('data-t'));
-      if(t.getAttribute('data-t')==='scn')renderScenarios();
+      if(t.getAttribute('data-t')==='pro'&&PRO_UNLOCKED)renderScenarios();
+    });
+  });
+
+  // Sub-tab navigation
+  document.querySelectorAll('.subtab').forEach(function(st){
+    st.addEventListener('click',function(){
+      var target=st.getAttribute('data-sub');
+      var parent=st.closest('.subtabs');
+      parent.querySelectorAll('.subtab').forEach(function(s){s.classList.remove('active');});
+      st.classList.add('active');
+      var container=parent.parentElement;
+      container.querySelectorAll('.subpanel').forEach(function(p){p.classList.remove('active');});
+      var panel=container.querySelector('#'+target);
+      if(panel)panel.classList.add('active');
     });
   });
 
@@ -1179,7 +1358,14 @@ document.addEventListener('DOMContentLoaded',function(){
     'rc-bal':function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
     'rc-amt':function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
     'rc-yrs':function(v){return v+' yrs'},
-    'rc-tax':function(v){return Number(v).toFixed(2)+'%'},'rc-rtax':function(v){return Number(v).toFixed(2)+'%'}
+    'rc-tax':function(v){return Number(v).toFixed(2)+'%'},'rc-rtax':function(v){return Number(v).toFixed(2)+'%'},
+    bal401k:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    balRoth:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    balTrad:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    'bal457b':function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    balHSA:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    balTx:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    moExp:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
   };
   document.querySelectorAll('input[type=range]').forEach(function(s){
     s.addEventListener('input',function(){
@@ -1219,12 +1405,14 @@ document.addEventListener('DOMContentLoaded',function(){
     exportPDF();
   });
   $('btnSave').addEventListener('click',function(){
-    if(!PRO_UNLOCKED){switchTab('scn');return;}
-    switchTab('scn');renderScenarios();
+    if(!PRO_UNLOCKED){switchTab('pro');return;}
+    switchTab('pro');renderScenarios();
   });
   $('btnSaveScenario').addEventListener('click',function(){saveCurrentScenario();});
   $('btnSpouse').addEventListener('click',function(){runSpouse();});
   $('btnRoth').addEventListener('click',function(){runRothConvert();});
+  $('btnStress').addEventListener('click',function(){runAll();switchTab('risk');});
+  $('s-filing').addEventListener('change',function(){});
 
   // Initial run
   try{runAll();}catch(e){console.error(e);}
@@ -1233,7 +1421,7 @@ document.addEventListener('DOMContentLoaded',function(){
   if(localStorage.getItem('finng-pro')==='1'){unlockPro();}
 
   // Upgrade buttons — link to payment (replace URL when ready)
-  var upgradeURL='https://wirdani.gumroad.com/l/finng-retire-pro';
+  var upgradeURL=''; // SET YOUR GUMROAD/STRIPE LINK HERE
   document.querySelectorAll('.btnUpgrade, #btnUpgrade1').forEach(function(b){
     b.addEventListener('click',function(){
       if(upgradeURL){window.open(upgradeURL,'_blank');}

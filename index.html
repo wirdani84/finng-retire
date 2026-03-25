@@ -104,10 +104,13 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
 .scenario-card .sc-name{color:var(--t1);font-size:13px;font-weight:600}
 .scenario-card .sc-date{color:var(--t3);font-size:10px;margin-top:3px}
 .scenario-card .sc-btns{display:flex;gap:6px}
-.subtabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg);border-radius:8px;padding:3px;border:1px solid var(--cy2)}
-.subtab{flex:1;padding:10px 4px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--t2);font-size:12px;font-weight:700;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:0.5px}
+.subtabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg);border-radius:8px;padding:3px;border:1px solid var(--cy2);flex-wrap:wrap}
+.subtab{flex:1 1 auto;min-width:80px;padding:10px 8px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--t2);font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:0.3px;text-align:center}
 .subtab.active{background:linear-gradient(135deg,var(--cy2),#6d28d9);color:#fff;box-shadow:0 2px 8px rgba(6,182,212,.3)}
 .subtab:hover{color:var(--t1);background:rgba(6,182,212,.1)}
+.subtab.proplus-tab:not(.unlocked){opacity:0.5;position:relative}
+.subtab.proplus-tab:not(.unlocked)::after{content:'PRO+';font-size:7px;position:absolute;top:2px;right:4px;background:var(--cy);color:#000;padding:1px 4px;border-radius:3px;font-weight:800}
+.subtab.proplus-tab.unlocked{opacity:1}
 .subpanel{display:none}
 .subpanel.active{display:block}
 @media print{.tabs,.tab,.btn,.btn-sm,.btn-pro,.hdr-sub,.footer,.tgl-r,.tgl,.alert{display:none!important}.app{padding:0}.card{break-inside:avoid;border:1px solid #ccc;margin-bottom:10px}.hdr{padding:10px 0}body{background:#fff;color:#000}.ct{color:#333!important}.sb .l,.sb .v,.sb .s{color:#000!important}table{color:#000}}
@@ -135,9 +138,84 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
 </div>
 <div class="tabs" id="tabBar"></div>
 
+<div id="tab-plan">
+  <div class="card"><div class="ct cyan"><span class="d"></span>Personal</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current Age</span><span class="sl-v" id="v-age">35</span></div><input type="range" id="s-age" min="18" max="60" value="35"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Retirement Age</span><span class="sl-v" id="v-ra">65</span></div><input type="range" id="s-ra" min="55" max="75" value="65"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Annual Salary</span><span class="sl-v" id="v-sal">$50,000.00</span></div><input type="range" id="s-sal" min="0" max="200000" step="1" value="50000"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Salary Growth</span><span class="sl-v" id="v-sg">3.00%</span></div><input type="range" id="s-sg" min="0" max="8" step="0.01" value="3"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Years Working in US</span><span class="sl-v" id="v-uy">2</span></div><input type="range" id="s-uy" min="0" max="40" value="2"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Expected Inflation</span><span class="sl-v" id="v-inf">3.00%</span></div><input type="range" id="s-inf" min="0" max="8" step="0.01" value="3"></div>
+    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">State of Residence (where you live)</div>
+    <select id="s-st"><option value="0">No state tax (FL, TX, NV, WA, WY, AK, NH, SD, TN)</option><option value="2.50">Arizona (2.50%)</option><option value="2.75">North Dakota (2.75%)</option><option value="3.05" selected>Indiana (3.05%)</option><option value="3.07">Pennsylvania (3.07%)</option><option value="4.25">Michigan (4.25%)</option><option value="4.40">Colorado (4.40%)</option><option value="4.75">North Carolina (4.75%)</option><option value="4.95">Illinois (4.95%)</option><option value="5.00">Massachusetts (5.00%)</option><option value="5.25">Virginia (5.25%)</option><option value="5.49">Georgia (5.49%)</option><option value="5.70">Ohio (5.70%)</option><option value="6.50">Maryland (6.50%)</option><option value="6.85">Minnesota (6.85%)</option><option value="6.99">New Jersey (6.99%)</option><option value="8.82">New York (8.82%)</option><option value="9.30">Oregon (9.30%)</option><option value="13.30">California (13.30%)</option></select></div>
+    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">State of Employment (where you work — if different)</div>
+    <select id="s-st2"><option value="0" selected>Same as residence</option><option value="0">No state tax (FL, TX, NV, WA, WY, AK, NH, SD, TN)</option><option value="2.50">Arizona (2.50%)</option><option value="2.75">North Dakota (2.75%)</option><option value="3.05">Indiana (3.05%)</option><option value="3.07">Pennsylvania (3.07%)</option><option value="4.25">Michigan (4.25%)</option><option value="4.40">Colorado (4.40%)</option><option value="4.75">North Carolina (4.75%)</option><option value="4.95">Illinois (4.95%)</option><option value="5.00">Massachusetts (5.00%)</option><option value="5.25">Virginia (5.25%)</option><option value="5.49">Georgia (5.49%)</option><option value="5.70">Ohio (5.70%)</option><option value="6.50">Maryland (6.50%)</option><option value="6.85">Minnesota (6.85%)</option><option value="6.99">New Jersey (6.99%)</option><option value="8.82">New York (8.82%)</option><option value="9.30">Oregon (9.30%)</option><option value="13.30">California (13.30%)</option></select>
+    <p class="note">If you live in one state but work in another (e.g., live in Indiana, work in Illinois), you may owe taxes to both states. Some states have reciprocal agreements that prevent double taxation — check with a tax professional.</p></div>
+    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">Filing Status</div>
+    <select id="s-filing"><option value="single" selected>Single</option><option value="married">Married Filing Jointly</option></select></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Living Expenses (retirement)</span><span class="sl-v" id="v-moExp">$3,000.00</span></div><input type="range" id="s-moExp" min="1000" max="10000" step="1" value="3000"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Employer Plan (401k/403b)</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Your Contribution</span><span class="sl-v" id="v-ec">6.00%</span></div><input type="range" id="s-ec" min="0" max="15" step="0.01" value="6"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Employer Match</span><span class="sl-v" id="v-em">3.00%</span></div><input type="range" id="s-em" min="0" max="15" step="0.01" value="3"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Existing Account Balances</div>
+    <p class="note" style="margin-bottom:10px">Enter your current balances. If starting from zero, leave at $0.00.</p>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current 401k/403b Balance</span><span class="sl-v" id="v-bal401k">$0.00</span></div><input type="range" id="s-bal401k" min="0" max="500000" step="100" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current Roth IRA Balance</span><span class="sl-v" id="v-balRoth">$0.00</span></div><input type="range" id="s-balRoth" min="0" max="500000" step="100" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current Traditional IRA Balance</span><span class="sl-v" id="v-balTrad">$0.00</span></div><input type="range" id="s-balTrad" min="0" max="500000" step="100" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current 457(b) Balance</span><span class="sl-v" id="v-bal457b">$0.00</span></div><input type="range" id="s-bal457b" min="0" max="300000" step="100" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current HSA Balance</span><span class="sl-v" id="v-balHSA">$0.00</span></div><input type="range" id="s-balHSA" min="0" max="100000" step="100" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Current Taxable Brokerage Balance</span><span class="sl-v" id="v-balTx">$0.00</span></div><input type="range" id="s-balTx" min="0" max="500000" step="100" value="0"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>IRAs</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Roth IRA</span><span class="sl-v" id="v-ri">$100.00</span></div><input type="range" id="s-ri" min="0" max="625" step="1" value="100"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Traditional IRA</span><span class="sl-v" id="v-ti">$0.00</span></div><input type="range" id="s-ti" min="0" max="625" step="1" value="0"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Additional Accounts</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly 457(b)</span><span class="sl-v" id="v-457">$0.00</span></div><input type="range" id="s-457" min="0" max="1000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly HSA</span><span class="sl-v" id="v-hsa">$0.00</span></div><input type="range" id="s-hsa" min="0" max="367" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Taxable Brokerage</span><span class="sl-v" id="v-tx">$0.00</span></div><input type="range" id="s-tx" min="0" max="2000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Expected Monthly Pension</span><span class="sl-v" id="v-pn">$0.00</span></div><input type="range" id="s-pn" min="0" max="5000" step="1" value="0"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Home &amp; Mortgage</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Home Value / Purchase Price</span><span class="sl-v" id="v-hv">$0.00</span></div><input type="range" id="s-hv" min="0" max="500000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Mortgage Balance (amount owed)</span><span class="sl-v" id="v-mb">$0.00</span></div><input type="range" id="s-mb" min="0" max="500000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Mortgage Interest Rate</span><span class="sl-v" id="v-mr">0.00%</span></div><input type="range" id="s-mr" min="0" max="9" step="0.01" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Mortgage Payment (P&amp;I only)</span><span class="sl-v" id="v-mp">$0.00</span></div><input type="range" id="s-mp" min="0" max="4000" step="1" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Property Tax + Insurance (escrow)</span><span class="sl-v" id="v-esc">$0.00</span></div><input type="range" id="s-esc" min="0" max="1500" step="1" value="0"></div>
+    <div class="alert i" style="margin-bottom:14px"><strong>Important:</strong> Enter only Principal &amp; Interest (P&amp;I) above — NOT your total monthly payment. Your total payment likely includes property tax and homeowner's insurance (escrow). Only P&amp;I pays down the mortgage. Tax and insurance are separate expenses that continue even after the mortgage is paid off.<br><br>
+    <strong>Example:</strong> If your total payment is $1,385/month and escrow (tax + insurance) is $288/month, your P&amp;I is $1,097/month. Check your mortgage statement for the breakdown.<br><br>
+    <strong>No mortgage?</strong> Leave all values at $0.00. Renters, veterans with paid-off VA loans, or homeowners who own outright can skip this section.</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Home Appreciation Rate</span><span class="sl-v" id="v-ha">0.00%</span></div><input type="range" id="s-ha" min="0" max="6" step="0.01" value="0"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Extra Mortgage Payment</span><span class="sl-v" id="v-xm">$0.00/mo</span></div><input type="range" id="s-xm" min="0" max="500" step="1" value="0"></div>
+  </div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Custom Return Assumptions <span class="pro">PRO</span></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Stock Return (annual)</span><span class="sl-v" id="v-rstock">8.00%</span></div><input type="range" id="s-rstock" min="0" max="15" step="0.01" value="8"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Bond Return (annual)</span><span class="sl-v" id="v-rbond">4.00%</span></div><input type="range" id="s-rbond" min="0" max="8" step="0.01" value="4"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Cash Return (annual)</span><span class="sl-v" id="v-rcash">2.00%</span></div><input type="range" id="s-rcash" min="0" max="5" step="0.01" value="2"></div>
+    <p class="note">Default stock return is 8% (historical S&amp;P 500 average). The simulator uses these as base rates and adds volatility through fat-tail distributions.</p>
+  </div>
+  <button class="btn" id="btnCalc">CALCULATE →</button>
+</div>
+
+
 <!-- TAB: DASHBOARD -->
 <div id="tab-dash" class="hidden">
+  <button class="btn-sm" id="btnBackPlan" style="margin-bottom:16px">← Back to My Plan</button>
+  <div id="proBanner" style="margin-bottom:12px"></div>
+  <div class="subtabs">
+    <button class="subtab active" data-sub="sub-results">Results</button>
+    <button class="subtab" data-sub="sub-risk">Risk</button>
+    <button class="subtab" data-sub="sub-intl">International</button>
+    <button class="subtab" data-sub="sub-pro">PRO 🔒</button>
+  </div>
+
+  <div class="subpanel active" id="sub-results">
+<div id="resultsSection">
+  <div style="margin:24px 0 16px;border-top:2px solid var(--cy);padding-top:16px"><span style="font-size:16px;font-weight:700;color:var(--cy);letter-spacing:1px">YOUR RESULTS</span></div>
   <div class="card"><div class="ct cyan"><span class="d"></span>Net Worth at Retirement</div><div class="g3" id="nwStats"></div></div>
+  <div class="card" style="border:2px solid var(--cy)"><div class="ct cyan"><span class="d"></span>Will Your Money Last? — 7-Layer Analysis</div><div id="layerStats"></div></div>
   <div class="card" style="border:1px solid var(--or)"><div class="ct orange"><span class="d"></span>Risk Analysis — What Could Go Wrong</div><div class="g2" id="dashRisk"></div><p class="note" style="margin-top:10px">These probabilities come from 500 Monte Carlo simulations using fat-tail distributions (Student's t, 5 df) which model crashes 2-3x more often than standard calculators. This is closer to how real markets behave.</p></div>
   <div class="card"><div class="ct green"><span class="d"></span>Monthly Retirement Income</div><div id="incTbl"></div></div>
   <div class="card"><div class="ct purple"><span class="d"></span>Mortgage Payoff Tracker</div><div id="mortTbl"></div></div>
@@ -149,39 +227,10 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     <button class="btn-pro" id="btnPDF">📄 Export PDF Report</button>
     <button class="btn-sm" id="btnSave">💾 Save This Scenario</button>
   </div>
-</div>
+  </div>
+  </div>
 
-<!-- TAB: INTERNATIONAL -->
-<div id="tab-intl" class="hidden">
-  <div class="subtabs"><button class="subtab active" data-sub="sub-ss">SS Tracker</button><button class="subtab" data-sub="sub-leave">Leave US?</button></div>
-  <div class="subpanel active" id="sub-ss">
-  <div class="card"><div class="ct orange"><span class="d"></span>Social Security Quarters</div><div id="ssAlert"></div><div class="g2" id="ssStats" style="margin-bottom:12px"></div><div class="q-grid" id="qGrid"></div></div>
-  <div class="card"><div class="ct cyan"><span class="d"></span>Benefit Estimates</div><div id="ssBen"></div></div>
-  <div class="card"><div class="ct red"><span class="d"></span>RMD — Required Minimum Distributions</div><div id="rmdTbl"></div><p class="note">At age 73, the IRS forces you to withdraw minimum amounts from traditional accounts (401k, 403b, Traditional IRA). Roth IRAs have NO RMDs. These forced withdrawals can push you into higher tax brackets.</p></div>
-  </div>
-  <div class="subpanel" id="sub-leave">
-  <div class="card"><div class="ct purple"><span class="d"></span>What If You Leave the US?</div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Leave at age</span><span class="sl-v" id="v-la">48</span></div><input type="range" id="s-la" min="27" max="65" value="48"></div>
-    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">Country</div>
-    <select id="s-cty">
-      <option value="x">— Select —</option>
-      <optgroup label="WITH Totalization Agreement (SS may continue)">
-        <option value="t">Australia</option><option value="t">Austria</option><option value="t">Belgium</option><option value="t">Brazil</option><option value="t">Canada</option><option value="t">Chile</option><option value="t">Czech Republic</option><option value="t">Denmark</option><option value="t">Finland</option><option value="t">France</option><option value="t">Germany</option><option value="t">Greece</option><option value="t">Hungary</option><option value="t">Iceland</option><option value="t">Ireland</option><option value="t">Italy</option><option value="t">Japan</option><option value="t">Luxembourg</option><option value="t">Netherlands</option><option value="t">Norway</option><option value="t">Poland</option><option value="t">Portugal</option><option value="t">Slovak Republic</option><option value="t">Slovenia</option><option value="t">South Korea</option><option value="t">Spain</option><option value="t">Sweden</option><option value="t">Switzerland</option><option value="t">United Kingdom</option><option value="t">Uruguay</option>
-      </optgroup>
-      <optgroup label="WITHOUT Agreement (SS STOPS after 6 months)">
-        <option value="n">China</option><option value="n">India</option><option value="n">Malaysia</option><option value="n">Turkey</option><option value="n">Mexico</option><option value="n">Philippines</option><option value="n">Vietnam</option><option value="n">Indonesia</option><option value="n">Thailand</option><option value="n">Nigeria</option><option value="n">Pakistan</option><option value="n">Bangladesh</option><option value="n">Singapore</option><option value="n">Hong Kong</option><option value="n">Taiwan</option><option value="n">UAE</option><option value="n">Saudi Arabia</option><option value="n">Kenya</option><option value="n">Colombia</option><option value="n">Peru</option><option value="n">Egypt</option><option value="n">Costa Rica</option><option value="n">Panama</option><option value="n">Other (no agreement)</option>
-      </optgroup>
-    </select></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Home country monthly cost of living (USD)</span><span class="sl-v" id="v-col">$800</span></div><input type="range" id="s-col" min="200" max="4000" step="100" value="800"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Currency volatility (annual %)</span><span class="sl-v" id="v-fx">10%</span></div><input type="range" id="s-fx" min="0" max="40" step="1" value="10"></div>
-    <div id="leaveRes"></div>
-  </div>
-  <div class="card"><div class="ct cyan"><span class="d"></span>Account Fate If You Leave</div><div id="acctFate"></div></div>
-  </div>
-</div>
-
-<!-- TAB: RISK -->
-<div id="tab-risk" class="hidden">
+  <div class="subpanel" id="sub-risk">
   <div class="subtabs"><button class="subtab active" data-sub="sub-sim">Simulator</button><button class="subtab" data-sub="sub-stress">Stress Test</button></div>
   <div class="subpanel active" id="sub-sim">
   <div class="card"><div class="ct cyan"><span class="d"></span>500 Simulation Results — Full Range</div>
@@ -260,94 +309,84 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     <div id="stressShortfall"></div>
   </div>
   <button class="btn" id="btnStress">RE-RUN STRESS TEST</button>
+  <div class="card" id="lossGate"><div class="ct red"><span class="d"></span>Loss vs Recovery — The Math of Losses</div>
+    <div class="pro-loss-locked" style="text-align:center;padding:20px">
+      <p style="color:var(--t2);margin-bottom:12px">See personalized loss/recovery math using YOUR portfolio balance — how much you'd lose in dollar terms, and how many years each drop takes to recover.</p>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:16px">Includes -10% to -60% scenarios with historical examples</div>
+      <button class="btn-pro" onclick="if(PRO_UNLOCKED){this.parentElement.style.display='none';document.getElementById('lossContent').style.display='';}else{switchTab('dash');var pb=document.querySelector('[data-sub=sub-pro]');if(pb)pb.click();}">Unlock with PRO</button>
+    </div>
+    <div id="lossContent" style="display:none">
+      <p class="note" style="margin-bottom:10px">Losses and gains are NOT symmetric. A 37% loss requires a 59% gain just to get back to even.</p>
+      <div id="lossTable"></div>
+      <div class="alert d" style="margin-top:10px"><strong>Key insight:</strong> The bigger the loss, the exponentially harder it is to recover. This is why the bucket strategy exists — it prevents you from being 100% in stocks when a crash would be most devastating.</div>
+    </div>
   </div>
-</div>
+  </div>
+  </div>
 
-<!-- TAB: INPUTS -->
-<div id="tab-in">
-  <div class="card"><div class="ct cyan"><span class="d"></span>Personal</div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Current Age</span><span class="sl-v" id="v-age">35</span></div><input type="range" id="s-age" min="18" max="60" value="35"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Retirement Age</span><span class="sl-v" id="v-ra">65</span></div><input type="range" id="s-ra" min="55" max="75" value="65"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Annual Salary</span><span class="sl-v" id="v-sal">$50,000.00</span></div><input type="range" id="s-sal" min="0" max="200000" step="1" value="50000"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Salary Growth</span><span class="sl-v" id="v-sg">3.00%</span></div><input type="range" id="s-sg" min="0" max="8" step="0.01" value="3"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Years Working in US</span><span class="sl-v" id="v-uy">2</span></div><input type="range" id="s-uy" min="0" max="40" value="2"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Expected Inflation</span><span class="sl-v" id="v-inf">3.00%</span></div><input type="range" id="s-inf" min="0" max="8" step="0.01" value="3"></div>
-    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">State of Residence (where you live)</div>
-    <select id="s-st"><option value="0">No state tax (FL, TX, NV, WA, WY, AK, NH, SD, TN)</option><option value="2.50">Arizona (2.50%)</option><option value="2.75">North Dakota (2.75%)</option><option value="3.05" selected>Indiana (3.05%)</option><option value="3.07">Pennsylvania (3.07%)</option><option value="4.25">Michigan (4.25%)</option><option value="4.40">Colorado (4.40%)</option><option value="4.75">North Carolina (4.75%)</option><option value="4.95">Illinois (4.95%)</option><option value="5.00">Massachusetts (5.00%)</option><option value="5.25">Virginia (5.25%)</option><option value="5.49">Georgia (5.49%)</option><option value="5.70">Ohio (5.70%)</option><option value="6.50">Maryland (6.50%)</option><option value="6.85">Minnesota (6.85%)</option><option value="6.99">New Jersey (6.99%)</option><option value="8.82">New York (8.82%)</option><option value="9.30">Oregon (9.30%)</option><option value="13.30">California (13.30%)</option></select></div>
-    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">State of Employment (where you work — if different)</div>
-    <select id="s-st2"><option value="0" selected>Same as residence</option><option value="0">No state tax (FL, TX, NV, WA, WY, AK, NH, SD, TN)</option><option value="2.50">Arizona (2.50%)</option><option value="2.75">North Dakota (2.75%)</option><option value="3.05">Indiana (3.05%)</option><option value="3.07">Pennsylvania (3.07%)</option><option value="4.25">Michigan (4.25%)</option><option value="4.40">Colorado (4.40%)</option><option value="4.75">North Carolina (4.75%)</option><option value="4.95">Illinois (4.95%)</option><option value="5.00">Massachusetts (5.00%)</option><option value="5.25">Virginia (5.25%)</option><option value="5.49">Georgia (5.49%)</option><option value="5.70">Ohio (5.70%)</option><option value="6.50">Maryland (6.50%)</option><option value="6.85">Minnesota (6.85%)</option><option value="6.99">New Jersey (6.99%)</option><option value="8.82">New York (8.82%)</option><option value="9.30">Oregon (9.30%)</option><option value="13.30">California (13.30%)</option></select>
-    <p class="note">If you live in one state but work in another (e.g., live in Indiana, work in Illinois), you may owe taxes to both states. Some states have reciprocal agreements that prevent double taxation — check with a tax professional.</p></div>
-    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">Filing Status</div>
-    <select id="s-filing"><option value="single" selected>Single</option><option value="married">Married Filing Jointly</option></select></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Living Expenses (retirement)</span><span class="sl-v" id="v-moExp">$3,000.00</span></div><input type="range" id="s-moExp" min="1000" max="10000" step="1" value="3000"></div>
+  <div class="subpanel" id="sub-intl">
+  <div class="subtabs"><button class="subtab active" data-sub="sub-ss">SS Tracker</button><button class="subtab" data-sub="sub-leave">Leave US?</button></div>
+  <div class="subpanel active" id="sub-ss">
+  <div class="card"><div class="ct orange"><span class="d"></span>Social Security Quarters</div><div id="ssAlert"></div><div class="g2" id="ssStats" style="margin-bottom:12px"></div><div class="q-grid" id="qGrid"></div></div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Benefit Estimates</div><div id="ssBen"></div></div>
+  <div class="card"><div class="ct red"><span class="d"></span>RMD — Required Minimum Distributions</div><div id="rmdTbl"></div><p class="note">At age 73, the IRS forces you to withdraw minimum amounts from traditional accounts (401k, 403b, Traditional IRA). Roth IRAs have NO RMDs. These forced withdrawals can push you into higher tax brackets.</p></div>
   </div>
-  <div class="card"><div class="ct cyan"><span class="d"></span>Employer Plan (401k/403b)</div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Your Contribution</span><span class="sl-v" id="v-ec">6.00%</span></div><input type="range" id="s-ec" min="0" max="15" step="0.01" value="6"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Employer Match</span><span class="sl-v" id="v-em">3.00%</span></div><input type="range" id="s-em" min="0" max="15" step="0.01" value="3"></div>
+  <div class="subpanel" id="sub-leave">
+  <div class="card"><div class="ct purple"><span class="d"></span>What If You Leave the US?</div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Leave at age</span><span class="sl-v" id="v-la">48</span></div><input type="range" id="s-la" min="27" max="65" value="48"></div>
+    <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">Country</div>
+    <select id="s-cty">
+      <option value="x">— Select —</option>
+      <optgroup label="WITH Totalization Agreement (SS may continue)">
+        <option value="t">Australia</option><option value="t">Austria</option><option value="t">Belgium</option><option value="t">Brazil</option><option value="t">Canada</option><option value="t">Chile</option><option value="t">Czech Republic</option><option value="t">Denmark</option><option value="t">Finland</option><option value="t">France</option><option value="t">Germany</option><option value="t">Greece</option><option value="t">Hungary</option><option value="t">Iceland</option><option value="t">Ireland</option><option value="t">Italy</option><option value="t">Japan</option><option value="t">Luxembourg</option><option value="t">Netherlands</option><option value="t">Norway</option><option value="t">Poland</option><option value="t">Portugal</option><option value="t">Slovak Republic</option><option value="t">Slovenia</option><option value="t">South Korea</option><option value="t">Spain</option><option value="t">Sweden</option><option value="t">Switzerland</option><option value="t">United Kingdom</option><option value="t">Uruguay</option>
+      </optgroup>
+      <optgroup label="WITHOUT Agreement (SS STOPS after 6 months)">
+        <option value="n">China</option><option value="n">India</option><option value="n">Malaysia</option><option value="n">Turkey</option><option value="n">Mexico</option><option value="n">Philippines</option><option value="n">Vietnam</option><option value="n">Indonesia</option><option value="n">Thailand</option><option value="n">Nigeria</option><option value="n">Pakistan</option><option value="n">Bangladesh</option><option value="n">Singapore</option><option value="n">Hong Kong</option><option value="n">Taiwan</option><option value="n">UAE</option><option value="n">Saudi Arabia</option><option value="n">Kenya</option><option value="n">Colombia</option><option value="n">Peru</option><option value="n">Egypt</option><option value="n">Costa Rica</option><option value="n">Panama</option><option value="n">Other (no agreement)</option>
+      </optgroup>
+    </select></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Home country monthly cost of living (USD)</span><span class="sl-v" id="v-col">$800</span></div><input type="range" id="s-col" min="200" max="4000" step="100" value="800"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Currency volatility (annual %)</span><span class="sl-v" id="v-fx">10%</span></div><input type="range" id="s-fx" min="0" max="40" step="1" value="10"></div>
+    <div id="leaveRes"></div>
   </div>
-  <div class="card"><div class="ct cyan"><span class="d"></span>Existing Account Balances</div>
-    <p class="note" style="margin-bottom:10px">Enter your current balances. If starting from zero, leave at $0.00.</p>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Current 401k/403b Balance</span><span class="sl-v" id="v-bal401k">$0.00</span></div><input type="range" id="s-bal401k" min="0" max="500000" step="100" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Current Roth IRA Balance</span><span class="sl-v" id="v-balRoth">$0.00</span></div><input type="range" id="s-balRoth" min="0" max="500000" step="100" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Current Traditional IRA Balance</span><span class="sl-v" id="v-balTrad">$0.00</span></div><input type="range" id="s-balTrad" min="0" max="500000" step="100" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Current 457(b) Balance</span><span class="sl-v" id="v-bal457b">$0.00</span></div><input type="range" id="s-bal457b" min="0" max="300000" step="100" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Current HSA Balance</span><span class="sl-v" id="v-balHSA">$0.00</span></div><input type="range" id="s-balHSA" min="0" max="100000" step="100" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Current Taxable Brokerage Balance</span><span class="sl-v" id="v-balTx">$0.00</span></div><input type="range" id="s-balTx" min="0" max="500000" step="100" value="0"></div>
+  <div class="card"><div class="ct cyan"><span class="d"></span>Account Fate If You Leave</div><div id="acctFate"></div></div>
   </div>
-  <div class="card"><div class="ct cyan"><span class="d"></span>IRAs</div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Roth IRA</span><span class="sl-v" id="v-ri">$100.00</span></div><input type="range" id="s-ri" min="0" max="625" step="1" value="100"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Traditional IRA</span><span class="sl-v" id="v-ti">$0.00</span></div><input type="range" id="s-ti" min="0" max="625" step="1" value="0"></div>
   </div>
-  <div class="card"><div class="ct cyan"><span class="d"></span>Additional Accounts</div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly 457(b)</span><span class="sl-v" id="v-457">$0.00</span></div><input type="range" id="s-457" min="0" max="1000" step="1" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly HSA</span><span class="sl-v" id="v-hsa">$0.00</span></div><input type="range" id="s-hsa" min="0" max="367" step="1" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Taxable Brokerage</span><span class="sl-v" id="v-tx">$0.00</span></div><input type="range" id="s-tx" min="0" max="2000" step="1" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Expected Monthly Pension</span><span class="sl-v" id="v-pn">$0.00</span></div><input type="range" id="s-pn" min="0" max="5000" step="1" value="0"></div>
-  </div>
-  <div class="card"><div class="ct cyan"><span class="d"></span>Home &amp; Mortgage</div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Home Value / Purchase Price</span><span class="sl-v" id="v-hv">$0.00</span></div><input type="range" id="s-hv" min="0" max="500000" step="1" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Mortgage Balance (amount owed)</span><span class="sl-v" id="v-mb">$0.00</span></div><input type="range" id="s-mb" min="0" max="500000" step="1" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Mortgage Interest Rate</span><span class="sl-v" id="v-mr">0.00%</span></div><input type="range" id="s-mr" min="0" max="9" step="0.01" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Mortgage Payment (P&amp;I only)</span><span class="sl-v" id="v-mp">$0.00</span></div><input type="range" id="s-mp" min="0" max="4000" step="1" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Property Tax + Insurance (escrow)</span><span class="sl-v" id="v-esc">$0.00</span></div><input type="range" id="s-esc" min="0" max="1500" step="1" value="0"></div>
-    <div class="alert i" style="margin-bottom:14px"><strong>Important:</strong> Enter only Principal &amp; Interest (P&amp;I) above — NOT your total monthly payment. Your total payment likely includes property tax and homeowner's insurance (escrow). Only P&amp;I pays down the mortgage. Tax and insurance are separate expenses that continue even after the mortgage is paid off.<br><br>
-    <strong>Example:</strong> If your total payment is $1,385/month and escrow (tax + insurance) is $288/month, your P&amp;I is $1,097/month. Check your mortgage statement for the breakdown.<br><br>
-    <strong>No mortgage?</strong> Leave all values at $0.00. Renters, veterans with paid-off VA loans, or homeowners who own outright can skip this section.</div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Home Appreciation Rate</span><span class="sl-v" id="v-ha">0.00%</span></div><input type="range" id="s-ha" min="0" max="6" step="0.01" value="0"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Extra Mortgage Payment</span><span class="sl-v" id="v-xm">$0.00/mo</span></div><input type="range" id="s-xm" min="0" max="500" step="1" value="0"></div>
-  </div>
-  <div class="card"><div class="ct cyan"><span class="d"></span>Custom Return Assumptions <span class="pro">PRO</span></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Stock Return (annual)</span><span class="sl-v" id="v-rstock">8.00%</span></div><input type="range" id="s-rstock" min="0" max="15" step="0.01" value="8"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Bond Return (annual)</span><span class="sl-v" id="v-rbond">4.00%</span></div><input type="range" id="s-rbond" min="0" max="8" step="0.01" value="4"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Cash Return (annual)</span><span class="sl-v" id="v-rcash">2.00%</span></div><input type="range" id="s-rcash" min="0" max="5" step="0.01" value="2"></div>
-    <p class="note">Default stock return is 8% (historical S&amp;P 500 average). The simulator uses these as base rates and adds volatility through fat-tail distributions.</p>
-  </div>
-  <button class="btn" id="btnCalc">CALCULATE →</button>
-</div>
 
-<!-- TAB: PRO -->
-<div id="tab-pro" class="hidden">
+  <div class="subpanel" id="sub-pro">
   <div class="pro-gate-wrap">
     <div class="pro-gate">
       <h3>🔒 Unlock PRO Features</h3>
-      <p>Save scenarios, plan with your spouse, optimize Roth conversions, and export branded PDF reports — all for a one-time payment.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;text-align:left">
-        <div style="background:var(--bg);border-radius:8px;padding:12px;border:1px solid var(--bdr)">
-          <div style="font-size:11px;font-weight:700;color:var(--or);margin-bottom:4px">Scenarios</div>
-          <div style="font-size:10px;color:var(--t2)">Save, load, and compare unlimited retirement plans</div>
+      <p>Save scenarios, plan with your spouse, optimize Roth conversions, analyze SS claiming ages, model catch-up contributions, estimate long-term care costs, and stress test SS solvency.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0;text-align:center">
+        <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--or)">Scenarios</div><div style="font-size:9px;color:var(--t3)">Save, load, compare plans</div></div>
+        <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--pr)">Spouse Planning</div><div style="font-size:9px;color:var(--t3)">Combined household income</div></div>
+        <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--gn)">Roth Optimizer</div><div style="font-size:9px;color:var(--t3)">Convert? Find your tax savings</div></div>
+        <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--cy)">SS Claiming Age</div><div style="font-size:9px;color:var(--t3)">Optimal age 62-70</div></div>
+        <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--gn)">Catch-Up Boost</div><div style="font-size:9px;color:var(--t3)">Extra savings after 50</div></div>
+        <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--rd)">Long-Term Care</div><div style="font-size:9px;color:var(--t3)">Nursing/assisted cost estimate</div></div>
+        <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr);grid-column:1/-1"><div style="font-size:10px;font-weight:700;color:var(--rd)">SS Solvency Risk</div><div style="font-size:9px;color:var(--t3)">What if benefits are cut 20-25%?</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;text-align:center">
+        <div style="background:var(--bg);border-radius:12px;padding:20px 14px;border:1px solid var(--bdr)">
+          <div style="font-size:12px;font-weight:700;color:var(--or);margin-bottom:8px;letter-spacing:1px">PRO</div>
+          <div style="font-size:36px;font-weight:800;color:var(--t1)">$10</div>
+          <div style="font-size:11px;color:var(--t3);margin-bottom:10px">one-time · forever</div>
+          <div style="font-size:10px;color:var(--t2);line-height:1.8;text-align:left;padding:0 8px">
+            Scenarios<br>Spouse Planning<br>Roth Conversion<br>PDF Export<br><span style="color:var(--t3)">Formulas frozen at purchase</span>
+          </div>
+          <button class="btn-pro" id="btnUpgradePro" style="margin-top:12px;padding:10px 20px;font-size:12px;width:100%">Get PRO — $10</button>
         </div>
-        <div style="background:var(--bg);border-radius:8px;padding:12px;border:1px solid var(--bdr)">
-          <div style="font-size:11px;font-weight:700;color:var(--pr);margin-bottom:4px">Spouse Planning</div>
-          <div style="font-size:10px;color:var(--t2)">Combined household income and net worth</div>
-        </div>
-        <div style="background:var(--bg);border-radius:8px;padding:12px;border:1px solid var(--bdr)">
-          <div style="font-size:11px;font-weight:700;color:var(--gn);margin-bottom:4px">Roth Optimizer</div>
-          <div style="font-size:10px;color:var(--t2)">Should you convert? Find your tax savings</div>
+        <div style="background:var(--bg);border-radius:12px;padding:20px 14px;border:2px solid var(--cy);position:relative">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--cy);color:#000;font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:1px">BEST VALUE</div>
+          <div style="font-size:12px;font-weight:700;color:var(--cy);margin-bottom:8px;letter-spacing:1px">PRO+</div>
+          <div style="font-size:36px;font-weight:800;color:var(--t1)">$29</div>
+          <div style="font-size:11px;color:var(--t3);margin-bottom:10px">per year · cancel anytime</div>
+          <div style="font-size:10px;color:var(--t2);line-height:1.8;text-align:left;padding:0 8px">
+            Everything in PRO, plus:<br><strong style="color:var(--cy)">SS Claiming Optimizer</strong><br><strong style="color:var(--cy)">Catch-Up Calculator</strong><br><strong style="color:var(--cy)">Long-Term Care</strong><br><strong style="color:var(--cy)">SS Solvency Risk</strong><br><strong style="color:var(--cy)">Annual formula updates</strong>
+          </div>
+          <button class="btn-pro" id="btnUpgradeProPlus" style="margin-top:12px;padding:10px 20px;font-size:12px;width:100%;background:var(--cy);color:#000">Get PRO+ — $29/yr</button>
         </div>
       </div>
-      <div class="price">$10</div>
-      <div class="price-sub">one-time payment · lifetime access · all 3 features</div>
-      <button class="btn-pro btnUpgrade" id="btnUpgrade1" style="padding:14px 40px;font-size:15px">Upgrade to PRO</button>
       <div style="margin-top:16px;display:flex;align-items:center;gap:8px;justify-content:center">
         <input type="text" id="proCode1" placeholder="Have an unlock code?" style="background:var(--bg);border:1px solid var(--bdr);color:var(--t1);padding:8px 12px;border-radius:6px;font-size:12px;width:180px;font-family:inherit">
         <button class="btn-sm" id="btnCode1">Activate</button>
@@ -355,7 +394,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     </div>
   </div>
   <div class="pro-content" style="display:none">
-    <div class="subtabs"><button class="subtab active" data-sub="sub-scn">Scenarios</button><button class="subtab" data-sub="sub-spouse">Spouse</button><button class="subtab" data-sub="sub-roth">Roth Convert</button></div>
+    <div class="subtabs"><button class="subtab active" data-sub="sub-scn">Scenarios</button><button class="subtab" data-sub="sub-spouse">Spouse</button><button class="subtab" data-sub="sub-roth">Roth Convert</button><button class="subtab proplus-tab" data-sub="sub-ssclaim">SS Claiming</button><button class="subtab proplus-tab" data-sub="sub-catchup">Catch-Up</button><button class="subtab proplus-tab" data-sub="sub-ltc">Long-Term Care</button><button class="subtab proplus-tab" data-sub="sub-ssolve">SS Solvency</button></div>
 
     <div class="subpanel active" id="sub-scn">
     <div class="card"><div class="ct orange"><span class="d"></span>Saved Scenarios</div>
@@ -401,6 +440,65 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     <button class="btn" id="btnRoth">ANALYZE CONVERSION →</button>
     <div class="card" style="margin-top:14px"><div class="ct cyan"><span class="d"></span>Conversion Analysis</div><div id="rothResults"></div></div>
     </div>
+
+    <div class="subpanel" id="sub-proplus-upsell">
+    <div class="card" style="text-align:center;border:2px solid var(--cy);padding:30px">
+      <h3 style="color:var(--cy);margin-bottom:12px">This is a PRO+ Feature</h3>
+      <p style="color:var(--t2);margin-bottom:20px;font-size:13px">SS Claiming Age, Catch-Up Contributions, Long-Term Care, and SS Solvency Risk are exclusive to PRO+ subscribers. PRO+ also includes annual formula updates with the latest IRS and SSA data.</p>
+      <div style="font-size:36px;font-weight:800;color:var(--t1);margin-bottom:4px">$29<span style="font-size:14px;color:var(--t3)">/year</span></div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:16px">4 extra features + annual updates + new features each year</div>
+      <button class="btn-pro" id="btnUpsellPlus" style="padding:12px 30px;font-size:14px;background:var(--cy);color:#000">Upgrade to PRO+</button>
+      <div style="margin-top:14px;display:flex;align-items:center;gap:8px;justify-content:center">
+        <input type="text" id="proCodePlus" placeholder="PRO+ unlock code" style="background:var(--bg);border:1px solid var(--bdr);color:var(--t1);padding:8px 12px;border-radius:6px;font-size:12px;width:180px;font-family:inherit">
+        <button class="btn-sm" id="btnCodePlus">Activate</button>
+      </div>
+    </div>
+    </div>
+
+    <div class="subpanel" id="sub-ssclaim">
+    <div class="card"><div class="ct orange"><span class="d"></span>SS Claiming Age Optimizer</div>
+      <p class="note" style="margin-bottom:14px">When you start Social Security dramatically affects your monthly benefit. Claiming early gives you less per month but for more years. Claiming late gives you more per month but for fewer years.</p>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Monthly expenses in retirement</span><span class="sl-v" id="v-ss-exp">$3,000.00</span></div><input type="range" id="s-ss-exp" min="1000" max="10000" step="1" value="3000"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Life expectancy</span><span class="sl-v" id="v-ss-le">85</span></div><input type="range" id="s-ss-le" min="70" max="100" value="85"></div>
+    </div>
+    <button class="btn" id="btnSSClaim">ANALYZE CLAIMING AGES →</button>
+    <div class="card" style="margin-top:14px"><div class="ct cyan"><span class="d"></span>Claiming Age Comparison</div><div id="ssClaimResults"></div></div>
+    <div class="alert w" style="margin-top:10px"><strong>Disclaimer:</strong> This is a simplified comparison. Real SS claiming decisions depend on spousal benefits, survivor benefits, earnings test (if still working), Medicare enrollment timing, and tax implications. Consult a financial advisor or visit ssa.gov/benefits/retirement for personalized analysis.</div>
+    </div>
+
+    <div class="subpanel" id="sub-catchup">
+    <div class="card"><div class="ct green"><span class="d"></span>Catch-Up Contribution Impact</div>
+      <p class="note" style="margin-bottom:14px">After age 50, the IRS lets you contribute extra to retirement accounts. After age 60, you get an even bigger "super catch-up." This tool shows how much these extra contributions add to your retirement.</p>
+    </div>
+    <button class="btn" id="btnCatchup">CALCULATE CATCH-UP IMPACT →</button>
+    <div class="card" style="margin-top:14px"><div class="ct cyan"><span class="d"></span>Catch-Up Results</div><div id="catchupResults"></div></div>
+    <div class="alert w" style="margin-top:10px"><strong>Disclaimer:</strong> Catch-up limits are subject to annual IRS adjustments. For 2026: 401k catch-up is $8,000 (age 50+), $11,250 (age 60-63). IRA catch-up is $1,100 (age 50+). These amounts may change in future years. Verify current limits at irs.gov before making contribution decisions.</div>
+    </div>
+
+    <div class="subpanel" id="sub-ltc">
+    <div class="card"><div class="ct red"><span class="d"></span>Long-Term Care Cost Estimator</div>
+      <p class="note" style="margin-bottom:14px">About 70% of people turning 65 will need some form of long-term care. Medicare does NOT cover long-term care. This is one of the biggest unplanned retirement expenses.</p>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Years of care needed</span><span class="sl-v" id="v-ltc-yrs">3</span></div><input type="range" id="s-ltc-yrs" min="0" max="10" value="3"></div>
+      <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">Type of care</div>
+      <select id="s-ltc-type"><option value="home" selected>Home health aide (~$62k/yr)</option><option value="assisted">Assisted living (~$64k/yr)</option><option value="nursing">Nursing home semi-private (~$104k/yr)</option><option value="nursing-private">Nursing home private (~$120k/yr)</option></select></div>
+    </div>
+    <button class="btn" id="btnLTC">ESTIMATE LONG-TERM CARE COST →</button>
+    <div class="card" style="margin-top:14px"><div class="ct cyan"><span class="d"></span>Long-Term Care Projection</div><div id="ltcResults"></div></div>
+    <div class="alert w" style="margin-top:10px"><strong>Disclaimer:</strong> Long-term care costs vary enormously by state, facility quality, and level of care needed. These estimates are national averages from Genworth's 2024 Cost of Care Survey. Actual costs in your area may be 50% higher or lower. Long-term care insurance, Medicaid, and VA benefits may offset some costs. Consult an elder care attorney for planning.</div>
+    </div>
+
+    <div class="subpanel" id="sub-ssolve">
+    <div class="card"><div class="ct red"><span class="d"></span>SS Solvency Risk</div>
+      <p class="note" style="margin-bottom:14px">The Social Security trust fund is projected to be depleted around 2033-2035. If Congress does not act, benefits may be automatically cut by 20-25%. This tool shows what that means for your retirement income.</p>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Assumed benefit cut (%)</span><span class="sl-v" id="v-ss-cut">23%</span></div><input type="range" id="s-ss-cut" min="0" max="40" step="1" value="23"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Cut starts at age</span><span class="sl-v" id="v-ss-cutage">67</span></div><input type="range" id="s-ss-cutage" min="62" max="75" value="67"></div>
+    </div>
+    <button class="btn" id="btnSolve">ANALYZE SS CUT IMPACT →</button>
+    <div class="card" style="margin-top:14px"><div class="ct cyan"><span class="d"></span>Solvency Impact Analysis</div><div id="ssolveResults"></div></div>
+    <div class="alert w" style="margin-top:10px"><strong>Disclaimer:</strong> Nobody knows what Congress will do. Benefits could be cut, payroll taxes could increase, the retirement age could be raised, or a combination. The 20-25% cut assumption comes from the Social Security Trustees' Annual Report projection. This analysis is speculative and for planning purposes only.</div>
+    </div>
+
+  </div>
   </div>
 </div>
 
@@ -408,23 +506,62 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
 <div id="tab-abt" class="hidden">
   <div class="card"><div class="ct cyan"><span class="d"></span>Why This Tool Exists</div>
     <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px">Most retirement calculators assume a straightforward financial life — one country, one career, one tax system. But millions of Americans, including international workers, immigrants, green card holders, veterans, gig workers, and anyone with a non-traditional career path, don't fit that mold.</p>
-    <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px">FinnG Retire was built to serve everyone — with specific features for international workers who face unique challenges like Social Security quarter requirements, totalization agreements, cross-border tax implications, and the "what if I leave" scenario that no other calculator models.</p>
+    <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px">FinnG Retire was built to serve everyone — with specific features for international workers who face unique challenges like Social Security quarter requirements, totalization agreements, and the "what if I leave" scenario that no other calculator models.</p>
     <p style="font-size:13px;color:var(--t2);line-height:1.8"><strong style="color:var(--cy)">Privacy-first:</strong> Everything runs in your browser. No data is sent anywhere. No account linking. No login required. Your financial data stays on your device.</p>
   </div>
-  <div class="card"><div class="ct cyan"><span class="d"></span>Model Features</div>
-    <div class="g2">
-      <div class="sb" style="text-align:left"><div class="l">Monte Carlo + Fat Tails</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Student's t-distribution (5 df) produces crash-like events 2-3x more often than normal distribution — matching real markets</div></div>
-      <div class="sb" style="text-align:left"><div class="l">Federal + State Tax</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Models 2026 federal brackets on traditional account withdrawals plus state income tax. Shows after-tax retirement income</div></div>
-      <div class="sb" style="text-align:left"><div class="l">Inflation Adjusted</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Shows both nominal dollars and real purchasing power. $760k in 23 years buys like ~$385k today at 3% inflation</div></div>
-      <div class="sb" style="text-align:left"><div class="l">Healthcare Costs</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Projects Medicare premiums + supplemental insurance + out-of-pocket. Based on Fidelity's $315k+ lifetime estimate</div></div>
-      <div class="sb" style="text-align:left"><div class="l">RMD Modeling</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Required Minimum Distributions at 73 from traditional accounts. Shows tax impact of forced withdrawals</div></div>
-      <div class="sb" style="text-align:left"><div class="l">Job Loss + Crash Correlation</div><div style="font-size:11px;color:var(--t2);margin-top:6px">When crashes happen, job loss probability spikes. Model simulates zero contributions during job loss years</div></div>
-      <div class="sb" style="text-align:left"><div class="l">Currency Risk</div><div style="font-size:11px;color:var(--t2);margin-top:6px">For retire-abroad scenarios, models exchange rate volatility on your USD savings</div></div>
-      <div class="sb" style="text-align:left"><div class="l">SS Quarters + Totalization</div><div style="font-size:11px;color:var(--t2);margin-top:6px">Tracks eligibility cliff, models zero-earning years in benefit formula, verifies totalization agreements for 30+ countries</div></div>
-    </div>
+
+  <div class="card"><div class="ct orange"><span class="d"></span>Plans & Pricing</div>
+    <table class="ctbl">
+      <tr><th style="width:30%">Feature</th><th style="text-align:center;width:23%">Free</th><th style="text-align:center;width:23%">PRO ($10 once)</th><th style="text-align:center;width:23%">PRO+ ($29/yr)</th></tr>
+      <tr><td>Monte Carlo (500 sims)</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Dashboard & Charts</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Stress Test (CVaR, Drawdown, Sustainability)</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>SS Tracker & International</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr style="border-top:2px solid var(--bdr)"><td>Save/Load Scenarios</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Spouse/Partner Planning</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Roth Conversion Optimizer</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Loss vs Recovery Math</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>PDF Report Export</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr style="border-top:2px solid var(--bdr)"><td>SS Claiming Age Optimizer</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
+      <tr><td>Catch-Up Contribution Calculator</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
+      <tr><td>Long-Term Care Estimator</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
+      <tr><td>SS Solvency Risk Analysis</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
+      <tr><td>Annual Formula Updates</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
+      <tr><td>New Features Each Year</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
+    </table>
+    <p class="note" style="margin-top:12px"><strong>PRO</strong> ($10 one-time) gives you planning tools that work forever, using the formulas from when you purchased. <strong>PRO+</strong> ($29/year) adds 4 advanced tools plus keeps all formulas current — every January we update tax brackets, SS numbers, contribution limits, and market assumptions with verified IRS and SSA data.</p>
   </div>
+
+  <div class="card"><div class="ct cyan"><span class="d"></span>Data Sources (2026)</div>
+    <table class="ctbl">
+      <tr><th>Data</th><th>Source</th><th style="text-align:right">Value</th></tr>
+      <tr><td>Tax brackets & standard deduction</td><td>IRS Rev Proc 2025-32 (OBBBA)</td><td class="n">$16,100 / $32,200</td></tr>
+      <tr><td>401k/403b limit</td><td>IRS Notice 2025-67</td><td class="n">$24,500</td></tr>
+      <tr><td>IRA limit</td><td>IRS Notice 2025-67</td><td class="n">$7,500</td></tr>
+      <tr><td>HSA individual limit</td><td>IRS 2026</td><td class="n">$4,400</td></tr>
+      <tr><td>SS wage base</td><td>SSA 2026</td><td class="n">$184,500</td></tr>
+      <tr><td>SS bend points</td><td>SSA 2026</td><td class="n">$1,286 / $7,749</td></tr>
+      <tr><td>PIA replacement factors</td><td>42 USC 415(a)(1)(A)</td><td class="n">90% / 32% / 15%</td></tr>
+      <tr><td>RMD start age</td><td>SECURE 2.0 Act</td><td class="n">73 or 75</td></tr>
+      <tr><td>Withdrawal rule</td><td>Trinity Study (1998)</td><td class="n">4% annually</td></tr>
+      <tr><td>Healthcare estimate</td><td>Fidelity Retiree Study</td><td class="n">$315k+ lifetime</td></tr>
+    </table>
+    <p class="note" style="margin-top:10px">Last verified: 2026. PRO+ subscribers receive updated data every January.</p>
+  </div>
+
   <div class="card"><div class="ct orange"><span class="d"></span>Known Limitations</div>
-    <p style="font-size:12px;color:var(--t2);line-height:1.8">Student's t-distribution is better than normal but still underestimates extreme tail events. Tax brackets are 2026 values and will change. Healthcare costs vary enormously by individual. No estate tax for non-citizens ($60k exemption vs $13.6M for citizens). No divorce, disability, or long-term care modeling. Single earner only (use Spouse tab for dual income). Not financial advice — consult a professional.</p>
+    <p style="font-size:12px;color:var(--t2);line-height:1.8;margin-bottom:10px">This tool uses mathematical models and historical patterns to project possible outcomes. All projections are estimates. Specific limitations include:</p>
+    <p style="font-size:12px;color:var(--t2);line-height:1.8;margin-bottom:6px"><strong>Moderate impact:</strong> No behavioral risk modeling (assumes you hold through crashes). SS taxation simplified (uses 85% always). Healthcare costs are flat by age. No estate tax for non-citizens ($60k vs $13.6M exemption).</p>
+    <p style="font-size:12px;color:var(--t2);line-height:1.8;margin-bottom:6px"><strong>Low impact:</strong> Volatility scaling is approximate. Single inflation rate (no category-specific). Dual-state tax is simplified. Total employer+employee cap ($72k) not enforced.</p>
+    <p style="font-size:12px;color:var(--t2);line-height:1.8"><strong>Out of scope:</strong> Divorce, disability, annuities, cryptocurrency, estate planning, state-specific Medicaid rules. These require professional advice specific to your situation.</p>
+  </div>
+
+  <div class="card"><div class="ct red"><span class="d"></span>Important Disclaimer</div>
+    <p style="font-size:12px;color:var(--t2);line-height:1.8"><strong style="color:var(--rd)">This tool is for educational and informational purposes only. It is NOT financial, tax, legal, or investment advice.</strong> All projections are estimates based on mathematical models and historical patterns. Past performance does not guarantee future results. Tax laws, Social Security rules, and contribution limits change. Your personal situation is unique. Always consult a qualified financial planner, tax advisor, and estate planning attorney before making retirement decisions. The creators of FinnG Retire are not liable for any decisions made based on this tool's projections.</p>
+  </div>
+
+  <div class="card"><div class="ct cyan"><span class="d"></span>Privacy</div>
+    <p style="font-size:12px;color:var(--t2);line-height:1.8">All calculations run entirely in your browser using JavaScript. No data is transmitted to any server. No cookies, no tracking, no analytics. Saved scenarios are stored in your browser's localStorage on your device only. Clearing your browser data will delete saved scenarios. <a href="privacy-policy.html" target="_blank" style="color:var(--cy)">Full privacy policy →</a></p>
   </div>
 </div>
 
@@ -442,30 +579,61 @@ var ST={crash:false,bucket:true};
 
 // ===== TABS =====
 var TABS=[
-  {id:'in',label:'Inputs'},{id:'dash',label:'Dashboard'},
-  {id:'risk',label:'Risk'},{id:'intl',label:'International'},
-  {id:'pro',label:'PRO 🔒'},{id:'abt',label:'About'}
+  {id:'plan',label:'My Plan'},{id:'dash',label:'Dashboard'},{id:'abt',label:'About'}
 ];
 
 var PRO_UNLOCKED=false;
+var PROPLUS_UNLOCKED=false;
+var FORMULA_YEAR='2026'; // update this each January
 
 function checkProCode(code){
-  return code.trim().toUpperCase()==='FINNIEGINGER2026PRO';
+  var c=code.trim().toUpperCase();
+  if(c==='FINNIEGINGER2026PRO')return 'pro';
+  if(c==='FINNG-PLUS-2026')return 'proplus';
+  return false;
 }
 
-function unlockPro(){
+function unlockPro(tier){
+  tier=tier||'pro';
   PRO_UNLOCKED=true;
   localStorage.setItem('finng-pro','1');
+  localStorage.setItem('finng-tier',tier);
+  if(tier==='proplus'){
+    PROPLUS_UNLOCKED=true;
+    localStorage.setItem('finng-proplus','1');
+    localStorage.setItem('finng-proplus-year',FORMULA_YEAR);
+    // Unlock PRO+ sub-tabs
+    document.querySelectorAll('.proplus-tab').forEach(function(t){t.classList.add('unlocked');});
+  }
   document.querySelectorAll('.pro-gate-wrap').forEach(function(el){el.remove();});
   document.querySelectorAll('.pro-content').forEach(function(el){el.style.display='';});
-  var lockEl=document.querySelector('.tab[data-t="pro"]');
-  if(lockEl)lockEl.textContent='PRO';
+  // Reveal PRO-gated content in other tabs
+  document.querySelectorAll('.pro-loss-locked').forEach(function(el){el.style.display='none';});
+  if($('lossContent'))$('lossContent').style.display='';
+  var lockEl=document.querySelector('[data-sub="sub-pro"]');
+  if(lockEl)lockEl.textContent=tier==='proplus'?'PRO+':'PRO';
+  updateProBanner();
+}
+
+function updateProBanner(){
+  var banner=$('proBanner');
+  if(!banner)return;
+  if(!PRO_UNLOCKED){banner.innerHTML='';return;}
+  var savedYear=localStorage.getItem('finng-proplus-year')||'';
+  var tier=localStorage.getItem('finng-tier')||'pro';
+  if(tier==='proplus'&&savedYear===FORMULA_YEAR){
+    banner.innerHTML='<div class="alert o" style="margin:0"><strong>PRO+ Active</strong> — Formulas updated for '+FORMULA_YEAR+' with latest IRS/SSA data.</div>';
+  }else if(tier==='proplus'&&savedYear!==FORMULA_YEAR){
+    banner.innerHTML='<div class="alert w" style="margin:0"><strong>PRO+ Expired</strong> — Your formulas are from '+savedYear+'. <a href="https://wirdani.gumroad.com/l/finng-retire-proplus" target="_blank" style="color:var(--cy);text-decoration:underline">Renew for '+FORMULA_YEAR+' data ($29/year)</a></div>';
+  }else{
+    banner.innerHTML='<div class="alert i" style="margin:0"><strong>PRO Active</strong> — Formulas from '+FORMULA_YEAR+'. <a href="https://wirdani.gumroad.com/l/finng-retire-proplus" target="_blank" style="color:var(--cy);text-decoration:underline">Upgrade to PRO+ for annual updates ($29/year)</a></div>';
+  }
 }
 
 function initTabs(){
   var h='';
   for(var i=0;i<TABS.length;i++){
-    h+='<button class="tab'+(TABS[i].id==='in'?' active':'')+'" data-t="'+TABS[i].id+'">'+TABS[i].label+'</button>';
+    h+='<button class="tab'+(TABS[i].id==='plan'?' active':'')+'" data-t="'+TABS[i].id+'">'+TABS[i].label+'</button>';
   }
   $('tabBar').innerHTML=h;
 }
@@ -549,10 +717,8 @@ function rmdFactor(age){
 
 // ===== FAT-TAIL RANDOM (Student's t, df=5) =====
 function randT(df){
-  // Generate Student's t via ratio of normal and chi-squared
   var u1=Math.random(),u2=Math.random();
   var z=Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2);
-  // Chi-squared with df degrees of freedom (sum of df standard normals squared)
   var chi=0;
   for(var i=0;i<df;i++){
     var a=Math.random(),b=Math.random();
@@ -562,7 +728,14 @@ function randT(df){
   return z/Math.sqrt(chi/df);
 }
 
-// ===== MONTE CARLO ENGINE =====
+// ===== MONTE CARLO ENGINE (7-Layer) =====
+// L1: Fat-tail returns (Student's t, df=5)
+// L2: Regime switching (calm/crisis modes)
+// L3: Correlation stress (stocks+bonds crash together)
+// L4: Black swan haircut (15% safety margin)
+// L5: Ruin probability (% chance money runs out before 90)
+// L6: Personalized safe withdrawal rate
+// L7: Volatility drag display
 function runMC(p,nSim,ov){
   nSim=nSim||500;ov=ov||{};
   var crashOn=ov.crash!==undefined?ov.crash:ST.crash;
@@ -573,20 +746,45 @@ function runMC(p,nSim,ov){
   var bStart=gv('ba')||58;
   var yrs=p.ra-p.age;
   var results=[],paths=[];
+  var ruinCount=0;
+  var totalVolDrag=0;
 
   for(var sim=0;sim<nSim;sim++){
     var bE=p.bal401k||0,bR=p.balRoth||0,bT=p.balTrad||0,b4=p.bal457||0,bH=p.balHSA||0,bX=p.balTx||0;
     var sal=p.sal,mBal=p.mb;
     var path=[];
+    var regime='calm';
+    var logReturns=[];
+
     for(var y=0;y<yrs;y++){
       var age=p.age+y;
-      // Fat-tail return (Student's t, df=5) with scaled volatility
+
+      // L2: Regime switching
+      if(regime==='calm'){regime=Math.random()<0.10?'crisis':'calm';}
+      else{regime=Math.random()<0.40?'calm':'crisis';}
+
+      // L1: Fat-tail return with regime params
       var t5=randT(5);
-      var vol=p.rStock*1.5; // volatility scales with expected return
-      var ret=p.rStock+vol*t5;
+      var rMean,rVol;
+      if(regime==='calm'){
+        rMean=p.rStock*1.1;
+        rVol=p.rStock*1.0;
+      }else{
+        rMean=p.rStock*(-0.5);
+        rVol=p.rStock*2.5;
+      }
+      var stockRet=Math.max(-0.60,rMean+rVol*t5);
+
+      // L3: Correlation stress
+      var bondRet=p.rBond;
+      if(regime==='crisis'&&stockRet<-0.15){
+        bondRet=p.rBond*0.5+p.rBond*0.3*randT(5);
+        bondRet=Math.max(-0.20,bondRet);
+      }
+
+      var ret=stockRet;
       var jobLoss=false;
 
-      // Crash injection
       if(crashOn&&age===cAge){
         ret=cMag;
         if(Math.random()<jlProb)jobLoss=true;
@@ -595,18 +793,24 @@ function runMC(p,nSim,ov){
       // Bucket strategy
       var sA=1.0;
       if(bucketOn&&age>=bStart){sA=Math.max(0.4,(p.ra-age)/(p.ra-bStart));}
-      var eR=sA*ret+(1-sA)*p.rBond;
+      var eR=sA*ret+(1-sA)*bondRet;
+      logReturns.push(eR);
 
-      // Contributions with 2026 limits (0 if job loss)
+      // Contributions with limits, mid-year timing
       var contrib=jobLoss?0:1;
-      var empContrib=Math.min(sal*p.ec,24500); // 2026 401k limit
-      var matchContrib=sal*p.em; // employer match not subject to employee limit
-      bE=(bE+(empContrib+matchContrib)*contrib)*(1+eR);
-      bR=(bR+Math.min(p.ri*12,7500)*contrib)*(1+eR); // 2026 IRA limit
-      bT=(bT+Math.min(p.ti*12,7500)*contrib)*(1+eR);
-      b4=(b4+Math.min(p.b457*12,24500)*contrib)*(1+eR);
-      bH=(bH+Math.min(p.hsa*12,4400)*contrib)*(1+eR); // 2026 HSA individual limit
-      bX=(bX+p.tx*12*contrib)*(1+eR*0.85); // tax drag
+      var empContrib=Math.min(sal*p.ec,24500);
+      var matchContrib=sal*p.em;
+      var annC401=(empContrib+matchContrib)*contrib;
+      bE=bE*(1+eR)+annC401*(1+eR/2);
+      bR=bR*(1+eR)+Math.min(p.ri*12,7500)*contrib*(1+eR/2);
+      bT=bT*(1+eR)+Math.min(p.ti*12,7500)*contrib*(1+eR/2);
+      b4=b4*(1+eR)+Math.min(p.b457*12,24500)*contrib*(1+eR/2);
+      bH=bH*(1+eR)+Math.min(p.hsa*12,4400)*contrib*(1+eR/2);
+      bX=bX*(1+eR*0.85)+p.tx*12*contrib*(1+eR*0.85/2);
+
+      // Balance floors
+      bE=Math.max(0,bE);bR=Math.max(0,bR);bT=Math.max(0,bT);
+      b4=Math.max(0,b4);bH=Math.max(0,bH);bX=Math.max(0,bX);
 
       if(!jobLoss)sal*=(1+p.sg);
 
@@ -614,18 +818,63 @@ function runMC(p,nSim,ov){
       if(mBal>0){var mr=p.mortRate/12;for(var m=0;m<12;m++){if(mBal<=0)break;mBal=Math.max(0,mBal-(p.mortPay+p.xm-mBal*mr));}}
 
       var totalI=bE+bR+bT+b4+bH+bX;
-      path.push({age:age+1,inv:totalI});
+      path.push({age:age+1,inv:totalI,regime:regime});
     }
     var hVal=p.hv*Math.pow(1+p.ha,yrs);
-    var hEq=hVal-Math.max(0,mBal);
+    var hEq=hVal-mBal; // CAN be negative (underwater)
     var totalInv=bE+bR+bT+b4+bH+bX;
     var nw=totalInv+hEq;
-    results.push({bE:bE,bR:bR,bT:bT,b4:b4,bH:bH,bX:bX,hEq:hEq,mBal:Math.max(0,mBal),nw:nw,totalInv:totalInv});
+
+    // L5: Ruin check — does money last to 90?
+    var ss=calcSS(p.uy+yrs,p.sal,p.sg);
+    var retBal=totalInv;var ruined=false;
+    for(var ry=0;ry<(90-p.ra);ry++){
+      var spend=p.moExp*12*Math.pow(1+p.inf,ry);
+      var ssInc=ss.pia*12*Math.pow(1.025,ry)+p.pn*12;
+      retBal=retBal*1.05-Math.max(0,spend-ssInc);
+      if(retBal<=0){ruined=true;break;}
+    }
+    if(ruined)ruinCount++;
+
+    // L7: Volatility drag
+    var geoM=1,arithS=0;
+    for(var i=0;i<logReturns.length;i++){geoM*=(1+logReturns[i]);arithS+=logReturns[i];}
+    if(logReturns.length>0){
+      var am=arithS/logReturns.length;
+      var ga=Math.pow(Math.max(0.001,geoM),1/logReturns.length)-1;
+      totalVolDrag+=(am-ga);
+    }
+
+    results.push({bE:bE,bR:bR,bT:bT,b4:b4,bH:bH,bX:bX,hEq:hEq,mBal:Math.max(0,mBal),nw:nw,totalInv:totalInv,ruined:ruined});
     paths.push(path);
   }
   results.sort(function(a,b){return a.nw-b.nw;});
   var pc=function(x){return results[Math.floor(x/100*(nSim-1))];};
-  return{p10:pc(10),p25:pc(25),p50:pc(50),p75:pc(75),p90:pc(90),worst:results[0],best:results[nSim-1],all:results,paths:paths};
+
+  // L6: Personalized safe withdrawal rate (max rate with <5% ruin)
+  var safeRate=0.04;
+  var ss6=calcSS(p.uy+yrs,p.sal,p.sg);
+  for(var tryRate=0.06;tryRate>=0.02;tryRate-=0.002){
+    var tryRuin=0;
+    for(var s=0;s<nSim;s++){
+      var tb=results[s].totalInv;var dead=false;
+      for(var ry=0;ry<(90-p.ra);ry++){
+        var sp=p.moExp*12*Math.pow(1+p.inf,ry);
+        var si=ss6.pia*12*Math.pow(1.025,ry)+p.pn*12;
+        tb=tb*1.05-Math.max(0,sp-si);
+        if(tb<=0){dead=true;break;}
+      }
+      if(dead)tryRuin++;
+    }
+    if(tryRuin/nSim<=0.05){safeRate=tryRate;break;}
+  }
+
+  return{
+    p10:pc(10),p25:pc(25),p50:pc(50),p75:pc(75),p90:pc(90),
+    worst:results[0],best:results[nSim-1],all:results,paths:paths,
+    ruinProb:ruinCount/nSim,ruinProbBS:Math.min(1,(ruinCount/nSim)*1.25),
+    safeRate:safeRate,volDrag:totalVolDrag/nSim,bsHaircut:0.85
+  };
 }
 
 // ===== RENDERERS =====
@@ -646,6 +895,24 @@ function renderDash(p,mc){
     '<div class="sb"><div class="l">Worst 10%</div><div class="v" style="color:var(--rd)">'+fmt(mc.p10.nw)+'</div><div class="s">Real: '+fmt(mc.p10.nw/inflFactor)+'</div></div>'+
     '<div class="sb"><div class="l">Median</div><div class="v" style="color:var(--cy)">'+fmt(m.nw)+'</div><div class="s">Real: '+fmt(realNW)+'</div></div>'+
     '<div class="sb"><div class="l">Best 10%</div><div class="v" style="color:var(--gn)">'+fmt(mc.p90.nw)+'</div><div class="s">Real: '+fmt(mc.p90.nw/inflFactor)+'</div></div>';
+
+  // 7-Layer headline metrics
+  var ruinColor=mc.ruinProb<0.05?'var(--gn)':mc.ruinProb<0.15?'var(--or)':'var(--rd)';
+  var survPct=Math.round((1-mc.ruinProb)*100);
+  var survPctBS=Math.round((1-mc.ruinProbBS)*100);
+  var safeWd=mc.p50.totalInv*mc.safeRate/12;
+  var uwAlert=m.hEq<0?'<div class="alert d" style="margin-top:12px"><strong>Underwater mortgage warning:</strong> Your home is worth less than what you owe. Home equity is '+fmt(m.hEq)+'. Your true net worth is reduced by this amount.</div>':'';
+
+  $('layerStats').innerHTML=
+    '<div class="g2" style="margin-bottom:12px">'+
+    '<div class="sb"><div class="l">Will your money last to 90?</div><div class="v" style="color:'+ruinColor+'">'+survPct+'% confidence</div><div class="s">Black swan adjusted: '+survPctBS+'%</div></div>'+
+    '<div class="sb"><div class="l">Your safe withdrawal rate</div><div class="v" style="color:var(--cy)">'+pct(mc.safeRate)+'</div><div class="s">'+fmt(safeWd)+'/mo from investments</div></div></div>'+
+    '<div class="g2">'+
+    '<div class="sb"><div class="l">Volatility drag</div><div class="v" style="color:var(--or)">'+pct(mc.volDrag)+'/yr</div><div class="s">Hidden cost of market swings</div></div>'+
+    '<div class="sb"><div class="l">Total monthly income</div><div class="v" style="color:var(--gn)">'+fmt(safeWd+ss.pia+p.pn)+'</div><div class="s">Investments + SS + pension</div></div></div>'+
+    (mc.ruinProb>=0.15?'<div class="alert d" style="margin-top:12px"><strong>High risk of outliving your savings.</strong> In '+Math.round(mc.ruinProb*100)+'% of scenarios, your money runs out before age 90. Consider: increasing contributions, reducing retirement expenses, or working longer.</div>':
+    mc.ruinProb>=0.05?'<div class="alert w" style="margin-top:12px"><strong>Moderate risk.</strong> In '+Math.round(mc.ruinProb*100)+'% of scenarios your money runs out before 90. You\'re close but a buffer would help.</div>':
+    '<div class="alert o" style="margin-top:12px"><strong>On track.</strong> '+survPct+'% confidence your savings last to 90. Black swan adjusted: '+survPctBS+'%.</div>')+uwAlert;
 
   // Income table
   var rows='';
@@ -1005,14 +1272,20 @@ function renderStress(mc){
   // 4. Spending sustainability — how long does money last?
   var annExp=p.moExp*12;
   var retReturn=0.05; // conservative 60/40 in retirement
+  var ssCOLA=0.025; // SS cost of living adjustment ~2.5%/yr
   // Worst 10% portfolio
   var p10Bal=mc.p10.totalInv;
   var medBal=mc.p50.totalInv;
   function yearsLast(startBal){
     var bal=startBal;
+    var ssAnn=ss.pia*12; // annual SS benefit
+    var penAnn=p.pn*12; // annual pension
     for(var y=0;y<50;y++){
       var spend=annExp*Math.pow(1+p.inf,y); // inflation-adjusted spending
-      bal=bal*(1+retReturn)-spend;
+      var ssIncome=ssAnn*Math.pow(1+ssCOLA,y); // SS with COLA
+      var penIncome=penAnn; // pension (no COLA assumed)
+      var netSpend=Math.max(0,spend-ssIncome-penIncome); // what investments must cover
+      bal=bal*(1+retReturn)-netSpend;
       if(bal<=0)return y;
     }
     return 50; // lasts 50+ years
@@ -1055,6 +1328,169 @@ function renderStress(mc){
     (medGap>0?'-'+fmt(medGap)+' shortfall':'+'+fmt(-medGap)+' surplus')+'</td></tr></table>'+
     (p10Gap>0?'<div class="alert d" style="margin-top:10px"><strong>Income shortfall in bad scenarios.</strong> You\'d need to either cut expenses by '+fmt(p10Gap)+'/month, work '+Math.ceil(p10Gap/(p.sal/12*p.ec*0.04))+' more years, or increase contributions by '+fmt(p10Gap/0.04*12/((p.ra-p.age)*12))+'/month to close this gap.</div>':
     '<div class="alert o" style="margin-top:10px"><strong>You\'re on track.</strong> Even in bad scenarios, your projected income covers your expenses with a '+fmt(-p10Gap)+'/month buffer.</div>');
+
+  // 7. Loss vs Recovery table
+  var losses=[
+    {pct:0.10,label:'-10%',ex:'Typical correction',sev:'gn'},
+    {pct:0.20,label:'-20%',ex:'2018 Q4 drop',sev:'or'},
+    {pct:0.30,label:'-30%',ex:'COVID 2020',sev:'or'},
+    {pct:0.37,label:'-37%',ex:'2008 financial crisis',sev:'rd'},
+    {pct:0.45,label:'-45%',ex:'Dot-com bust',sev:'rd'},
+    {pct:0.50,label:'-50%',ex:'Extreme bear market',sev:'rd'},
+    {pct:0.60,label:'-60%',ex:'Model floor (never happened)',sev:'rd'}
+  ];
+  var lh='<table class="ctbl"><tr><th>Loss</th><th style="text-align:right">Gain to Recover</th><th style="text-align:right">Your $ Impact</th><th style="text-align:right">Recovery Time</th><th>Historical</th></tr>';
+  var userBal=mc.p50.totalInv;
+  for(var i=0;i<losses.length;i++){
+    var L=losses[i];
+    var recover=(1/(1-L.pct)-1);
+    var dollarLoss=userBal*L.pct;
+    var yrsRecover=Math.ceil(Math.log(1/(1-L.pct))/Math.log(1+p.rStock));
+    lh+='<tr><td style="color:var(--'+L.sev+');font-weight:700">'+L.label+'</td>';
+    lh+='<td class="n" style="color:var(--'+L.sev+')">+'+pct(recover)+'</td>';
+    lh+='<td class="n">'+fmt(dollarLoss)+'</td>';
+    lh+='<td class="n">~'+yrsRecover+' yrs at '+pct(p.rStock)+'</td>';
+    lh+='<td style="font-size:10px;color:var(--t3)">'+L.ex+'</td></tr>';
+  }
+  lh+='</table>';
+  $('lossTable').innerHTML=lh;
+}
+
+// ===== SS CLAIMING AGE OPTIMIZER =====
+function runSSClaim(){
+  var p=getP();
+  var totalYrs=p.uy+(p.ra-p.age);
+  var ss=calcSS(totalYrs,p.sal,p.sg);
+  var lifeExp=Number($('s-ss-le').value)||85;
+
+  // SS adjustments by claiming age
+  // FRA = 67 for born 1960+. Early = 6.67%/yr reduction for first 3 yrs, 5%/yr beyond. Late = 8%/yr credit.
+  var ages=[62,63,64,65,66,67,68,69,70];
+  var rows='<table class="ctbl"><tr><th>Claim Age</th><th style="text-align:right">Monthly Benefit</th><th style="text-align:right">Annual</th><th style="text-align:right">Lifetime Total (to '+lifeExp+')</th><th style="text-align:right">vs Age 67</th></tr>';
+  var fra67=ss.pia;
+  var best={age:0,total:0};
+  for(var i=0;i<ages.length;i++){
+    var age=ages[i];
+    var adj=1.0;
+    if(age<67){
+      var earlyMonths=(67-age)*12;
+      if(earlyMonths<=36)adj=1-earlyMonths*(5.0/9/100);
+      else adj=1-36*(5.0/9/100)-(earlyMonths-36)*(5.0/12/100);
+    }else if(age>67){
+      adj=1+(age-67)*0.08; // 8% per year delayed
+    }
+    var monthly=ss.pia*adj;
+    var annual=monthly*12;
+    var yrsCollecting=Math.max(0,lifeExp-age);
+    var lifetime=annual*yrsCollecting;
+    var vs67=lifetime-fra67*12*(lifeExp-67);
+    if(lifetime>best.total){best.age=age;best.total=lifetime;}
+    var color=age===best.age?'var(--gn)':age===67?'var(--cy)':'var(--t1)';
+    rows+='<tr><td'+(age===67?' style="font-weight:700"':'')+'>'+age+(age===67?' (FRA)':'')+'</td>';
+    rows+='<td class="n" style="color:'+color+'">'+fmt(monthly)+'</td>';
+    rows+='<td class="n">'+fmt(annual)+'</td>';
+    rows+='<td class="n" style="color:'+color+'">'+fmt(lifetime)+'</td>';
+    rows+='<td class="n" style="color:'+(vs67>=0?'var(--gn)':'var(--rd)')+'">'+
+      (vs67>=0?'+':'')+fmt(vs67)+'</td></tr>';
+  }
+  rows+='</table>';
+  $('ssClaimResults').innerHTML=rows+
+    '<div class="alert o" style="margin-top:14px"><strong>Optimal claiming age: '+best.age+'</strong> (assuming you live to '+lifeExp+'). This maximizes your lifetime Social Security income at '+fmt(best.total)+'. However, if you need income earlier or have health concerns, claiming sooner may be better for your situation.</div>';
+}
+
+// ===== CATCH-UP CONTRIBUTIONS =====
+function runCatchup(){
+  var p=getP();
+  var yrs=p.ra-p.age;
+  // Scenario 1: No catch-up (current model)
+  var mc1=runMC(p,200);
+  var base=mc1.p50.totalInv;
+
+  // Scenario 2: With catch-up contributions
+  // 401k: +$8,000/yr from age 50, +$11,250/yr from age 60-63
+  // IRA: +$1,100/yr from age 50
+  var extraTotal=0;
+  for(var y=0;y<yrs;y++){
+    var age=p.age+y;
+    var extra=0;
+    if(age>=50&&age<60){extra=8000+1100;} // 401k catch-up + IRA catch-up
+    else if(age>=60&&age<=63){extra=11250+1100;} // super catch-up + IRA
+    else if(age>63){extra=8000+1100;} // back to regular catch-up
+    extraTotal+=extra*Math.pow(1+p.rStock,(yrs-y-0.5)); // mid-year growth
+  }
+  var withCatchup=base+extraTotal;
+  var diff=withCatchup-base;
+  var diffMonthly=diff*0.04/12;
+
+  $('catchupResults').innerHTML=
+    '<table class="ctbl"><tr><th>Scenario</th><th style="text-align:right">Investment Balance</th><th style="text-align:right">Monthly Income (4%)</th></tr>'+
+    '<tr><td>Without catch-up (current)</td><td class="n">'+fmt(base)+'</td><td class="n">'+fmt(base*0.04/12)+'</td></tr>'+
+    '<tr><td>With catch-up contributions</td><td class="n" style="color:var(--gn)">'+fmt(withCatchup)+'</td><td class="n" style="color:var(--gn)">'+fmt(withCatchup*0.04/12)+'</td></tr>'+
+    '<tr style="border-top:2px solid var(--bdr)"><td><strong>Catch-up boost</strong></td><td class="n" style="color:var(--cy)"><strong>+'+fmt(diff)+'</strong></td><td class="n" style="color:var(--cy)"><strong>+'+fmt(diffMonthly)+'/mo</strong></td></tr></table>'+
+    '<div class="g2" style="margin-top:14px">'+
+    '<div class="sb"><div class="l">2026 Catch-Up Limits</div><div style="font-size:11px;color:var(--t2);margin-top:6px;text-align:left">401k age 50+: +$8,000/yr<br>401k age 60-63: +$11,250/yr<br>IRA age 50+: +$1,100/yr</div></div>'+
+    '<div class="sb"><div class="l">Your Catch-Up Window</div><div style="font-size:11px;color:var(--t2);margin-top:6px;text-align:left">'+
+    (p.age>=50?'You qualify NOW. Start contributing extra immediately.':'You qualify at age 50 (in '+(50-p.age)+' years). Plan ahead.')+
+    '</div></div></div>';
+}
+
+// ===== LONG-TERM CARE ESTIMATOR =====
+function runLTC(){
+  var p=getP();
+  var yrs=Number($('s-ltc-yrs').value)||3;
+  var type=$('s-ltc-type').value;
+  var costs={home:62000,assisted:64000,nursing:104000,'nursing-private':120000};
+  var labels={home:'Home Health Aide',assisted:'Assisted Living Facility',nursing:'Nursing Home (Semi-Private)',
+    'nursing-private':'Nursing Home (Private Room)'};
+  var annCost=costs[type];
+  var yrsToNeed=Math.max(0,(80-p.age)); // assume need starts around age 80
+  var inflatedCost=annCost*Math.pow(1.05,yrsToNeed); // healthcare inflates at ~5%
+  var totalCost=inflatedCost*yrs;
+  var pctOfNW=0;
+  var mc=runMC(p,100);
+  if(mc.p50.nw>0)pctOfNW=totalCost/mc.p50.nw;
+
+  $('ltcResults').innerHTML=
+    '<table class="ctbl"><tr><th>Item</th><th style="text-align:right">Amount</th></tr>'+
+    '<tr><td>'+labels[type]+' (today\'s cost)</td><td class="n">'+fmt(annCost)+'/year</td></tr>'+
+    '<tr><td>Inflation-adjusted cost (at ~age 80, 5%/yr healthcare inflation)</td><td class="n" style="color:var(--or)">'+fmt(inflatedCost)+'/year</td></tr>'+
+    '<tr><td>Duration of care</td><td class="n">'+yrs+' years</td></tr>'+
+    '<tr style="border-top:2px solid var(--bdr)"><td><strong>Total estimated cost</strong></td><td class="n" style="color:var(--rd);font-size:18px"><strong>'+fmt(totalCost)+'</strong></td></tr>'+
+    '<tr><td>As % of your projected net worth</td><td class="n" style="color:'+(pctOfNW>0.3?'var(--rd)':'var(--or)')+'">'+pct(pctOfNW)+'</td></tr></table>'+
+    '<div class="g2" style="margin-top:14px">'+
+    '<div class="sb"><div class="l">Without LTC Insurance</div><div class="v" style="color:var(--rd)">'+fmt(totalCost)+'</div><div class="s">Out of pocket</div></div>'+
+    '<div class="sb"><div class="l">With LTC Insurance (~$2,500/yr premium)</div><div class="v" style="color:var(--gn)">'+fmt(2500*(p.ra-p.age))+'</div><div class="s">Total premiums paid</div></div></div>'+
+    (pctOfNW>0.3?'<div class="alert d" style="margin-top:14px"><strong>Long-term care could consume '+pct(pctOfNW)+' of your net worth.</strong> Consider long-term care insurance, especially if you have family history of conditions requiring extended care. Start looking at policies before age 60 for better rates.</div>':
+    '<div class="alert w" style="margin-top:14px"><strong>Long-term care would consume '+pct(pctOfNW)+' of your net worth.</strong> This is manageable but worth planning for. 70% of people over 65 will need some form of long-term care.</div>');
+}
+
+// ===== SS SOLVENCY RISK =====
+function runSSSolve(){
+  var p=getP();
+  var totalYrs=p.uy+(p.ra-p.age);
+  var ss=calcSS(totalYrs,p.sal,p.sg);
+  var cutPct=Number($('s-ss-cut').value)/100;
+  var cutAge=Number($('s-ss-cutage').value);
+
+  var fullPIA=ss.pia;
+  var cutPIA=fullPIA*(1-cutPct);
+  var fullLifetime=fullPIA*12*(85-67); // to age 85
+  var cutLifetime=fullPIA*12*Math.max(0,cutAge-67)+cutPIA*12*Math.max(0,85-cutAge);
+  var lostIncome=fullLifetime-cutLifetime;
+  var lostMonthly=fullPIA-cutPIA;
+  var moExp=p.moExp||3000;
+  var newGap=moExp-(p.pn+(runMC(p,100).p50.totalInv*0.04/12)+cutPIA);
+
+  $('ssolveResults').innerHTML=
+    '<table class="ctbl"><tr><th>Scenario</th><th style="text-align:right">Monthly SS</th><th style="text-align:right">Annual SS</th><th style="text-align:right">Lifetime (to 85)</th></tr>'+
+    '<tr><td>Full benefits (no cut)</td><td class="n" style="color:var(--gn)">'+fmt(fullPIA)+'</td><td class="n">'+fmt(fullPIA*12)+'</td><td class="n">'+fmt(fullLifetime)+'</td></tr>'+
+    '<tr><td>After '+Math.round(cutPct*100)+'% cut at age '+cutAge+'</td><td class="n" style="color:var(--rd)">'+fmt(cutPIA)+'</td><td class="n">'+fmt(cutPIA*12)+'</td><td class="n" style="color:var(--rd)">'+fmt(cutLifetime)+'</td></tr>'+
+    '<tr style="border-top:2px solid var(--bdr)"><td><strong>Lost income</strong></td><td class="n" style="color:var(--rd)"><strong>-'+fmt(lostMonthly)+'/mo</strong></td><td class="n" style="color:var(--rd)"><strong>-'+fmt(lostMonthly*12)+'/yr</strong></td><td class="n" style="color:var(--rd)"><strong>-'+fmt(lostIncome)+'</strong></td></tr></table>'+
+    '<div class="g2" style="margin-top:14px">'+
+    '<div class="sb"><div class="l">Extra Savings Needed</div><div class="v" style="color:var(--or)">'+fmt(lostIncome)+'</div><div class="s">To replace lost SS over 18 years</div></div>'+
+    '<div class="sb"><div class="l">Extra Monthly Savings Now</div><div class="v" style="color:var(--or)">'+fmt(lostIncome/((p.ra-p.age)*12))+'</div><div class="s">To build replacement fund</div></div></div>'+
+    (newGap>0?'<div class="alert d" style="margin-top:14px"><strong>With SS cuts, you\'d have a '+fmt(newGap)+'/month shortfall.</strong> This is the gap between your expenses and your reduced income. Consider: increasing savings now, planning to work longer, or reducing expected retirement expenses.</div>':
+    '<div class="alert w" style="margin-top:14px"><strong>Even with SS cuts, your other income sources cover your expenses.</strong> However, you\'d lose '+fmt(lostMonthly)+'/month in SS income. Building a buffer is still wise.</div>');
 }
 
 // ===== MAIN =====
@@ -1313,19 +1749,35 @@ document.addEventListener('DOMContentLoaded',function(){
   document.querySelectorAll('.tab').forEach(function(t){
     t.addEventListener('click',function(){
       switchTab(t.getAttribute('data-t'));
-      if(t.getAttribute('data-t')==='pro'&&PRO_UNLOCKED)renderScenarios();
     });
   });
 
   // Sub-tab navigation
   document.querySelectorAll('.subtab').forEach(function(st){
     st.addEventListener('click',function(){
+      // If PRO+ tab and not unlocked, show upsell
+      if(st.classList.contains('proplus-tab')&&!PROPLUS_UNLOCKED){
+        var subtabsBar=st.closest('.subtabs');
+        var container=subtabsBar.parentElement;
+        // Only toggle direct child subpanels
+        Array.from(container.children).forEach(function(ch){
+          if(ch.classList&&ch.classList.contains('subpanel'))ch.classList.remove('active');
+        });
+        var upsell=container.querySelector('#sub-proplus-upsell');
+        if(upsell)upsell.classList.add('active');
+        subtabsBar.querySelectorAll('.subtab').forEach(function(s){s.classList.remove('active');});
+        st.classList.add('active');
+        return;
+      }
       var target=st.getAttribute('data-sub');
-      var parent=st.closest('.subtabs');
-      parent.querySelectorAll('.subtab').forEach(function(s){s.classList.remove('active');});
+      var subtabsBar=st.closest('.subtabs');
+      subtabsBar.querySelectorAll('.subtab').forEach(function(s){s.classList.remove('active');});
       st.classList.add('active');
-      var container=parent.parentElement;
-      container.querySelectorAll('.subpanel').forEach(function(p){p.classList.remove('active');});
+      var container=subtabsBar.parentElement;
+      // Only toggle direct child subpanels, not nested ones
+      Array.from(container.children).forEach(function(ch){
+        if(ch.classList&&ch.classList.contains('subpanel'))ch.classList.remove('active');
+      });
       var panel=container.querySelector('#'+target);
       if(panel)panel.classList.add('active');
     });
@@ -1365,7 +1817,12 @@ document.addEventListener('DOMContentLoaded',function(){
     'bal457b':function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
     balHSA:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
     balTx:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
-    moExp:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+    moExp:function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    'ss-exp':function(v){return '$'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')},
+    'ss-le':function(v){return v+' yrs'},
+    'ltc-yrs':function(v){return v+' yrs'},
+    'ss-cut':function(v){return v+'%'},
+    'ss-cutage':function(v){return 'Age '+v}
   };
   document.querySelectorAll('input[type=range]').forEach(function(s){
     s.addEventListener('input',function(){
@@ -1400,34 +1857,65 @@ document.addEventListener('DOMContentLoaded',function(){
   // Buttons
   $('btnSim').addEventListener('click',function(){runAll();});
   $('btnCalc').addEventListener('click',function(){runAll();switchTab('dash');});
+  $('btnBackPlan').addEventListener('click',function(){switchTab('plan');});
   $('btnPDF').addEventListener('click',function(){
     if(!PRO_UNLOCKED){alert('PDF export is a PRO feature. Upgrade to access branded retirement reports.');return;}
     exportPDF();
   });
   $('btnSave').addEventListener('click',function(){
-    if(!PRO_UNLOCKED){switchTab('pro');return;}
-    switchTab('pro');renderScenarios();
+    switchTab('dash');
+    var proBtn=document.querySelector('[data-sub="sub-pro"]');
+    if(proBtn)proBtn.click();
+    if(PRO_UNLOCKED)renderScenarios();
   });
   $('btnSaveScenario').addEventListener('click',function(){saveCurrentScenario();});
   $('btnSpouse').addEventListener('click',function(){runSpouse();});
   $('btnRoth').addEventListener('click',function(){runRothConvert();});
-  $('btnStress').addEventListener('click',function(){runAll();switchTab('risk');});
+  $('btnSSClaim').addEventListener('click',function(){runSSClaim();});
+  $('btnCatchup').addEventListener('click',function(){runCatchup();});
+  $('btnLTC').addEventListener('click',function(){runLTC();});
+  $('btnSolve').addEventListener('click',function(){runSSSolve();});
+  $('btnStress').addEventListener('click',function(){
+    runAll();switchTab('dash');
+    // Activate risk sub-tab
+    var riskBtn=document.querySelector('[data-sub="sub-risk"]');
+    if(riskBtn)riskBtn.click();
+  });
   $('s-filing').addEventListener('change',function(){});
 
   // Initial run
   try{runAll();}catch(e){console.error(e);}
 
   // PRO unlock check from localStorage
-  if(localStorage.getItem('finng-pro')==='1'){unlockPro();}
+  if(localStorage.getItem('finng-pro')==='1'){
+    var tier=localStorage.getItem('finng-tier')||'pro';
+    unlockPro(tier);
+  }
+  updateProBanner();
 
-  // Upgrade buttons — link to payment (replace URL when ready)
-  var upgradeURL=''; // SET YOUR GUMROAD/STRIPE LINK HERE
-  document.querySelectorAll('.btnUpgrade, #btnUpgrade1').forEach(function(b){
-    b.addEventListener('click',function(){
-      if(upgradeURL){window.open(upgradeURL,'_blank');}
-      else{alert('PRO coming soon! Payment setup in progress.');}
-    });
-  });
+  // Upgrade buttons — link to Gumroad
+  if($('btnUpgradePro')){$('btnUpgradePro').addEventListener('click',function(){
+    window.open('https://wirdani.gumroad.com/l/finng-retire-pro','_blank');
+  });}
+  if($('btnUpgradeProPlus')){$('btnUpgradeProPlus').addEventListener('click',function(){
+    window.open('https://wirdani.gumroad.com/l/finng-retire-proplus','_blank');
+  });}
+  if($('btnUpsellPlus')){$('btnUpsellPlus').addEventListener('click',function(){
+    window.open('https://wirdani.gumroad.com/l/finng-retire-proplus','_blank');
+  });}
+  if($('btnCodePlus')){$('btnCodePlus').addEventListener('click',function(){
+    var code=$('proCodePlus').value.trim();
+    if(!code){alert('Please enter a PRO+ unlock code.');return;}
+    var tier=checkProCode(code);
+    if(tier==='proplus'){
+      unlockPro('proplus');
+      alert('PRO+ unlocked! All features with latest formula updates.');
+    }else if(tier==='pro'){
+      alert('This is a PRO code, not PRO+. PRO is already active. You need a PRO+ code for these features.');
+    }else{
+      alert('Invalid code. Please check and try again.');
+    }
+  });}
 
   // Unlock code activation
   document.querySelectorAll('.btnCodeActivate, #btnCode1').forEach(function(b){
@@ -1435,9 +1923,12 @@ document.addEventListener('DOMContentLoaded',function(){
       var input=b.parentElement.querySelector('input')||$('proCode1');
       var code=input?input.value.trim():'';
       if(!code){alert('Please enter an unlock code.');return;}
-      if(checkProCode(code)){
-        unlockPro();
-        alert('PRO unlocked! All features are now available.');
+      var tier=checkProCode(code);
+      if(tier){
+        unlockPro(tier);
+        var msg=tier==='proplus'?'PRO+ unlocked! All features with latest formula updates.':'PRO unlocked! All premium features are now available.';
+        alert(msg);
+        updateProBanner();
       }else{
         alert('Invalid code. Please check and try again.');
       }

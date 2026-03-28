@@ -1,13 +1,10 @@
-var CACHE_NAME = 'finng-retire-v14';
+var CACHE_NAME = 'finng-retire-v15';
 var ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png',
-  './logo.png',
-  './screenshot-wide.png',
-  './screenshot-narrow.png'
+  './icon-512.png'
 ];
 
 self.addEventListener('install', function(event) {
@@ -36,20 +33,17 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request).then(function(response) {
-      if (response) {
-        return response;
+    fetch(event.request).then(function(networkResponse) {
+      if (networkResponse && networkResponse.status === 200) {
+        var responseToCache = networkResponse.clone();
+        caches.open(CACHE_NAME).then(function(cache) {
+          cache.put(event.request, responseToCache);
+        });
       }
-      return fetch(event.request).then(function(networkResponse) {
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-          var responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then(function(cache) {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return networkResponse;
-      }).catch(function() {
-        return caches.match('./index.html');
+      return networkResponse;
+    }).catch(function() {
+      return caches.match(event.request).then(function(cachedResponse) {
+        return cachedResponse || caches.match('./index.html');
       });
     })
   );

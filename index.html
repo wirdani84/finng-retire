@@ -134,7 +134,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     <!-- PROJECTION CALCULATOR -->
     <text x="55" y="62" font-family="'Segoe UI',system-ui,-apple-system,Arial,sans-serif" font-size="11.5" font-weight="500" fill="#8b5cf6" letter-spacing="5" opacity="0.8">PROJECTION CALCULATOR</text>
   </svg>
-  <div class="hdr-sub">Retirement planning for international workers, immigrants, and non-traditional careers. The only calculator that tracks SS quarter eligibility, models totalization agreements across 30+ countries, and projects the financial impact of leaving the US, powered by a regime-switching Monte Carlo engine, no signup, no data collected. </div>
+  <div class="hdr-sub">For US citizens and international workers &middot; Monte Carlo &middot; Tax Modeling &middot; Inflation &middot; Healthcare &middot; Fat-Tail Distributions</div>
 </div>
 <div class="tabs" id="tabBar"></div>
 
@@ -355,8 +355,8 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
   <div class="subpanel" id="sub-pro">
   <div class="pro-gate-wrap">
     <div class="pro-gate">
-      <h3>🔒 Unlock PRO Features</h3>
-      <p>Save scenarios, plan with your spouse, optimize Roth conversions, analyze SS claiming ages, model catch-up contributions, estimate long-term care costs, and stress test SS solvency.</p>
+      <h3>🔒 Unlock All Features — $10/year</h3>
+      <p>Get every premium feature for the price of a lunch. We believe retirement planning tools should be affordable for everyone.</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0;text-align:center">
         <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--or)">Scenarios</div><div style="font-size:9px;color:var(--t3)">Save, load, compare plans</div></div>
         <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--pr)">Spouse Planning</div><div style="font-size:9px;color:var(--t3)">Combined household income</div></div>
@@ -364,29 +364,15 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
         <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--cy)">SS Claiming Age</div><div style="font-size:9px;color:var(--t3)">Optimal age 62-70</div></div>
         <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--gn)">Catch-Up Boost</div><div style="font-size:9px;color:var(--t3)">Extra savings after 50</div></div>
         <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--rd)">Long-Term Care</div><div style="font-size:9px;color:var(--t3)">Nursing/assisted cost estimate</div></div>
-        <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr);grid-column:1/-1"><div style="font-size:10px;font-weight:700;color:var(--rd)">SS Solvency Risk</div><div style="font-size:9px;color:var(--t3)">What if benefits are cut 20-25%?</div></div>
+        <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--rd)">SS Solvency Risk</div><div style="font-size:9px;color:var(--t3)">What if benefits are cut 20-25%?</div></div>
+        <div style="background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--cy)">Loss/Recovery Math</div><div style="font-size:9px;color:var(--t3)">Personalized impact table</div></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;text-align:center">
-        <div style="background:var(--bg);border-radius:12px;padding:20px 14px;border:1px solid var(--bdr)">
-          <div style="font-size:12px;font-weight:700;color:var(--or);margin-bottom:8px;letter-spacing:1px">PRO</div>
-          <div style="font-size:36px;font-weight:800;color:var(--t1)">$10</div>
-          <div style="font-size:11px;color:var(--t3);margin-bottom:10px">one-time · forever</div>
-          <div style="font-size:10px;color:var(--t2);line-height:1.8;text-align:left;padding:0 8px">
-            Scenarios<br>Spouse Planning<br>Roth Conversion<br>PDF Export<br><span style="color:var(--t3)">Formulas frozen at purchase</span>
-          </div>
-          <button class="btn-pro" id="btnUpgradePro" style="margin-top:12px;padding:10px 20px;font-size:12px;width:100%">Get PRO — $10</button>
-        </div>
-        <div style="background:var(--bg);border-radius:12px;padding:20px 14px;border:2px solid var(--cy);position:relative">
-          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--cy);color:#000;font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:1px">BEST VALUE</div>
-          <div style="font-size:12px;font-weight:700;color:var(--cy);margin-bottom:8px;letter-spacing:1px">PRO+</div>
-          <div style="font-size:36px;font-weight:800;color:var(--t1)">$29</div>
-          <div style="font-size:11px;color:var(--t3);margin-bottom:10px">per year · cancel anytime</div>
-          <div style="font-size:10px;color:var(--t2);line-height:1.8;text-align:left;padding:0 8px">
-            Everything in PRO, plus:<br><strong style="color:var(--cy)">SS Claiming Optimizer</strong><br><strong style="color:var(--cy)">Catch-Up Calculator</strong><br><strong style="color:var(--cy)">Long-Term Care</strong><br><strong style="color:var(--cy)">SS Solvency Risk</strong><br><strong style="color:var(--cy)">Annual formula updates</strong>
-          </div>
-          <button class="btn-pro" id="btnUpgradeProPlus" style="margin-top:12px;padding:10px 20px;font-size:12px;width:100%;background:var(--cy);color:#000">Get PRO+ — $29/yr</button>
-        </div>
+      <div style="text-align:center;margin:20px 0">
+        <div style="font-size:42px;font-weight:800;color:var(--t1)">$10</div>
+        <div style="font-size:13px;color:var(--t3);margin-bottom:4px">per year · cancel anytime</div>
+        <div style="font-size:11px;color:var(--cy)">All 8 features + annual formula updates</div>
       </div>
+      <button class="btn-pro" id="btnUpgradeProPlus" style="padding:14px 40px;font-size:15px;width:100%;background:var(--cy);color:#000">Get PRO+ — $10/year</button>
       <div style="margin-top:16px;display:flex;align-items:center;gap:8px;justify-content:center">
         <input type="text" id="proCode1" placeholder="Have an unlock code?" style="background:var(--bg);border:1px solid var(--bdr);color:var(--t1);padding:8px 12px;border-radius:6px;font-size:12px;width:180px;font-family:inherit">
         <button class="btn-sm" id="btnCode1">Activate</button>
@@ -394,7 +380,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     </div>
   </div>
   <div class="pro-content" style="display:none">
-    <div class="subtabs"><button class="subtab active" data-sub="sub-scn">Scenarios</button><button class="subtab" data-sub="sub-spouse">Spouse</button><button class="subtab" data-sub="sub-roth">Roth Convert</button><button class="subtab proplus-tab" data-sub="sub-ssclaim">SS Claiming</button><button class="subtab proplus-tab" data-sub="sub-catchup">Catch-Up</button><button class="subtab proplus-tab" data-sub="sub-ltc">Long-Term Care</button><button class="subtab proplus-tab" data-sub="sub-ssolve">SS Solvency</button></div>
+    <div class="subtabs"><button class="subtab active" data-sub="sub-scn">Scenarios</button><button class="subtab" data-sub="sub-spouse">Spouse</button><button class="subtab" data-sub="sub-roth">Roth Convert</button><button class="subtab" data-sub="sub-ssclaim">SS Claiming</button><button class="subtab" data-sub="sub-catchup">Catch-Up</button><button class="subtab" data-sub="sub-ltc">Long-Term Care</button><button class="subtab" data-sub="sub-ssolve">SS Solvency</button></div>
 
     <div class="subpanel active" id="sub-scn">
     <div class="card"><div class="ct orange"><span class="d"></span>Saved Scenarios</div>
@@ -439,20 +425,6 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     </div>
     <button class="btn" id="btnRoth">ANALYZE CONVERSION →</button>
     <div class="card" style="margin-top:14px"><div class="ct cyan"><span class="d"></span>Conversion Analysis</div><div id="rothResults"></div></div>
-    </div>
-
-    <div class="subpanel" id="sub-proplus-upsell">
-    <div class="card" style="text-align:center;border:2px solid var(--cy);padding:30px">
-      <h3 style="color:var(--cy);margin-bottom:12px">This is a PRO+ Feature</h3>
-      <p style="color:var(--t2);margin-bottom:20px;font-size:13px">SS Claiming Age, Catch-Up Contributions, Long-Term Care, and SS Solvency Risk are exclusive to PRO+ subscribers. PRO+ also includes annual formula updates with the latest IRS and SSA data.</p>
-      <div style="font-size:36px;font-weight:800;color:var(--t1);margin-bottom:4px">$29<span style="font-size:14px;color:var(--t3)">/year</span></div>
-      <div style="font-size:11px;color:var(--t3);margin-bottom:16px">4 extra features + annual updates + new features each year</div>
-      <button class="btn-pro" id="btnUpsellPlus" style="padding:12px 30px;font-size:14px;background:var(--cy);color:#000">Upgrade to PRO+</button>
-      <div style="margin-top:14px;display:flex;align-items:center;gap:8px;justify-content:center">
-        <input type="text" id="proCodePlus" placeholder="PRO+ unlock code" style="background:var(--bg);border:1px solid var(--bdr);color:var(--t1);padding:8px 12px;border-radius:6px;font-size:12px;width:180px;font-family:inherit">
-        <button class="btn-sm" id="btnCodePlus">Activate</button>
-      </div>
-    </div>
     </div>
 
     <div class="subpanel" id="sub-ssclaim">
@@ -505,31 +477,36 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
 <!-- TAB: ABOUT -->
 <div id="tab-abt" class="hidden">
   <div class="card"><div class="ct cyan"><span class="d"></span>Why This Tool Exists</div>
-    <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px">Most retirement calculators assume a straightforward financial life: one country, one career, one tax system. But millions of Americans, including international workers, immigrants, green card holders, veterans, gig workers, and anyone with a non-traditional career path, don't fit that mold.</p>
-    <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px">FinnG Retire was built to serve everyone, with specific features for international workers who face unique challenges like Social Security quarter requirements, totalization agreements, and the "what if I leave" scenario that no other calculator models.</p>
-    <p style="font-size:13px;color:var(--t2);line-height:1.8"><strong style="color:var(--cy)">Privacy-first:</strong> Everything runs in your browser. No data is sent anywhere. No account linking. No login required. Your financial data stays on your device.</p>
+    <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px">Most retirement calculators assume a straightforward financial life — one country, one career, one tax system. But millions of Americans, including international workers, immigrants, green card holders, veterans, gig workers, and anyone with a non-traditional career path, don't fit that mold.</p>
+    <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px">FinnG Retire was built to serve everyone — with specific features for international workers who face unique challenges like Social Security quarter requirements, totalization agreements, and the "what if I leave" scenario that no other calculator models.</p>
   </div>
 
-  <div class="card"><div class="ct orange"><span class="d"></span>Plans & Pricing</div>
+  <div class="card" style="border:1px solid var(--cy)"><div class="ct cyan"><span class="d"></span>Our Principles</div>
+    <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px"><strong style="color:var(--cy)">Affordable for everyone.</strong> FinnG believes retirement planning tools should not cost hundreds or thousands of dollars. The core calculator is completely free — no limits, no trial period, no feature walls on the essentials. PRO+ is $10/year because we think that's a fair price for premium features. Not $29. Not $99. Not $1,000. Ten dollars.</p>
+    <p style="font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px"><strong style="color:var(--cy)">Privacy is not negotiable.</strong> Everything runs in your browser. No data is sent to any server. No account required. No login. No tracking. No cookies. No analytics. Your salary, your savings, your Social Security estimates — none of it ever leaves your device. We can't see your data because we never receive it. This is by design, not by policy.</p>
+    <p style="font-size:13px;color:var(--t2);line-height:1.8"><strong style="color:var(--cy)">Honest math.</strong> We don't inflate projections to make you feel good. Our 7-layer Monte Carlo engine uses regime-switching markets, fat-tail distributions, correlated asset crashes, and a black swan safety margin. We show ruin probability — the chance your money runs out — because that's the number that actually matters. Every data source is cited. Every limitation is documented.</p>
+  </div>
+
+  <div class="card"><div class="ct orange"><span class="d"></span>Pricing</div>
     <table class="ctbl">
-      <tr><th style="width:30%">Feature</th><th style="text-align:center;width:23%">Free</th><th style="text-align:center;width:23%">PRO ($10 once)</th><th style="text-align:center;width:23%">PRO+ ($29/yr)</th></tr>
-      <tr><td>Monte Carlo (500 sims)</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
-      <tr><td>Dashboard & Charts</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
-      <tr><td>Stress Test (CVaR, Drawdown, Sustainability)</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
-      <tr><td>SS Tracker & International</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
-      <tr style="border-top:2px solid var(--bdr)"><td>Save/Load Scenarios</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
-      <tr><td>Spouse/Partner Planning</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
-      <tr><td>Roth Conversion Optimizer</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
-      <tr><td>Loss vs Recovery Math</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
-      <tr><td>PDF Report Export</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
-      <tr style="border-top:2px solid var(--bdr)"><td>SS Claiming Age Optimizer</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
-      <tr><td>Catch-Up Contribution Calculator</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
-      <tr><td>Long-Term Care Estimator</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
-      <tr><td>SS Solvency Risk Analysis</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
-      <tr><td>Annual Formula Updates</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
-      <tr><td>New Features Each Year</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--rd)">—</td><td class="n" style="color:var(--cy)">PRO+ only</td></tr>
+      <tr><th style="width:50%">Feature</th><th style="text-align:center;width:25%">Free</th><th style="text-align:center;width:25%">PRO+ ($10/yr)</th></tr>
+      <tr><td>7-Layer Monte Carlo (500 sims)</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Dashboard, Charts, Risk Analysis</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Stress Test (CVaR, Drawdown, Sustainability)</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>SS Tracker, Totalization, Leave US</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Ruin Probability, Safe Withdrawal Rate</td><td class="n" style="color:var(--gn)">Included</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr style="border-top:2px solid var(--bdr)"><td>Save/Load Scenarios</td><td class="n" style="color:var(--t3)">—</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Spouse/Partner Planning</td><td class="n" style="color:var(--t3)">—</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Roth Conversion Optimizer</td><td class="n" style="color:var(--t3)">—</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>SS Claiming Age Optimizer</td><td class="n" style="color:var(--t3)">—</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Catch-Up Contribution Calculator</td><td class="n" style="color:var(--t3)">—</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Long-Term Care Estimator</td><td class="n" style="color:var(--t3)">—</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>SS Solvency Risk Analysis</td><td class="n" style="color:var(--t3)">—</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Loss/Recovery Math Table</td><td class="n" style="color:var(--t3)">—</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>PDF Report Export</td><td class="n" style="color:var(--t3)">—</td><td class="n" style="color:var(--gn)">Included</td></tr>
+      <tr><td>Annual Formula Updates (IRS/SSA)</td><td class="n" style="color:var(--t3)">—</td><td class="n" style="color:var(--gn)">Included</td></tr>
     </table>
-    <p class="note" style="margin-top:12px"><strong>PRO</strong> ($10 one-time) gives you planning tools that work forever, using the formulas from when you purchased. <strong>PRO+</strong> ($29/year) adds 4 advanced tools plus keeps all formulas current — every January we update tax brackets, SS numbers, contribution limits, and market assumptions with verified IRS and SSA data.</p>
+    <p class="note" style="margin-top:12px">The core calculator is free forever — no signup, no trial, no limits. PRO+ ($10/year) unlocks all 8 premium features plus annual formula updates. We update every January with verified IRS and SSA data.</p>
   </div>
 
   <div class="card"><div class="ct cyan"><span class="d"></span>Data Sources (2026)</div>
@@ -561,7 +538,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
   </div>
 
   <div class="card"><div class="ct cyan"><span class="d"></span>Privacy</div>
-    <p style="font-size:12px;color:var(--t2);line-height:1.8">All calculations run entirely in your browser using JavaScript. No data is transmitted to any server. No cookies, no tracking, no analytics. Saved scenarios are stored in your browser's localStorage on your device only. Clearing your browser data will delete saved scenarios. <a href="privacy-policy.html" target="_blank" style="color:var(--cy)">Full privacy policy →</a></p>
+    <p style="font-size:12px;color:var(--t2);line-height:1.8">All calculations run entirely in your browser using JavaScript. No data is transmitted to any server. No cookies, no tracking, no analytics. Saved scenarios are stored in your browser's localStorage on your device only. Clearing your browser data will delete saved scenarios. <a href="privacy-policy.html" target="_blank" style="color:var(--cy)">Full privacy policy</a></p>
   </div>
 </div>
 
@@ -584,34 +561,27 @@ var TABS=[
 
 var PRO_UNLOCKED=false;
 var PROPLUS_UNLOCKED=false;
-var FORMULA_YEAR='2026'; // update this each January
+var FORMULA_YEAR='2026';
 
 function checkProCode(code){
   var c=code.trim().toUpperCase();
-  if(c==='FINNIEGINGER2026PRO')return 'pro';
   if(c==='FINNG-PLUS-2026')return 'proplus';
   return false;
 }
 
-function unlockPro(tier){
-  tier=tier||'pro';
+function unlockPro(){
   PRO_UNLOCKED=true;
+  PROPLUS_UNLOCKED=true;
   localStorage.setItem('finng-pro','1');
-  localStorage.setItem('finng-tier',tier);
-  if(tier==='proplus'){
-    PROPLUS_UNLOCKED=true;
-    localStorage.setItem('finng-proplus','1');
-    localStorage.setItem('finng-proplus-year',FORMULA_YEAR);
-    // Unlock PRO+ sub-tabs
-    document.querySelectorAll('.proplus-tab').forEach(function(t){t.classList.add('unlocked');});
-  }
+  localStorage.setItem('finng-tier','proplus');
+  localStorage.setItem('finng-proplus','1');
+  localStorage.setItem('finng-proplus-year',FORMULA_YEAR);
   document.querySelectorAll('.pro-gate-wrap').forEach(function(el){el.remove();});
   document.querySelectorAll('.pro-content').forEach(function(el){el.style.display='';});
-  // Reveal PRO-gated content in other tabs
   document.querySelectorAll('.pro-loss-locked').forEach(function(el){el.style.display='none';});
   if($('lossContent'))$('lossContent').style.display='';
   var lockEl=document.querySelector('[data-sub="sub-pro"]');
-  if(lockEl)lockEl.textContent=tier==='proplus'?'PRO+':'PRO';
+  if(lockEl)lockEl.textContent='PRO+';
   updateProBanner();
 }
 
@@ -620,15 +590,13 @@ function updateProBanner(){
   if(!banner)return;
   if(!PRO_UNLOCKED){banner.innerHTML='';return;}
   var savedYear=localStorage.getItem('finng-proplus-year')||'';
-  var tier=localStorage.getItem('finng-tier')||'pro';
-  if(tier==='proplus'&&savedYear===FORMULA_YEAR){
+  if(savedYear===FORMULA_YEAR){
     banner.innerHTML='<div class="alert o" style="margin:0"><strong>PRO+ Active</strong> — Formulas updated for '+FORMULA_YEAR+' with latest IRS/SSA data.</div>';
-  }else if(tier==='proplus'&&savedYear!==FORMULA_YEAR){
-    banner.innerHTML='<div class="alert w" style="margin:0"><strong>PRO+ Expired</strong> — Your formulas are from '+savedYear+'. <a href="https://wirdani.gumroad.com/l/finng-retire-proplus" target="_blank" style="color:var(--cy);text-decoration:underline">Renew for '+FORMULA_YEAR+' data ($29/year)</a></div>';
   }else{
-    banner.innerHTML='<div class="alert i" style="margin:0"><strong>PRO Active</strong> — Formulas from '+FORMULA_YEAR+'. <a href="https://wirdani.gumroad.com/l/finng-retire-proplus" target="_blank" style="color:var(--cy);text-decoration:underline">Upgrade to PRO+ for annual updates ($29/year)</a></div>';
+    banner.innerHTML='<div class="alert w" style="margin:0"><strong>PRO+ Expired</strong> — Your formulas are from '+savedYear+'. <a href="https://wirdani.gumroad.com/l/finng-retire-proplus" target="_blank" style="color:var(--cy);text-decoration:underline">Renew for '+FORMULA_YEAR+' data ($10/year)</a></div>';
   }
 }
+
 
 function initTabs(){
   var h='';
@@ -1755,20 +1723,7 @@ document.addEventListener('DOMContentLoaded',function(){
   // Sub-tab navigation
   document.querySelectorAll('.subtab').forEach(function(st){
     st.addEventListener('click',function(){
-      // If PRO+ tab and not unlocked, show upsell
-      if(st.classList.contains('proplus-tab')&&!PROPLUS_UNLOCKED){
-        var subtabsBar=st.closest('.subtabs');
-        var container=subtabsBar.parentElement;
-        // Only toggle direct child subpanels
-        Array.from(container.children).forEach(function(ch){
-          if(ch.classList&&ch.classList.contains('subpanel'))ch.classList.remove('active');
-        });
-        var upsell=container.querySelector('#sub-proplus-upsell');
-        if(upsell)upsell.classList.add('active');
-        subtabsBar.querySelectorAll('.subtab').forEach(function(s){s.classList.remove('active');});
-        st.classList.add('active');
-        return;
-      }
+
       var target=st.getAttribute('data-sub');
       var subtabsBar=st.closest('.subtabs');
       subtabsBar.querySelectorAll('.subtab').forEach(function(s){s.classList.remove('active');});
@@ -1887,34 +1842,12 @@ document.addEventListener('DOMContentLoaded',function(){
   try{runAll();}catch(e){console.error(e);}
 
   // PRO unlock check from localStorage
-  if(localStorage.getItem('finng-pro')==='1'){
-    var tier=localStorage.getItem('finng-tier')||'pro';
-    unlockPro(tier);
-  }
+  if(localStorage.getItem('finng-pro')==='1'){unlockPro();}
   updateProBanner();
 
   // Upgrade buttons — link to Gumroad
-  if($('btnUpgradePro')){$('btnUpgradePro').addEventListener('click',function(){
-    window.open('https://wirdani.gumroad.com/l/finng-retire-pro','_blank');
-  });}
   if($('btnUpgradeProPlus')){$('btnUpgradeProPlus').addEventListener('click',function(){
     window.open('https://wirdani.gumroad.com/l/finng-retire-proplus','_blank');
-  });}
-  if($('btnUpsellPlus')){$('btnUpsellPlus').addEventListener('click',function(){
-    window.open('https://wirdani.gumroad.com/l/finng-retire-proplus','_blank');
-  });}
-  if($('btnCodePlus')){$('btnCodePlus').addEventListener('click',function(){
-    var code=$('proCodePlus').value.trim();
-    if(!code){alert('Please enter a PRO+ unlock code.');return;}
-    var tier=checkProCode(code);
-    if(tier==='proplus'){
-      unlockPro('proplus');
-      alert('PRO+ unlocked! All features with latest formula updates.');
-    }else if(tier==='pro'){
-      alert('This is a PRO code, not PRO+. PRO is already active. You need a PRO+ code for these features.');
-    }else{
-      alert('Invalid code. Please check and try again.');
-    }
   });}
 
   // Unlock code activation
@@ -1925,9 +1858,8 @@ document.addEventListener('DOMContentLoaded',function(){
       if(!code){alert('Please enter an unlock code.');return;}
       var tier=checkProCode(code);
       if(tier){
-        unlockPro(tier);
-        var msg=tier==='proplus'?'PRO+ unlocked! All features with latest formula updates.':'PRO unlocked! All premium features are now available.';
-        alert(msg);
+        unlockPro();
+        alert('PRO+ unlocked! All features are now available.');
         updateProBanner();
       }else{
         alert('Invalid code. Please check and try again.');

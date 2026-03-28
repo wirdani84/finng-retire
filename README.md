@@ -1,6 +1,6 @@
 # FinnG Retire — Projection Calculator
 
-A comprehensive retirement planning tool built for everyone: US citizens, international workers, immigrants, veterans, and anyone planning their financial future.
+A comprehensive retirement planning tool built for everyone — US citizens, international workers, immigrants, veterans, and anyone planning their financial future.
 
 ## What It Does
 

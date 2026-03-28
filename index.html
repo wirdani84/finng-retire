@@ -593,7 +593,7 @@ function updateProBanner(){
   if(savedYear===FORMULA_YEAR){
     banner.innerHTML='<div class="alert o" style="margin:0"><strong>PRO+ Active</strong> — Formulas updated for '+FORMULA_YEAR+' with latest IRS/SSA data.</div>';
   }else{
-    banner.innerHTML='<div class="alert w" style="margin:0"><strong>PRO+ Expired</strong> — Your formulas are from '+savedYear+'. <a href="https://wirdani.gumroad.com/l/finng-retire-proplus" target="_blank" style="color:var(--cy);text-decoration:underline">Renew for '+FORMULA_YEAR+' data ($10/year)</a></div>';
+    banner.innerHTML='<div class="alert w" style="margin:0"><strong>PRO+ Expired</strong> — Your formulas are from '+savedYear+'. <a href="https://finng.gumroad.com/l/finng-retire-proplus" target="_blank" style="color:var(--cy);text-decoration:underline">Renew for '+FORMULA_YEAR+' data ($10/year)</a></div>';
   }
 }
 
@@ -1847,7 +1847,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
   // Upgrade buttons — link to Gumroad
   if($('btnUpgradeProPlus')){$('btnUpgradeProPlus').addEventListener('click',function(){
-    window.open('https://wirdani.gumroad.com/l/finng-retire-proplus','_blank');
+    window.open('https://finng.gumroad.com/l/finng-retire-proplus','_blank');
   });}
 
   // Unlock code activation

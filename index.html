@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<meta name="theme-color" content="#06b6d4">
+<meta name="theme-color" content="#1a0b2e">
 <meta name="description" content="Comprehensive retirement projection calculator for US citizens and international workers. Monte Carlo simulation, tax modeling, inflation adjustment. Privacy-first.">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FinnG Retire">
 <meta name="application-name" content="FinnG Retire">
-<meta name="msapplication-TileColor" content="#04070d">
+<meta name="msapplication-TileColor" content="#1a0b2e">
 <meta name="msapplication-tap-highlight" content="no">
 <meta property="og:title" content="FinnG Retire - Projection Calculator">
 <meta property="og:description" content="Comprehensive retirement planning with Monte Carlo simulation. Privacy-first.">
@@ -22,23 +22,23 @@
 <title>FinnG Retire - Comprehensive Retirement Planner</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
-:root{--bg:#04070d;--bg2:#0a1019;--card:#0f1723;--bdr:#1c2940;--cy:#06b6d4;--cy2:#0891b2;--gn:#10b981;--rd:#ef4444;--or:#f59e0b;--pr:#8b5cf6;--bl:#3b82f6;--pk:#ec4899;--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--t4:#475569}
+:root{--bg:#1a0b2e;--bg2:#281446;--card:#221040;--bdr:#3d2566;--cy:#c8a4d4;--cy2:#a884b8;--gn:#87b59d;--rd:#d18a8a;--or:#d4b574;--pr:#b89dd8;--bl:#8da3c7;--pk:#e5a8c5;--t1:#ede4ea;--t2:#b8a8c5;--t3:#8b7d9b;--t4:#5e546a}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--t1);font-family:'Outfit',sans-serif;line-height:1.5}
 .mono{font-family:'JetBrains Mono',monospace}
 .app{max-width:940px;margin:0 auto;padding:20px 16px}
 .hdr{text-align:center;padding:28px 0 16px;position:relative}
-.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:500px;height:200px;background:radial-gradient(ellipse,rgba(6,182,212,.08) 0%,transparent 70%);pointer-events:none}
+.hdr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:500px;height:200px;background:radial-gradient(ellipse,rgba(229,168,197,.06) 0%,transparent 70%);pointer-events:none}
 .hdr-tag{font-size:9px;letter-spacing:5px;color:var(--cy2);text-transform:uppercase;font-weight:600;margin-bottom:6px}
-.hdr h1{font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--cy),var(--pr),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hdr h1{font-size:28px;font-weight:900;color:var(--pk);letter-spacing:-0.02em}
 .hdr-sub{font-size:11px;color:var(--t3);margin-top:6px}
 .tabs{display:flex;gap:3px;background:var(--card);border-radius:12px;padding:4px;margin-bottom:20px;border:1px solid var(--bdr);overflow-x:auto}
 .tab{flex:1;padding:9px 2px;border:none;border-radius:8px;cursor:pointer;background:transparent;color:var(--t3);font-size:10px;font-weight:600;font-family:'Outfit',sans-serif;transition:all .2s;white-space:nowrap}
 .tab:hover{color:var(--t2)}
-.tab.active{background:linear-gradient(135deg,var(--cy2),#6d28d9);color:#fff;box-shadow:0 2px 8px rgba(6,182,212,.2)}
+.tab.active{background:var(--pk);color:var(--bg);box-shadow:none}
 .card{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:20px;margin-bottom:16px}
 .ct{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.ct .d{width:6px;height:6px;border-radius:50%;box-shadow:0 0 8px currentColor}
+.ct .d{width:5px;height:5px;border-radius:50%}
 .ct.cyan{color:var(--cy)}.ct.cyan .d{background:var(--cy)}
 .ct.green{color:var(--gn)}.ct.green .d{background:var(--gn)}
 .ct.red{color:var(--rd)}.ct.red .d{background:var(--rd)}
@@ -57,11 +57,11 @@ body{background:var(--bg);color:var(--t1);font-family:'Outfit',sans-serif;line-h
 .sl-l{font-size:12px;color:var(--t2)}
 .sl-v{font-size:12px;color:var(--cy);font-family:'JetBrains Mono',monospace}
 input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--bdr);outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--cy);box-shadow:0 0 6px rgba(6,182,212,.4)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--pk)}
 select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px solid var(--bdr);border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer}
 .tgl-r{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .tgl{width:42px;height:22px;border-radius:11px;cursor:pointer;position:relative;transition:background .25s}
-.tgl.off{background:var(--bdr)}.tgl.on{background:var(--cy)}
+.tgl.off{background:var(--bdr)}.tgl.on{background:var(--pk)}
 .tgl-k{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;transition:left .25s}
 .tgl.off .tgl-k{left:2px}.tgl.on .tgl-k{left:22px}
 .ctbl{width:100%;border-collapse:collapse;font-size:12px}
@@ -75,8 +75,8 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
 .alert.i{background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.3);color:var(--cy)}
 .alert.o{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--gn)}
 .note{font-size:11px;color:var(--t3);line-height:1.6;margin-top:8px}
-.btn{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--cy2),#6d28d9);color:#fff;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 15px rgba(6,182,212,.15)}
-.btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(6,182,212,.25)}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;background:var(--pk);color:var(--bg);font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;letter-spacing:1px;transition:opacity .2s}
+.btn:hover{opacity:0.88}
 .sc-row{background:var(--bg2);border-radius:10px;padding:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--bdr)}
 .dbar{display:flex;align-items:flex-end;gap:2px;height:55px;margin-top:10px}
 .dbar .b{flex:1;border-radius:2px 2px 0 0}
@@ -87,29 +87,30 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
 .q-cell.mile{border:2px solid var(--or)}
 .hidden{display:none}
 .footer{text-align:center;padding:28px 0;font-size:9px;color:var(--t4);letter-spacing:.5px}
-.pro{display:inline-block;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;letter-spacing:1px}
+.pro{display:inline-block;background:var(--bdr);color:var(--pk);font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;letter-spacing:1px;border:1px solid var(--pk)}
 .tab .lock{font-size:10px;margin-left:3px;opacity:0.7}
 .pro-overlay{position:relative}
 .pro-overlay::before{content:'';position:absolute;inset:0;background:rgba(4,7,13,0.85);z-index:10;border-radius:14px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .pro-overlay::after{content:'🔒 PRO Feature';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:11;color:var(--or);font-size:16px;font-weight:700;font-family:'Outfit',sans-serif;text-align:center;pointer-events:none}
-.pro-gate{background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(239,68,68,.08));border:1px solid rgba(245,158,11,.3);border-radius:14px;padding:40px 24px;text-align:center;margin-bottom:14px}
-.pro-gate h3{color:var(--or);font-size:20px;margin-bottom:10px}
+.pro-gate{background:var(--bg2);border:1px solid var(--pk);border-radius:14px;padding:40px 24px;text-align:center;margin-bottom:14px}
+.pro-gate h3{color:var(--pk);font-size:20px;margin-bottom:10px}
 .pro-gate p{color:var(--t2);font-size:13px;line-height:1.8;margin-bottom:16px}
 .pro-gate .price{font-size:32px;font-weight:800;color:var(--t1);margin-bottom:4px}
 .pro-gate .price-sub{font-size:12px;color:var(--t3);margin-bottom:20px}
 .btn-sm{background:var(--bg2);color:var(--t1);border:1px solid var(--bdr);padding:8px 16px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit}
-.btn-sm:hover{background:var(--card);border-color:var(--cy)}
-.btn-pro{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-sm:hover{background:var(--card);border-color:var(--pk)}
+.btn-pro{background:var(--pk);color:var(--bg);border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s}
+.btn-pro:hover{opacity:0.88}
 .scenario-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 .scenario-card .sc-name{color:var(--t1);font-size:13px;font-weight:600}
 .scenario-card .sc-date{color:var(--t3);font-size:10px;margin-top:3px}
 .scenario-card .sc-btns{display:flex;gap:6px}
 .subtabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg);border-radius:8px;padding:3px;border:1px solid var(--cy2);flex-wrap:wrap}
 .subtab{flex:1 1 auto;min-width:80px;padding:10px 8px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--t2);font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:0.3px;text-align:center}
-.subtab.active{background:linear-gradient(135deg,var(--cy2),#6d28d9);color:#fff;box-shadow:0 2px 8px rgba(6,182,212,.3)}
-.subtab:hover{color:var(--t1);background:rgba(6,182,212,.1)}
+.subtab.active{background:var(--pk);color:var(--bg);box-shadow:none}
+.subtab:hover{color:var(--t1);background:rgba(229,168,197,.08)}
 .subtab.proplus-tab:not(.unlocked){opacity:0.5;position:relative}
-.subtab.proplus-tab:not(.unlocked)::after{content:'PRO+';font-size:7px;position:absolute;top:2px;right:4px;background:var(--cy);color:#000;padding:1px 4px;border-radius:3px;font-weight:800}
+.subtab.proplus-tab:not(.unlocked)::after{content:'PRO+';font-size:7px;position:absolute;top:2px;right:4px;background:var(--pk);color:var(--bg);padding:1px 4px;border-radius:3px;font-weight:800}
 .subtab.proplus-tab.unlocked{opacity:1}
 .subpanel{display:none}
 .subpanel.active{display:block}
@@ -136,7 +137,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
   <div class="card"><div class="ct cyan"><span class="d"></span>Personal</div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Current Age</span><span class="sl-v" id="v-age">35</span></div><input type="range" id="s-age" min="18" max="60" value="35"></div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Retirement Age</span><span class="sl-v" id="v-ra">65</span></div><input type="range" id="s-ra" min="55" max="75" value="65"></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Annual Salary</span><span class="sl-v" id="v-sal">$50,000.00</span></div><input type="range" id="s-sal" min="0" max="200000" step="1" value="50000"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Annual Salary</span><span class="sl-v" id="v-sal">$0.00</span></div><input type="range" id="s-sal" min="0" max="200000" step="1" value="0"></div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Salary Growth</span><span class="sl-v" id="v-sg">3.00%</span></div><input type="range" id="s-sg" min="0" max="8" step="0.01" value="3"></div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Years Working in US</span><span class="sl-v" id="v-uy">2</span></div><input type="range" id="s-uy" min="0" max="40" value="2"></div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Expected Inflation</span><span class="sl-v" id="v-inf">3.00%</span></div><input type="range" id="s-inf" min="0" max="8" step="0.01" value="3"></div>
@@ -147,7 +148,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     <p class="note">If you live in one state but work in another (e.g., live in Indiana, work in Illinois), you may owe taxes to both states. Some states have reciprocal agreements that prevent double taxation — check with a tax professional.</p></div>
     <div style="margin-bottom:14px"><div class="sl-l" style="margin-bottom:6px">Filing Status</div>
     <select id="s-filing"><option value="single" selected>Single</option><option value="married">Married Filing Jointly</option></select></div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Living Expenses (retirement)</span><span class="sl-v" id="v-moExp">$3,000.00</span></div><input type="range" id="s-moExp" min="1000" max="10000" step="1" value="3000"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Living Expenses (retirement)</span><span class="sl-v" id="v-moExp">$0.00</span></div><input type="range" id="s-moExp" min="1000" max="10000" step="1" value="0"></div>
   </div>
   <div class="card"><div class="ct cyan"><span class="d"></span>Employer Plan (401k/403b)</div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Your Contribution</span><span class="sl-v" id="v-ec">6.00%</span></div><input type="range" id="s-ec" min="0" max="15" step="0.01" value="6"></div>
@@ -163,7 +164,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     <div class="sl"><div class="sl-h"><span class="sl-l">Current Taxable Brokerage Balance</span><span class="sl-v" id="v-balTx">$0.00</span></div><input type="range" id="s-balTx" min="0" max="500000" step="100" value="0"></div>
   </div>
   <div class="card"><div class="ct cyan"><span class="d"></span>IRAs</div>
-    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Roth IRA</span><span class="sl-v" id="v-ri">$100.00</span></div><input type="range" id="s-ri" min="0" max="625" step="1" value="100"></div>
+    <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Roth IRA</span><span class="sl-v" id="v-ri">$0.00</span></div><input type="range" id="s-ri" min="0" max="625" step="1" value="0"></div>
     <div class="sl"><div class="sl-h"><span class="sl-l">Monthly Traditional IRA</span><span class="sl-v" id="v-ti">$0.00</span></div><input type="range" id="s-ti" min="0" max="625" step="1" value="0"></div>
   </div>
   <div class="card"><div class="ct cyan"><span class="d"></span>Additional Accounts</div>
@@ -424,7 +425,7 @@ select{width:100%;padding:10px;background:var(--bg2);color:var(--t1);border:1px 
     <div class="subpanel" id="sub-ssclaim">
     <div class="card"><div class="ct orange"><span class="d"></span>SS Claiming Age Optimizer</div>
       <p class="note" style="margin-bottom:14px">When you start Social Security dramatically affects your monthly benefit. Claiming early gives you less per month but for more years. Claiming late gives you more per month but for fewer years.</p>
-      <div class="sl"><div class="sl-h"><span class="sl-l">Monthly expenses in retirement</span><span class="sl-v" id="v-ss-exp">$3,000.00</span></div><input type="range" id="s-ss-exp" min="1000" max="10000" step="1" value="3000"></div>
+      <div class="sl"><div class="sl-h"><span class="sl-l">Monthly expenses in retirement</span><span class="sl-v" id="v-ss-exp">$0.00</span></div><input type="range" id="s-ss-exp" min="1000" max="10000" step="1" value="0"></div>
       <div class="sl"><div class="sl-h"><span class="sl-l">Life expectancy</span><span class="sl-v" id="v-ss-le">85</span></div><input type="range" id="s-ss-le" min="70" max="100" value="85"></div>
     </div>
     <button class="btn" id="btnSSClaim">ANALYZE CLAIMING AGES →</button>
